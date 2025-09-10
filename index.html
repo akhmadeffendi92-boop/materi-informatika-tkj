@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Interaktif: Informatika TKJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Soft Mint and Cream -->
+    <!-- Application Structure Plan: Aplikasi ini dirancang sebagai SPA (Single Page Application) dengan navigasi di bagian atas untuk melompat ke bagian-bagian utama: Konsep Dasar, Proses Komputasi, Penerapan, dan Latihan. Struktur ini dipilih karena meniru alur belajar yang logis, dari teori ke praktik, dan memungkinkan siswa untuk fokus pada satu topik pada satu waktu atau dengan mudah meninjau kembali materi. Interaksi seperti tab, visualisasi animasi sederhana, dan tombol "lihat jawaban" ditambahkan untuk membuat pembelajaran menjadi aktif, bukan pasif, sehingga meningkatkan keterlibatan dan pemahaman siswa. -->
+    <!-- Visualization & Content Choices: Materi diubah menjadi komponen interaktif. Untuk 'Struktur Data', analogi Stack dan Queue divisualisasikan menggunakan blok HTML/CSS yang dimanipulasi dengan JS untuk menunjukkan cara kerja LIFO/FIFO (Goal: Inform, Method: HTML/CSS Animation, Interaction: Button click). 'Proses Komputasi' disajikan sebagai diagram alur yang dapat diklik (Goal: Organize, Method: HTML/Tailwind layout, Interaction: Click to reveal). 'Penerapan Nyata' menggunakan kartu interaktif (Goal: Relate, Method: HTML/Tailwind cards, Interaction: Click to expand). 'LKPD' diubah menjadi kuis interaktif (Goal: Assess, Method: HTML forms, Interaction: Click to reveal answers). Semua ini bertujuan untuk membuat konten yang padat menjadi lebih mudah dicerna dan diingat. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #333;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover {
+            color: #2F855A;
+        }
+        .nav-link.active {
+            color: #2F855A;
+            border-bottom: 2px solid #2F855A;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #E2E8F0;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #38A169;
+        }
+        .btn-primary:hover {
+            background-color: #2F855A;
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background-color: #4A5568;
+        }
+        .btn-secondary:hover {
+            background-color: #2D3748;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .data-item {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">Informatika Interaktif</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#konsep" class="nav-link pb-1">Konsep Dasar</a>
+                <a href="#proses" class="nav-link pb-1">Proses Komputasi</a>
+                <a href="#penerapan" class="nav-link pb-1">Penerapan</a>
+                <a href="#latihan" class="nav-link pb-1">Latihan</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="beranda" class="text-center mb-20">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Struktur Data, Algoritma, & Komputasi</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-6">Selamat datang di materi pembelajaran interaktif! Di sini, kamu akan menjelajahi konsep-konsep inti informatika yang menjadi dasar dari semua teknologi yang kita gunakan setiap hari, disajikan dengan cara yang sederhana dan menyenangkan.</p>
+            <div class="card max-w-2xl mx-auto p-6">
+                <h3 class="text-xl font-semibold mb-3 text-gray-800">Tujuan Pembelajaran</h3>
+                <ul class="text-left space-y-2 text-gray-700">
+                    <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span> Memahami konsep struktur data dan algoritma standar.</li>
+                    <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span> Menerapkan proses komputasi untuk mendapatkan data berkualitas.</li>
+                    <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span> Menerapkan algoritma dan struktur data untuk menyelesaikan persoalan.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="konsep" class="mb-20 pt-16 -mt-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">1. Memahami Konsep Dasar</h2>
+                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Setiap aplikasi hebat, dari game hingga media sosial, dibangun di atas dua pilar utama: Struktur Data (cara data diatur) dan Algoritma (cara data diproses). Mari kita bedah keduanya.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="card p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-green-700">A. Struktur Data</h3>
+                    <p class="mb-4">Cara kita menyimpan dan menyusun data di komputer agar efisien. Anggap saja seperti mengatur buku di perpustakaan agar mudah ditemukan.</p>
+                    
+                    <div class="border-t pt-4">
+                        <h4 class="font-semibold text-lg mb-3">Analogi & Visualisasi</h4>
+                        <p class="text-sm text-gray-600 mb-4">Coba interaksi di bawah untuk melihat bagaimana dua struktur data umum bekerja.</p>
+                        
+                        <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                            <h5 class="font-bold">Tumpukan Piring (Stack)</h5>
+                            <p class="text-xs mb-2 text-gray-500">Yang terakhir masuk, pertama keluar (LIFO).</p>
+                            <div id="stack-container" class="h-48 p-2 bg-gray-200 rounded-md flex flex-col-reverse justify-start"></div>
+                            <div class="mt-2 space-x-2 text-center">
+                                <button id="stack-push" class="btn btn-primary text-sm py-1 px-3">Tambah Piring</button>
+                                <button id="stack-pop" class="btn btn-secondary text-sm py-1 px-3">Ambil Piring</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h5 class="font-bold">Antrean Kantin (Queue)</h5>
+                            <p class="text-xs mb-2 text-gray-500">Yang pertama datang, pertama dilayani (FIFO).</p>
+                             <div id="queue-container" class="h-48 p-2 bg-gray-200 rounded-md flex flex-col justify-start"></div>
+                            <div class="mt-2 space-x-2 text-center">
+                                <button id="queue-enqueue" class="btn btn-primary text-sm py-1 px-3">Masuk Antrean</button>
+                                <button id="queue-dequeue" class="btn btn-secondary text-sm py-1 px-3">Layani</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-green-700">B. Algoritma</h3>
+                    <p class="mb-4">Serangkaian langkah logis dan sistematis untuk memecahkan masalah. Ini adalah resep yang diikuti komputer untuk menyelesaikan tugas.</p>
+                    
+                    <div class="border-t pt-4">
+                        <h4 class="font-semibold text-lg mb-3">Contoh: Menemukan Kemeja Putih</h4>
+                        <p class="text-sm text-gray-600 mb-4">Ini adalah "resep" atau algoritma yang mungkin kita lakukan tanpa sadar.</p>
+                        <div class="space-y-2">
+                            <div class="p-3 bg-green-100 border-l-4 border-green-500 rounded-r-md">1. <strong>Mulai:</strong> Buka lemari.</div>
+                            <div class="p-3 bg-blue-100 border-l-4 border-blue-500 rounded-r-md">2. <strong>Loop:</strong> Ambil satu kemeja.</div>
+                            <div class="p-3 bg-yellow-100 border-l-4 border-yellow-500 rounded-r-md">3. <strong>Kondisi:</strong> Apakah kemeja berwarna putih?</div>
+                            <div class="ml-6 p-3 bg-gray-100 rounded-md text-sm">→ <strong>Jika ya:</strong> Ambil kemeja. Selesai.</div>
+                            <div class="ml-6 p-3 bg-gray-100 rounded-md text-sm">→ <strong>Jika tidak:</strong> Ulangi langkah 2.</div>
+                             <div class="p-3 bg-green-100 border-l-4 border-green-500 rounded-r-md">4. <strong>Selesai.</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="proses" class="mb-20 pt-16 -mt-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">2. Menerapkan Proses Komputasi Manusia</h2>
+                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Komputasi bukan cuma milik mesin. Kita pun berpikir secara komputasi saat memecahkan masalah. Proses ini membantu kita mendapatkan data berkualitas dan solusi yang tepat.</p>
+            </div>
+             <div class="card p-8">
+                 <h3 class="font-semibold text-xl mb-6 text-center">4 Langkah Memecahkan Masalah Jaringan Lambat</h3>
+                 <div class="grid md:grid-cols-4 gap-4 text-center">
+                    <div class="step-card" data-content="proses-1">
+                        <div class="p-4 bg-blue-500 text-white rounded-full w-16 h-16 mx-auto flex items-center justify-center text-2xl font-bold mb-3">1</div>
+                        <h4 class="font-semibold">Pengumpulan Data</h4>
+                    </div>
+                    <div class="step-card" data-content="proses-2">
+                        <div class="p-4 bg-green-500 text-white rounded-full w-16 h-16 mx-auto flex items-center justify-center text-2xl font-bold mb-3">2</div>
+                        <h4 class="font-semibold">Pemodelan</h4>
+                    </div>
+                    <div class="step-card" data-content="proses-3">
+                        <div class="p-4 bg-yellow-500 text-white rounded-full w-16 h-16 mx-auto flex items-center justify-center text-2xl font-bold mb-3">3</div>
+                        <h4 class="font-semibold">Analisis</h4>
+                    </div>
+                    <div class="step-card" data-content="proses-4">
+                        <div class="p-4 bg-red-500 text-white rounded-full w-16 h-16 mx-auto flex items-center justify-center text-2xl font-bold mb-3">4</div>
+                        <h4 class="font-semibold">Simulasi</h4>
+                    </div>
+                </div>
+                <div id="proses-content" class="mt-8 p-6 bg-gray-50 rounded-lg border min-h-[120px]">
+                    <p class="text-gray-500">Klik salah satu langkah di atas untuk melihat penjelasannya.</p>
+                </div>
+             </div>
+        </section>
+
+        <section id="penerapan" class="mb-20 pt-16 -mt-16">
+            <div class="text-center mb-12">
+                 <h2 class="text-3xl font-bold text-gray-900">3. Penerapan di Dunia Nyata TKJ</h2>
+                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Konsep-konsep ini bukan hanya teori. Di dunia kerja Teknik Komputer dan Jaringan (TKJ), mereka adalah alat kerja sehari-hari.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6 text-center">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold mb-2">Pencarian Data</h3>
+                    <p class="text-gray-600">Saat mencari file, OS menggunakan algoritma pencarian seperti <strong>Binary Search</strong> untuk menemukan data dalam sekejap dari jutaan file.</p>
+                </div>
+                 <div class="card p-6 text-center">
+                    <div class="text-4xl mb-4">🌐</div>
+                    <h3 class="text-xl font-semibold mb-2">Manajemen Jaringan</h3>
+                    <p class="text-gray-600">Router menggunakan struktur data <strong>Queue</strong> untuk mengatur antrean paket data, memastikan data terkirim dengan adil dan terurut.</p>
+                </div>
+                 <div class="card p-6 text-center">
+                    <div class="text-4xl mb-4">🖼️</div>
+                    <h3 class="text-xl font-semibold mb-2">Pengolahan Citra</h3>
+                    <p class="text-gray-600">Gambar digital adalah sebuah <strong>Array</strong> dua dimensi dari piksel. Algoritma digunakan untuk memanipulasi array ini, misalnya saat kamu mengedit foto.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="latihan" class="pt-16 -mt-16">
+            <div class="text-center mb-12">
+                 <h2 class="text-3xl font-bold text-gray-900">4. Waktunya Latihan! (LKPD)</h2>
+                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Uji pemahamanmu dengan menjawab beberapa pertanyaan berikut. Klik tombol untuk melihat jawaban yang benar.</p>
+            </div>
+            <div class="space-y-8">
+                <div class="card p-6">
+                    <h3 class="font-semibold text-lg">Soal 1: Tumpukan Buku</h3>
+                    <p class="my-2">Kamu menumpuk 5 buku dengan urutan: Buku A, Buku B, Buku C, Buku D, Buku E. Saat mengambil kembali, buku mana yang pertama kali kamu ambil? Apa nama struktur data yang sesuai?</p>
+                    <button class="btn btn-primary btn-sm toggle-answer">Lihat Jawaban</button>
+                    <div class="answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg hidden">
+                        <p><strong>Jawaban:</strong> Kamu akan mengambil <strong>Buku E</strong> terlebih dahulu. Struktur data yang sesuai adalah <strong>Stack (Tumpukan)</strong>, karena buku yang terakhir diletakkan (Last In) adalah yang pertama diambil (First Out).</p>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="font-semibold text-lg">Soal 2: Ganti Password</h3>
+                    <p class="my-2">Tuliskan langkah-langkah (algoritma) sederhana untuk mengganti password akun media sosialmu.</p>
+                    <button class="btn btn-primary btn-sm toggle-answer">Lihat Contoh Jawaban</button>
+                    <div class="answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg hidden">
+                        <ol class="list-decimal list-inside">
+                            <li>Buka aplikasi & masuk ke menu Pengaturan.</li>
+                            <li>Pilih menu Keamanan / Akun.</li>
+                            <li>Klik opsi "Ubah Password".</li>
+                            <li>Masukkan password lama.</li>
+                            <li>Masukkan password baru & konfirmasi.</li>
+                            <li>Simpan perubahan.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="font-semibold text-lg">Soal 3: Tabel Analogi</h3>
+                    <p class="my-2">Isi kolom "Struktur Data" dengan jawaban yang paling sesuai.</p>
+                    <table class="w-full mt-4 border">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-2 border text-left">Situasi Sehari-hari</th>
+                                <th class="p-2 border text-left">Struktur Data yang Sesuai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 border">Antrean di bank</td>
+                                <td class="p-2 border answer-cell" data-answer="Queue (Antrean)">???</td>
+                            </tr>
+                             <tr>
+                                <td class="p-2 border">Tumpukan kartu remi</td>
+                                <td class="p-2 border answer-cell" data-answer="Stack (Tumpukan)">???</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border">Daftar nama siswa berurutan di kelas</td>
+                                <td class="p-2 border answer-cell" data-answer="Array">???</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                     <button id="fill-table-answers" class="btn btn-primary btn-sm mt-4">Isi Jawaban Tabel</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <p>&copy; 2025 Materi Pembelajaran Informatika. Dibuat untuk Siswa SMK TKJ.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a');
+            window.onscroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 68) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active');
+                    if (a.getAttribute('href') === `#${current}`) {
+                        a.classList.add('active');
+                    }
+                });
+            };
+
+            // Stack visualization
+            const stackContainer = document.getElementById('stack-container');
+            const stackPushBtn = document.getElementById('stack-push');
+            const stackPopBtn = document.getElementById('stack-pop');
+            let stackItems = [];
+            const stackColors = ['bg-red-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-purple-400'];
+
+            stackPushBtn.addEventListener('click', () => {
+                if (stackItems.length < 4) {
+                    const itemNumber = stackItems.length + 1;
+                    const item = document.createElement('div');
+                    item.className = `data-item ${stackColors[itemNumber-1]}`;
+                    item.textContent = `Piring ${itemNumber}`;
+                    stackItems.push(item);
+                    stackContainer.appendChild(item);
+                }
+            });
+
+            stackPopBtn.addEventListener('click', () => {
+                if (stackItems.length > 0) {
+                    const item = stackItems.pop();
+                    item.style.opacity = '0';
+                    setTimeout(() => stackContainer.removeChild(item), 500);
+                }
+            });
+
+            // Queue visualization
+            const queueContainer = document.getElementById('queue-container');
+            const queueEnqueueBtn = document.getElementById('queue-enqueue');
+            const queueDequeueBtn = document.getElementById('queue-dequeue');
+            let queueItems = [];
+            let queueCounter = 0;
+            const queueColors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
+
+            queueEnqueueBtn.addEventListener('click', () => {
+                if (queueItems.length < 4) {
+                    queueCounter++;
+                    const item = document.createElement('div');
+                    item.className = `data-item ${queueColors[queueCounter % queueColors.length]}`;
+                    item.textContent = `Orang ${queueCounter}`;
+                    queueItems.push(item);
+                    queueContainer.appendChild(item);
+                }
+            });
+
+            queueDequeueBtn.addEventListener('click', () => {
+                if (queueItems.length > 0) {
+                    const item = queueItems.shift();
+                    item.style.transform = 'translateX(-100%)';
+                    item.style.opacity = '0';
+                    setTimeout(() => queueContainer.removeChild(item), 500);
+                }
+            });
+
+            // Proses Komputasi content display
+            const stepCards = document.querySelectorAll('.step-card');
+            const prosesContent = document.getElementById('proses-content');
+            const prosesData = {
+                'proses-1': {
+                    title: '1. Pengumpulan Data',
+                    text: 'Langkah pertama adalah mengumpulkan informasi sebanyak-banyaknya. Contoh: bertanya kepada guru dan siswa tentang kapan jaringan melambat, memeriksa kabel fisik, dan melihat log atau status pada router.'
+                },
+                'proses-2': {
+                    title: '2. Pemodelan',
+                    text: 'Ubah masalah menjadi bentuk yang lebih sederhana. Contoh: membuat diagram alur jaringan sekolah di kertas, dari sumber internet, ke server, lalu ke setiap ruang kelas. Ini membantu memvisualisasikan masalah.'
+                },
+                'proses-3': {
+                    title: '3. Analisis',
+                    text: 'Cari pola atau keanehan dari data dan model. Contoh: dari diagram, kamu sadar bahwa satu titik akses Wi-Fi di lantai 2 melayani terlalu banyak perangkat, dan ada laporan kabel yang sering terinjak di lab.'
+                },
+                'proses-4': {
+                    title: '4. Simulasi',
+                    text: 'Bayangkan atau uji coba solusi sebelum diterapkan sepenuhnya. Contoh: "Jika saya pindahkan beberapa pengguna ke titik akses lain dan mengganti kabel yang rusak, seharusnya beban terbagi rata dan kecepatan meningkat." Ini adalah prediksi solusi.'
+                }
+            };
+            
+            stepCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    const contentKey = card.dataset.content;
+                    const data = prosesData[contentKey];
+                    prosesContent.innerHTML = `<h4 class="font-bold text-lg mb-2">${data.title}</h4><p>${data.text}</p>`;
+                });
+            });
+
+            // Latihan: Toggle answers
+            document.querySelectorAll('.toggle-answer').forEach(button => {
+                button.addEventListener('click', () => {
+                    const answerDiv = button.nextElementSibling;
+                    const isHidden = answerDiv.classList.contains('hidden');
+                    answerDiv.classList.toggle('hidden');
+                    button.textContent = isHidden ? 'Sembunyikan Jawaban' : 'Lihat Jawaban';
+                });
+            });
+            
+            // Latihan: Fill table answers
+            document.getElementById('fill-table-answers').addEventListener('click', function() {
+                document.querySelectorAll('.answer-cell').forEach(cell => {
+                    cell.textContent = cell.dataset.answer;
+                    cell.classList.add('font-bold', 'text-green-700');
+                });
+                this.disabled = true;
+                this.textContent = 'Jawaban Terisi';
+                this.classList.remove('btn-primary');
+                this.classList.add('bg-gray-400', 'cursor-not-allowed');
+            });
+        });
+    </script>
+</body>
+</html>
