@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Informatika TKJ Kelas X</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        
+        /* Animasi Latar Belakang Gradien */
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background: linear-gradient(135deg, #16a085, #2980b9, #8e44ad, #c0392b);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.85); /* Semi-transparan untuk melihat background */
+            backdrop-filter: blur(10px); /* Efek kaca buram */
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.8em;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+            margin-top: 50px;
+        }
+        h3 {
+            font-size: 1.4em;
+            margin-top: 30px;
+            color: #34495e;
+        }
+        .section-intro {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.7);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .analogy-box {
+            background: rgba(234, 244, 255, 0.7);
+            border: 1px solid #c2e0ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        .analogy-box h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .highlight {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #bdc3c7;
+            margin: 40px 0;
+        }
+        .interactive-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+        .interactive-section textarea,
+        .interactive-section input,
+        .interactive-section button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .interactive-section button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .interactive-section button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .output-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.5s ease;
+        }
+        .output-box.pass {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .output-box.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .task-item {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: move;
+            text-align: center;
+            width: 90%;
+            touch-action: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .task-item:hover {
+            transform: scale(1.05);
+            background-color: #d0d3d6;
+        }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            width: 90%;
+            min-height: 200px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-style: italic;
+            color: #888;
+            transition: border-color 0.3s;
+        }
+        .task-block {
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .task-block:hover {
+            transform: scale(1.05);
+        }
+        .task-block.red { background-color: #e74c3c; }
+        .task-block.yellow { background-color: #f1c40f; }
+        .task-block.blue { background-color: #3498db; }
+        .task-block.green { background-color: #2ecc71; }
+        .flowchart-piece {
+            background-color: #f1c40f;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .atm-display {
+            background-color: #2c3e50;
+            color: #2ecc71;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .atm-button {
+            background-color: #34495e;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .atm-button:hover {
+            transform: translateY(-2px);
+        }
+        .memory-block {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #fff;
+            box-sizing: border-box;
+            float: left;
+            background-color: #ccc;
+        }
+        .fragmented { background-color: #e74c3c; }
+        .used { background-color: #3498db; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Memahami Dasar-Dasar Informatika</h1>
+    <p class="section-intro">
+        Selamat datang di materi pembelajaran interaktif untuk siswa **TKJ Kelas X**! Kita akan menjelajahi tiga konsep fundamental dalam dunia komputer: **logika pemrograman**, **arsitektur komputer**, dan **sistem operasi**. Mari kita bedah konsep-konsep ini dari sudut pandang yang relevan dengan kehidupan sehari-hari dan dunia kerja Anda.
+    </p>
+
+    <hr>
+
+    <h2>1. Merancang Program dengan Pseudocode: "Resep" untuk Komputer</h2>
+    <p>
+        <span class="highlight">Pseudocode</span> adalah "cetak biru" atau "resep" untuk program komputer. Sebelum seorang arsitek membangun gedung, ia membuat denah. Sebelum seorang koki memasak hidangan, ia menulis resep. Sama halnya, seorang programmer harus membuat pseudocode untuk merancang logika programnya. Ini adalah tahap krusial di mana kita memecah masalah besar menjadi langkah-langkah kecil yang logis dan berurutan.
+    </p>
+    
+    <h3>Mengapa Pseudocode Penting?</h3>
+    <ul>
+        <li><strong>Fokus pada Logika:</strong> Pseudocode memungkinkan kita untuk fokus pada alur pemecahan masalah tanpa terganggu oleh aturan sintaksis yang rumit dari bahasa pemrograman.</li>
+        <li><strong>Komunikasi:</strong> Pseudocode mudah dipahami oleh orang lain, bahkan yang tidak tahu bahasa pemrograman tertentu. Ini sangat berguna dalam kerja tim.</li>
+        <li><strong>Meminimalisir Kesalahan:</strong> Dengan merancang logika terlebih dahulu, kita bisa menemukan dan memperbaiki kesalahan berpikir (bug) sejak dini.</li>
+    </ul>
+
+    <div class="analogy-box">
+        <h4>Contoh Analogi: Merencanakan Perjalanan ke Sekolah</h4>
+        <p>Sebuah algoritma bisa sederhana atau kompleks, tergantung situasinya.</p>
+        <p><strong>Versi Sederhana:</strong></p>
+        <ol>
+            <li>Bangun tidur.</li>
+            <li>Mandi.</li>
+            <li>Sarapan.</li>
+            <li>Berangkat ke sekolah.</li>
+        </ol>
+        <p><strong>Versi Kompleks (dengan Kondisi dan Perulangan):</strong></p>
+        <pre><code>Mulai
+    // Input
+    Cek cuaca.
+    
+    // Proses (Logika Kondisional)
+    JIKA cuaca hujan
+        Ambil payung.
+        Pesan ojek online.
+    SELAIN ITU (cuaca cerah)
+        Ambil helm.
+        Keluarkan motor.
+
+    // Proses (Logika Perulangan)
+    ULANGI sampai tiba di sekolah
+        Terus berkendara.
+        Lewati kemacetan jika ada.
+    
+    // Output
+    Sampai di sekolah.
+Selesai</code></pre>
+    </div>
+
+    <h3>Ayo Bermain! Game Logika (3 Game)</h3>
+    <p>Permainan ini akan menguji kemampuan Anda dalam menyusun urutan langkah-langkah secara logis.</p>
+    
+    <h4>Game 1: Teka-Teki Logika "Disarm Bomb"</h4>
+    <p>Ikuti instruksi dan klik tombol dengan urutan yang benar untuk "menonaktifkan" bom virtual. Urutan yang benar adalah: **Biru, Hijau, Merah, Kuning**.</p>
+    <div class="interactive-section">
+        <button id="btn-blue" style="background-color: #3498db; color: white;">Biru</button>
+        <button id="btn-green" style="background-color: #2ecc71; color: white;">Hijau</button>
+        <button id="btn-red" style="background-color: #e74c3c; color: white;">Merah</button>
+        <button id="btn-yellow" style="background-color: #f1c40f; color: black;">Kuning</button>
+        <div id="bomb-status" class="output-box" style="margin-top: 15px;"></div>
+    </div>
+    
+    <h4>Game 2: Rencana Harian (Drag-and-Drop)</h4>
+    <p>Susun langkah-langkah harian berikut ke dalam urutan yang benar.  </p>
+    <div class="interactive-section">
+        <p><strong>Tugas Harian:</strong></p>
+        <div class="task-list" id="task-list-source">
+            <div class="task-item" draggable="true" id="task-sarapan">Sarapan</div>
+            <div class="task-item" draggable="true" id="task-mandi">Mandi</div>
+            <div class="task-item" draggable="true" id="task-bangun">Bangun Tidur</div>
+            <div class="task-item" draggable="true" id="task-sekolah">Berangkat ke Sekolah</div>
+        </div>
+        <p><strong>Urutan Harian:</strong></p>
+        <div class="drop-zone" id="drop-zone-target">Seret dan letakkan tugas di sini.</div>
+        <button onclick="checkDailyPlan()">Periksa Urutan</button>
+        <div id="daily-plan-result" class="output-box" style="display: none;"></div>
+    </div>
+
+    <h4>Game 3: Flowchart Puzzle</h4>
+    <p>Selesaikan puzzle dengan menyusun potongan-potongan flowchart agar menghasilkan output "LULUS".</p>
+    <div class="interactive-section flowchart-container">
+        <p><strong>Tujuan:</strong> Periksa Nilai (`> 75`). Tampilkan "LULUS" jika benar, "TIDAK LULUS" jika salah.</p>
+        <div class="flowchart-pieces">
+            <div class="flowchart-piece" draggable="true" data-type="if">IF nilai > 75</div>
+            <div class="flowchart-piece" draggable="true" data-type="start">Mulai</div>
+            <div class="flowchart-piece" draggable="true" data-type="print-fail">Cetak "TIDAK LULUS"</div>
+            <div class="flowchart-piece" draggable="true" data-type="end">Selesai</div>
+            <div class="flowchart-piece" draggable="true" data-type="print-pass">Cetak "LULUS"</div>
+        </div>
+        <div class="drop-zone flowchart-zone" id="flowchart-drop-zone">Seret potongan flowchart ke sini, susun dari atas ke bawah.</div>
+        <button onclick="checkFlowchart()">Periksa Urutan Flowchart</button>
+        <div id="flowchart-result" class="output-box" style="display: none;"></div>
+    </div>
+
+    <hr>
+
+    <h2>2. Memahami Model IPO dan Arsitektur Von Neumann</h2>
+    <p>
+        Setiap tugas yang dilakukan komputer mengikuti siklus dasar yang disebut <span class="highlight">Input-Process-Output (IPO)</span>. 
+
+[Image of a Von Neumann architecture diagram]
+
+    </p>
+    <h3>Siklus IPO:</h3>
+    <ul>
+        <li><strong>Input (I):</strong> Segala sesuatu yang kita masukkan ke dalam sistem. Ini bisa berupa data yang diketik, klik mouse, atau sinyal dari sensor.</li>
+        <li><strong>Process (P):</strong> Serangkaian operasi yang dilakukan untuk memanipulasi data input. Ini adalah "otak" dari sistem, di mana semua perhitungan dan logika terjadi.</li>
+        <li><strong>Output (O):</strong> Hasil akhir dari proses yang bisa kita lihat, dengar, atau simpan. Ini bisa berupa teks di layar, suara dari speaker, atau dokumen yang dicetak.</li>
+    </ul>
+
+    <h3>Arsitektur Von Neumann: "Mesin" di Balik IPO</h3>
+    <p>
+        Model IPO dijalankan oleh sebuah arsitektur fisik yang disebut <span class="highlight">Arsitektur Von Neumann</span>. Arsitektur ini adalah dasar dari hampir semua komputer modern.
+    </p>
+    <ul>
+        <li><strong>Unit I/O:</strong> Jembatan untuk **Input** dan **Output**. Keyboard dan mouse adalah perangkat input, sedangkan monitor dan printer adalah perangkat output.</li>
+        <li><strong>CPU:</strong> Inti dari **Process**. Di sinilah semua instruksi dieksekusi, data dihitung, dan keputusan dibuat.</li>
+        <li><strong>Memori (RAM):</strong> Tempat kerja sementara yang menyimpan data **Input** dan instruksi **Process** sebelum dieksekusi oleh CPU.</li>
+    </ul>
+    
+    <div class="analogy-box">
+        <h4>Analogi Kehidupan Sehari-hari: Transaksi di Minimarket</h4>
+        <p>Saat berbelanja, Anda bisa melihat model IPO dalam aksi:</p>
+        <ul>
+            <li><strong>Input:</strong> Kasir memindai kode barang dan Anda memberikan uang tunai.</li>
+            <li><strong>Proses:</strong> Mesin kasir (CPU) menghitung total belanja.</li>
+            <li><strong>Output:</strong> Mesin mencetak struk belanja.</li>
+        </ul>
+    </div>
+    
+    <h3>Ayo Bermain! Simulasi IPO (3 Game)</h3>
+    <p>Cobalah hitung dua angka di bawah ini. Anda adalah **Input**, tombol adalah **Proses**, dan hasilnya adalah **Output**.</p>
+    <div class="interactive-section">
+        <h4>Game 1: Mesin Penjumlahan IPO</h4>
+        <label for="input-1">Angka 1 (Input):</label>
+        <input type="number" id="input-1" placeholder="Masukkan angka">
+        <label for="input-2">Angka 2 (Input):</label>
+        <input type="number" id="input-2" placeholder="Masukkan angka">
+        <button onclick="performCalculation()">Proses (Penjumlahan)</button>
+        <div id="ipo-output" class="output-box"></div>
+    </div>
+    
+    <h4>Game 2: Simulasi Mesin Kasir</h4>
+    <p>Pahami alur Input, Proses, Output seperti yang terjadi di minimarket.</p>
+    <div class="interactive-section">
+        <div class="cashier-input">
+            <label for="price">Harga Barang (Input):</label>
+            <input type="number" id="price" placeholder="Contoh: 15000">
+            <label for="payment">Jumlah Bayar (Input):</label>
+            <input type="number" id="payment" placeholder="Contoh: 20000">
+            <button onclick="calculateChange()">Hitung Kembalian (Proses)</button>
+        </div>
+        <div id="cashier-display" class="cashier-display">
+            Hasil (Output) akan muncul di sini.
+        </div>
+    </div>
+
+    <h4>Game 3: Simulasi Mesin ATM</h4>
+    <p>Simulasikan penarikan uang di ATM untuk memahami IPO. </p>
+    <div class="interactive-section">
+        <div class="atm-display" id="atm-display">Masukkan kartu ATM Anda.</div>
+        <label for="atm-input-amount">Jumlah Penarikan (Input):</label>
+        <input type="number" id="atm-input-amount" placeholder="Masukkan kelipatan Rp50.000">
+        <button onclick="withdrawCash()">Tarik Tunai (Proses)</button>
+    </div>
+
+    <hr>
+
+    <h2>3. Peran Sistem Operasi (OS): "Manajer" Komputer</h2>
+    <p>
+        <span class="highlight">Sistem Operasi (OS)</span> adalah software terpenting yang bertindak sebagai jembatan antara hardware dan software. Tanpa OS, perangkat keras hanyalah kumpulan komponen yang tidak berguna.
+    </p>
+
+    <h3>Peran Utama OS dengan Analogi: Manajer Gedung Apartemen</h3>
+    <div class="analogy-box">
+        <p>Bayangkan komputer adalah sebuah gedung apartemen besar. OS adalah manajernya, yang bertugas:</p>
+        <ul>
+            <li><strong>Manajemen Proses:</strong> Mengatur jadwal penggunaan lift (CPU) agar semua penghuni (program) bisa menggunakannya secara adil, tanpa ada yang menunggu terlalu lama.</li>
+            <li><strong>Manajemen Memori:</strong> Mengalokasikan kamar (memori) untuk setiap penghuni (program) agar mereka tidak saling tumpang tindih.</li>
+            <li><strong>Manajemen File:</strong> Mengelola kunci dan kotak surat (sistem file dan folder) agar setiap penghuni dapat menemukan barang mereka dengan mudah.</li>
+            <li><strong>Manajemen I/O:</strong> Mengatur penggunaan pintu masuk dan keluar (perangkat I/O) agar semua paket (data) dari kurir sampai ke penghuni yang tepat.</li>
+        </ul>
+    </div>
+
+    <p><strong>Studi Kasus: Menyalin File sambil Menonton YouTube</strong><br>
+    Ketika Anda mengunduh file besar sambil mendengarkan musik, OS bekerja keras di belakang layar:</p>
+    <ul>
+        <li>OS membagi waktu CPU untuk kedua program (pengunduh dan pemutar musik). Ini adalah **manajemen proses**.</li>
+        <li>OS memastikan kedua program memiliki ruang memori yang cukup. Ini adalah **manajemen memori**.</li>
+        <li>OS mengelola data yang masuk dari internet untuk pengunduh dan data audio yang dikirim ke speaker untuk pemutar musik. Ini adalah **manajemen I/O**.</li>
+    </ul>
+
+    <h3>Ayo Bermain! Simulasi OS (3 Game)</h3>
+    <p>Permainan ini akan mensimulasikan bagaimana OS bekerja di belakang layar.</p>
+    
+    <h4>Game 1: Manajer Tugas</h4>
+    <p>Klik semua tugas yang muncul sebelum timer habis. Ini mensimulasikan bagaimana OS mengelola proses-proses yang masuk.</p>
+    <div class="interactive-section game-container">
+        <p>Waktu tersisa: <span id="timer">30</span> detik</p>
+        <p>Tugas selesai: <span id="tasks-completed">0</span></p>
+        <div class="task-manager-grid" id="task-grid"></div>
+        <button onclick="startGame()" id="start-btn">Mulai Game</button>
+    </div>
+    
+    <h4>Game 2: Alokasi Memori (Drag-and-Drop)</h4>
+    <p>Seret dan letakkan ikon program ke slot memori yang tersedia. Ini mensimulasikan manajemen memori oleh OS. </p>
+    <div class="interactive-section game-container">
+        <p><strong>Program (CPU):</strong></p>
+        <div class="program-bank" id="program-bank">
+            <span class="program-icon" draggable="true" id="prog-word" data-size="2">📄</span>
+            <span class="program-icon" draggable="true" id="prog-chrome" data-size="3">🌐</span>
+            <span class="program-icon" draggable="true" id="prog-game" data-size="4">🎮</span>
+            <span class="program-icon" draggable="true" id="prog-music" data-size="1">🎶</span>
+        </div>
+        <p><strong>Memori (RAM):</strong></p>
+        <div class="memory-grid-container">
+            <div class="memory-grid" id="memory-grid"></div>
+        </div>
+    </div>
+
+    <h4>Game 3: Fragmentasi Memori</h4>
+    <p>Klik "Fragmentasi" untuk melihat bagaimana memori menjadi terfragmentasi, lalu klik "Defrag" untuk membersihkannya.</p>
+    <div class="interactive-section">
+        <div id="memory-visualization" style="border: 2px solid #34495e; padding: 10px; min-height: 200px;"></div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="fragmentMemory()">Fragmentasi</button>
+            <button onclick="defragmentMemory()">Defrag</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- JavaScript untuk Game Interaktif ---
+
+    // Game 1: Cek Kelulusan
+    function checkPassStatus() {
+        const gradeInput = document.getElementById('student-grade');
+        const grade = parseInt(gradeInput.value);
+        const outputDiv = document.getElementById('grade-output');
+
+        if (isNaN(grade)) {
+            outputDiv.textContent = 'Masukkan nilai yang valid!';
+            outputDiv.className = 'output-box fail';
+        } else if (grade >= 75) {
+            outputDiv.textContent = `Nilai Anda ${grade}. Selamat, Anda LULUS!`;
+            outputDiv.className = 'output-box pass';
+        } else {
+            outputDiv.textContent = `Nilai Anda ${grade}. Maaf, Anda TIDAK LULUS.`;
+            outputDiv.className = 'output-box fail';
+        }
+    }
+
+    // Game 2: Teka-Teki Logika
+    let bombSequence = ['btn-blue', 'btn-green', 'btn-red', 'btn-yellow'];
+    let userSequence = [];
+    const bombStatus = document.getElementById('bomb-status');
+
+    function checkBombSequence(clickedId) {
+        userSequence.push(clickedId);
+        if (userSequence.length > bombSequence.length) {
+            bombStatus.textContent = 'Urutan Salah! Coba lagi dari awal.';
+            bombStatus.className = 'output-box fail';
+            userSequence = [];
+            return;
+        }
+        if (userSequence[userSequence.length - 1] !== bombSequence[userSequence.length - 1]) {
+            bombStatus.textContent = 'Urutan Salah! Coba lagi dari awal.';
+            bombStatus.className = 'output-box fail';
+            userSequence = [];
+            return;
+        }
+        if (userSequence.length === bombSequence.length) {
+            bombStatus.textContent = 'Bom berhasil dinonaktifkan! Urutan Anda benar!';
+            bombStatus.className = 'output-box pass';
+        } else {
+            bombStatus.textContent = `Langkah ke ${userSequence.length} benar. Lanjut!`;
+            bombStatus.className = 'output-box pass';
+        }
+    }
+
+    document.getElementById('btn-blue').addEventListener('click', () => checkBombSequence('btn-blue'));
+    document.getElementById('btn-green').addEventListener('click', () => checkBombSequence('btn-green'));
+    document.getElementById('btn-red').addEventListener('click', () => checkBombSequence('btn-red'));
+    document.getElementById('btn-yellow').addEventListener('click', () => checkBombSequence('btn-yellow'));
+
+    // Game 3: Rencana Harian Drag-and-Drop
+    const taskList = document.getElementById('task-list-source');
+    const dropZone = document.getElementById('drop-zone-target');
+    let draggedItem = null;
+
+    taskList.addEventListener('dragstart', (e) => {
+        draggedItem = e.target;
+        setTimeout(() => e.target.style.display = 'none', 0);
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.textContent = 'Lepaskan di sini.';
+        dropZone.style.border = '2px dashed #3498db';
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.textContent = 'Seret dan letakkan tugas di sini.';
+        dropZone.style.border = '2px dashed #ccc';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.textContent = '';
+        dropZone.style.border = '2px dashed #ccc';
+        draggedItem.style.display = 'block';
+        dropZone.appendChild(draggedItem);
+    });
+
+    function checkDailyPlan() {
+        const resultDiv = document.getElementById('daily-plan-result');
+        const tasks = Array.from(dropZone.children).map(item => item.id);
+        const correctOrder = ['task-bangun', 'task-mandi', 'task-sarapan', 'task-sekolah'];
+        
+        let isCorrect = tasks.length === correctOrder.length;
+        if (isCorrect) {
+            for (let i = 0; i < tasks.length; i++) {
+                if (tasks[i] !== correctOrder[i]) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+        }
+
+        if (isCorrect) {
+            resultDiv.textContent = 'Urutan Anda benar! Bagus sekali!';
+            resultDiv.className = 'output-box pass';
+        } else {
+            resultDiv.textContent = 'Urutan Anda salah. Coba lagi!';
+            resultDiv.className = 'output-box fail';
+        }
+        resultDiv.style.display = 'block';
+    }
+
+    // Game 4: Flowchart Puzzle
+    const flowchartPieces = document.querySelectorAll('.flowchart-piece');
+    const flowchartZone = document.getElementById('flowchart-drop-zone');
+    let draggingFlowchartPiece = null;
+
+    flowchartPieces.forEach(piece => {
+        piece.addEventListener('dragstart', (e) => {
+            draggingFlowchartPiece = e.target;
+            setTimeout(() => e.target.style.opacity = '0.5', 0);
+        });
+    });
+
+    flowchartZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        flowchartZone.style.border = '2px dashed #3498db';
+    });
+
+    flowchartZone.addEventListener('dragleave', () => {
+        flowchartZone.style.border = '2px dashed #ccc';
+    });
+
+    flowchartZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        flowchartZone.style.border = '2px dashed #ccc';
+        draggingFlowchartPiece.style.opacity = '1';
+        flowchartZone.appendChild(draggingFlowchartPiece);
+    });
+
+    function checkFlowchart() {
+        const resultDiv = document.getElementById('flowchart-result');
+        const pieces = Array.from(flowchartZone.children).map(item => item.dataset.type);
+        const correctOrder = ['start', 'if', 'print-pass', 'print-fail', 'end'];
+
+        let isCorrect = true;
+        if (pieces.length !== correctOrder.length) {
+            isCorrect = false;
+        } else {
+            for (let i = 0; i < pieces.length; i++) {
+                if (pieces[i] !== correctOrder[i]) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+        }
+
+        if (isCorrect) {
+            resultDiv.textContent = 'Flowchart benar! Alur logika Anda sempurna!';
+            resultDiv.className = 'output-box pass';
+        } else {
+            resultDiv.textContent = 'Flowchart salah. Susun kembali logikanya!';
+            resultDiv.className = 'output-box fail';
+        }
+        resultDiv.style.display = 'block';
+    }
+
+    // Game 5: Simulasi Mesin Penjumlahan IPO
+    function performCalculation() {
+        const input1 = parseFloat(document.getElementById('input-1').value);
+        const input2 = parseFloat(document.getElementById('input-2').value);
+        const outputDiv = document.getElementById('ipo-output');
+
+        if (isNaN(input1) || isNaN(input2)) {
+            outputDiv.textContent = 'Masukkan dua angka yang valid!';
+            outputDiv.className = 'output-box fail';
+        } else {
+            const result = input1 + input2;
+            outputDiv.textContent = `Hasilnya adalah: ${result}`;
+            outputDiv.className = 'output-box pass';
+        }
+    }
+    
+    // Game 6: Simulasi Mesin Kasir
+    function calculateChange() {
+        const price = parseFloat(document.getElementById('price').value);
+        const payment = parseFloat(document.getElementById('payment').value);
+        const display = document.getElementById('cashier-display');
+
+        if (isNaN(price) || isNaN(payment) || payment < price) {
+            display.textContent = 'Input tidak valid. Periksa kembali harga dan pembayaran.';
+            display.style.backgroundColor = '#f8d7da';
+        } else {
+            const change = payment - price;
+            display.textContent = `Harga: Rp${price.toLocaleString()} | Bayar: Rp${payment.toLocaleString()} | Kembalian: Rp${change.toLocaleString()}`;
+            display.style.backgroundColor = '#d4edda';
+        }
+    }
+
+    // Game 7: Simulasi Mesin ATM
+    function withdrawCash() {
+        const amountInput = document.getElementById('atm-input-amount');
+        const amount = parseInt(amountInput.value);
+        const display = document.getElementById('atm-display');
+
+        if (isNaN(amount) || amount <= 0 || amount % 50000 !== 0) {
+            display.textContent = 'Jumlah tidak valid. Masukkan kelipatan Rp50.000.';
+            display.style.color = '#e74c3c';
+        } else {
+            display.textContent = `Sedang memproses penarikan Rp${amount.toLocaleString()}... `;
+            display.style.color = '#2ecc71';
+            setTimeout(() => {
+                display.textContent = `Penarikan berhasil! Silahkan ambil uang Anda.`;
+            }, 2000);
+        }
+    }
+
+    // Game 8: Manajer Tugas
+    const taskGrid = document.getElementById('task-grid');
+    const timerDisplay = document.getElementById('timer');
+    const tasksCompletedDisplay = document.getElementById('tasks-completed');
+    const startBtn = document.getElementById('start-btn');
+    let gameInterval;
+    let taskCount = 0;
+    let timer = 30;
+    
+    function startGame() {
+        taskGrid.innerHTML = '';
+        taskCount = 0;
+        timer = 30;
+        tasksCompletedDisplay.textContent = taskCount;
+        timerDisplay.textContent = timer;
+        startBtn.disabled = true;
+
+        gameInterval = setInterval(() => {
+            timer--;
+            timerDisplay.textContent = timer;
+            if (timer <= 0) {
+                endGame();
+            } else {
+                createTaskBlock();
+            }
+        }, 1000);
+    }
+    
+    function endGame() {
+        clearInterval(gameInterval);
+        taskGrid.innerHTML = 'Game Selesai!';
+        startBtn.disabled = false;
+    }
+
+    function createTaskBlock() {
+        const colors = ['red', 'yellow', 'blue', 'green'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const taskBlock = document.createElement('div');
+        taskBlock.className = `task-block ${randomColor}`;
+        taskBlock.textContent = 'Tugas';
+        taskBlock.onclick = () => {
+            taskGrid.removeChild(taskBlock);
+            taskCount++;
+            tasksCompletedDisplay.textContent = taskCount;
+        };
+        if (taskGrid.children.length < 9) {
+            taskGrid.appendChild(taskBlock);
+        }
+    }
+    
+    // Game 9: Alokasi Memori (Drag-and-Drop)
+    const memoryGrid = document.getElementById('memory-grid');
+    const programBank = document.getElementById('program-bank');
+
+    for (let i = 0; i < 16; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'memory-slot';
+        slot.dataset.index = i;
+        memoryGrid.appendChild(slot);
+    }
+
+    let dragging = null;
+
+    programBank.addEventListener('dragstart', (e) => {
+        dragging = e.target;
+        e.dataTransfer.setData('text/plain', dragging.id);
+        setTimeout(() => e.target.style.opacity = '0.5', 0);
+    });
+
+    memoryGrid.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const targetSlot = e.target.closest('.memory-slot');
+        if (targetSlot) {
+            const size = parseInt(dragging.dataset.size);
+            const startIndex = parseInt(targetSlot.dataset.index);
+            const isValid = checkMemorySpace(startIndex, size);
+            targetSlot.style.borderColor = isValid ? 'green' : 'red';
+        }
+    });
+
+    memoryGrid.addEventListener('dragleave', (e) => {
+        const targetSlot = e.target.closest('.memory-slot');
+        if (targetSlot) {
+            targetSlot.style.borderColor = '#95a5a6';
+        }
+    });
+
+    memoryGrid.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const targetSlot = e.target.closest('.memory-slot');
+        if (targetSlot) {
+            const size = parseInt(dragging.dataset.size);
+            const startIndex = parseInt(targetSlot.dataset.index);
+            if (checkMemorySpace(startIndex, size)) {
+                for (let i = 0; i < size; i++) {
+                    const slot = memoryGrid.children[startIndex + i];
+                    slot.style.backgroundColor = dragging.id === 'prog-word' ? '#3498db' :
+                                                   dragging.id === 'prog-chrome' ? '#f1c40f' :
+                                                   dragging.id === 'prog-game' ? '#e74c3c' : '#2ecc71';
+                    slot.textContent = dragging.textContent;
+                }
+                dragging.remove();
+            }
+            targetSlot.style.borderColor = '#95a5a6';
+        }
+    });
+    
+    function checkMemorySpace(startIndex, size) {
+        if (startIndex + size > 16) return false;
+        for (let i = 0; i < size; i++) {
+            if (memoryGrid.children[startIndex + i].textContent !== '') {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    // Game 10: Fragmentasi Memori
+    const memoryVis = document.getElementById('memory-visualization');
+    const MEMORY_SIZE = 100;
+    let memoryBlocks = [];
+
+    function initMemory() {
+        memoryBlocks = new Array(MEMORY_SIZE).fill('free');
+        renderMemory();
+    }
+
+    function renderMemory() {
+        memoryVis.innerHTML = '';
+        memoryBlocks.forEach(blockState => {
+            const block = document.createElement('div');
+            block.className = 'memory-block';
+            if (blockState === 'used') {
+                block.style.backgroundColor = '#3498db';
+            } else if (blockState === 'fragmented') {
+                block.style.backgroundColor = '#e74c3c';
+            } else {
+                block.style.backgroundColor = '#ccc';
+            }
+            memoryVis.appendChild(block);
+        });
+    }
+
+    function fragmentMemory() {
+        // Simulate fragmentation
+        for (let i = 0; i < 20; i++) {
+            const start = Math.floor(Math.random() * (MEMORY_SIZE - 5));
+            const size = Math.floor(Math.random() * 5) + 1;
+            for (let j = 0; j < size; j++) {
+                if (memoryBlocks[start + j] === 'free') {
+                    memoryBlocks[start + j] = 'used';
+                }
+            }
+        }
+        for (let i = 0; i < 10; i++) {
+            const start = Math.floor(Math.random() * (MEMORY_SIZE - 2));
+            const size = Math.floor(Math.random() * 2) + 1;
+            for (let j = 0; j < size; j++) {
+                if (memoryBlocks[start + j] === 'used') {
+                    memoryBlocks[start + j] = 'free';
+                }
+            }
+        }
+        renderMemory();
+    }
+
+    function defragmentMemory() {
+        const usedBlocks = memoryBlocks.filter(block => block === 'used');
+        const freeBlocks = memoryBlocks.filter(block => block === 'free');
+        memoryBlocks = [...usedBlocks, ...freeBlocks];
+        renderMemory();
+    }
+
+    window.onload = initMemory;
+</script>
+
+</body>
+</html>
