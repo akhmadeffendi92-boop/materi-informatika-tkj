@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Interaktif: Praktik Microsoft Word</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Study -->
+    <!-- Application Structure Plan: Aplikasi ini mengubah Lembar Kerja Peserta Didik (LKPD) linear menjadi pengalaman belajar interaktif. Strukturnya dirancang secara tematik untuk pemahaman yang intuitif, bukan meniru urutan dokumen asli. Alurnya: 1) Pengantar & Tujuan Pembelajaran disajikan dalam kartu yang jelas. 2) "Arena Pemformatan" sebagai inti interaktif, dengan panel kontrol di kiri untuk memicu perubahan visual pada pratinjau dokumen di kanan, memungkinkan pengguna menjelajahi efek setiap fitur secara non-linear. 3) "Visualisasi Penilaian", menggunakan diagram donat untuk meringkas bobot setiap keterampilan, memberikan wawasan cepat. Struktur ini dipilih karena mengubah instruksi pasif menjadi eksplorasi aktif, memperkuat pembelajaran dengan menghubungkan aksi (klik tombol) ke hasil visual secara langsung, yang jauh lebih efektif untuk pemahaman. -->
+    <!-- Visualization & Content Choices: 1. Tujuan Pembelajaran -> Kartu HTML/Tailwind -> Goal: Inform -> Interaksi: Tidak ada, hanya presentasi bersih. Justifikasi: Memecah daftar tujuan menjadi segmen visual yang mudah dicerna. 2. Instruksi Pemformatan & Teks -> Panel Kontrol (Tombol HTML) & Area Pratinjau (Blok Teks HTML) -> Goal: Teach & Demonstrate -> Interaksi: Klik tombol memicu fungsi JS untuk menerapkan gaya CSS/Tailwind ke teks, mensimulasikan pemformatan. Justifikasi: Ini adalah inti interaktif, memungkinkan pembelajaran berbasis penemuan. 3. Tabel Penilaian -> Diagram Donat (Chart.js/Canvas) -> Goal: Compare & Synthesize -> Interaksi: Hover untuk tooltip detail. Justifikasi: Menerjemahkan data tabel menjadi wawasan visual instan tentang pentingnya setiap kategori penilaian. Semua elemen visual dibuat dengan HTML/CSS dan Canvas, menghindari SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .control-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .control-button.active {
+            background-color: #388E3C !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .control-button:hover:not(.active) {
+             background-color: #E0E0E0;
+        }
+        .document-preview {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #E0E0E0;
+        }
+        .document-preview.bordered {
+             border: 1.5pt solid #4A4A4A;
+        }
+        .notification {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Panduan Interaktif MS Word</h1>
+            <div class="flex space-x-4">
+                <a href="#tujuan" class="text-gray-600 hover:text-blue-600">Tujuan</a>
+                <a href="#arena" class="text-gray-600 hover:text-blue-600">Arena</a>
+                <a href="#penilaian" class="text-gray-600 hover:text-blue-600">Penilaian</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="tujuan" class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800">Tujuan Pembelajaran</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8">
+                LKPD ini dirancang untuk menguasai keterampilan esensial dalam Microsoft Word. Setelah menyelesaikan latihan ini, Anda diharapkan mampu mencapai target-target berikut.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">Mengetik Akurat</h3>
+                    <p class="text-sm">Mengetik dokumen minimal 250 kata dengan cepat dan akurat.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">Format Teks</h3>
+                    <p class="text-sm">Menerapkan format teks seperti font, ukuran, gaya, dan indentasi.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">Tata Letak</h3>
+                    <p class="text-sm">Menggunakan fitur tata letak dasar (margin, spasi, header/footer, border).</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">Daftar Terstruktur</h3>
+                    <p class="text-sm">Membuat daftar terstruktur menggunakan bullet dan numbering.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">Sisip Objek</h3>
+                    <p class="text-sm">Menyisipkan dan memformat objek seperti tabel dan catatan kaki.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="arena" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Arena Pemformatan Interaktif</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                    Klik tombol di panel kontrol untuk menerapkan pemformatan secara langsung pada dokumen pratinjau. Jelajahi setiap fitur untuk melihat bagaimana dokumen berubah secara visual.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <h3 class="font-bold text-xl mb-6 border-b pb-3 text-gray-700">Panel Kontrol</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold mb-3 text-gray-600">1. Pengaturan Dasar</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button id="btn-margin" data-feature="margin" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Margin Kustom</button>
+                                <button id="btn-font" data-feature="font" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Font & Ukuran</button>
+                                <button id="btn-spacing" data-feature="spacing" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Spasi & Rata Teks</button>
+                                <button id="btn-border" data-feature="border" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Bingkai Halaman</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-gray-600">2. Pemformatan Teks</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button id="btn-title" data-feature="title" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Format Judul</button>
+                                <button id="btn-subtitle" data-feature="subtitle" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Format Subjudul</button>
+                                <button id="btn-italic" data-feature="italic" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Teks Miring (Italic)</button>
+                                <button id="btn-indent" data-feature="indent" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Indentasi Paragraf</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-gray-600">3. Sisip Objek & Daftar</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button id="btn-footnote" data-feature="footnote" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Sisip Catatan Kaki</button>
+                                <button id="btn-table" data-feature="table" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Sisip Tabel</button>
+                                <button id="btn-list" data-feature="list" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Buat Daftar</button>
+                            </div>
+                        </div>
+                         <div>
+                            <h4 class="font-semibold mb-3 text-gray-600">4. Header & Footer</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button id="btn-header" data-feature="header" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Tambahkan Header</button>
+                                <button id="btn-footer" data-feature="footer" class="control-button text-sm bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg">Tambahkan Footer</button>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="btn-reset" class="w-full bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">Reset Semua</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 relative">
+                    <div id="document-container" class="bg-white p-4 sm:p-8 md:p-12 rounded-lg document-preview">
+                        <div id="header-area" class="h-10 text-xs text-gray-500 text-right"></div>
+                        <div id="document-content">
+                            <h1 id="main-title" class="text-center font-bold">LEMBAR KERJA PESERTA DIDIK (LKPD) PRAKTIK MICROSOFT WORD</h1>
+                            
+                            <h3 id="main-subtitle" class="font-bold mt-4">Revolusi Digital, Perangkat Keras, dan Etika Pengguna</h3>
+                            <p class="doc-paragraph mt-2">Teknologi informasi telah mengubah cara hidup, bekerja, dan berinteraksi kita. Kita kini berada di tengah-tengah Revolusi Digital, era di mana data dan informasi menjadi aset paling berharga. Kemampuan untuk mengoperasikan perangkat lunak dasar, seperti Microsoft Word, bukan lagi sekadar keterampilan tambahan, melainkan sebuah kebutuhan mutlak (<span id="footnote-target">literasi digital</span>). Tanpa penguasaan dasar pengolahan kata, komunikasi profesional dan akademis akan terhambat.</p>
+                            <p class="doc-paragraph mt-2">Literasi komputer mencakup pemahaman tentang bagaimana komputer bekerja dan kemampuan menggunakan aplikasi untuk memecahkan masalah atau menyelesaikan tugas. Dalam konteks pendidikan, penguasaan Microsoft Word memastikan siswa dapat memproduksi laporan, makalah, atau resume dengan standar profesional. Aplikasi ini menyediakan alat yang diperlukan untuk menjaga konsistensi format.</p>
+                            <div id="list-container" class="mt-2">
+                                <p>Berikut adalah beberapa alasan mengapa penguasaan Ms. Word itu penting:</p>
+                                <ol class="list-decimal list-inside">
+                                    <li>Standarisasi Dokumen: Memastikan semua dokumen memiliki format yang seragam dan mudah dibaca.</li>
+                                    <li>Kolaborasi: Dokumen dapat dibagikan dan diedit oleh banyak pengguna secara bersamaan, mendukung kerja tim.</li>
+                                    <li>Efisiensi Waktu: Fitur seperti koreksi otomatis, pengecekan tata bahasa, dan penggunaan template mempercepat proses penulisan.</li>
+                                </ol>
+                            </div>
+                            <p class="doc-paragraph mt-2">Selain penguasaan perangkat lunak, pemahaman mendalam tentang komponen perangkat keras juga fundamental. Seorang ahli informatika harus memahami perbedaan antara <b class="keyword">RAM</b> (Random Access Memory) yang bersifat sementara dan <b class="keyword">ROM</b> (Read Only Memory) yang permanen, serta peran sentral <b class="keyword">Sistem Operasi</b> (OS) dalam mengelola sumber daya perangkat keras. Kesalahan dalam memahami interaksi antara perangkat lunak dan perangkat keras dapat menyebabkan masalah serius pada kinerja sistem. Oleh karena itu, keterampilan mengetik dan memformat ini juga merupakan bagian dari pemahaman alur kerja digital yang efisien dan terstruktur.</p>
+                            <p class="doc-paragraph mt-2">Etika digital merupakan aspek penting lainnya yang harus diperhatikan oleh setiap pengguna komputer. Ketika berinteraksi dalam Revolusi Digital, penting untuk selalu menjunjung tinggi <b class="keyword">integritas data</b>, menghormati hak cipta, dan menghindari plagiarisme. Penggunaan fitur kutipan dan referensi di Microsoft Word, meskipun tidak dipraktikkan di LKPD ini, adalah langkah lanjutan dalam menunjukkan sikap profesionalisme dan etika yang baik saat menyusun dokumen akademik atau profesional di masa depan.</p>
+                        </div>
+                        <div id="footnote-area" class="text-xs border-t mt-4 pt-2"></div>
+                        <div id="table-area" class="mt-4"></div>
+                        <div id="footer-area" class="h-10 text-xs text-gray-500 text-center flex items-end justify-center"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="penilaian">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Visualisasi Bobot Penilaian</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                    Diagram ini menunjukkan distribusi bobot nilai untuk setiap aspek keterampilan dalam LKPD. Arahkan kursor ke setiap bagian untuk melihat detail. Ini membantu memahami area mana yang paling penting untuk dikuasai.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                <div class="chart-container relative w-full max-w-lg mx-auto h-[40vh] max-h-96">
+                    <canvas id="assessmentChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="notification-popup" class="notification fixed bottom-5 right-5 bg-blue-600 text-white py-3 px-6 rounded-lg shadow-xl">
+        <p id="notification-text"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const state = {
+                margin: false, font: false, spacing: false, border: false,
+                title: false, subtitle: false, italic: false, indent: false,
+                footnote: false, table: false, list: false,
+                header: false, footer: false
+            };
+
+            const initialContent = document.getElementById('document-content').innerHTML;
+
+            const docContainer = document.getElementById('document-container');
+            const docContent = document.getElementById('document-content');
+            const mainTitle = document.getElementById('main-title');
+            const mainSubtitle = document.getElementById('main-subtitle');
+            const paragraphs = document.querySelectorAll('.doc-paragraph');
+            const keywords = document.querySelectorAll('.keyword');
+            const listContainer = document.getElementById('list-container');
+            const footnoteTarget = document.getElementById('footnote-target');
+            const footnoteArea = document.getElementById('footnote-area');
+            const tableArea = document.getElementById('table-area');
+            const headerArea = document.getElementById('header-area');
+            const footerArea = document.getElementById('footer-area');
+
+            function showNotification(message) {
+                const popup = document.getElementById('notification-popup');
+                const text = document.getElementById('notification-text');
+                text.textContent = message;
+                popup.classList.add('show');
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 3000);
+            }
+
+            function toggleFeature(feature) {
+                state[feature] = !state[feature];
+                updateDocument();
+                const button = document.getElementById(`btn-${feature}`);
+                if (button) {
+                    button.classList.toggle('active', state[feature]);
+                }
+                const message = state[feature] ? `Fitur '${feature}' diaktifkan.` : `Fitur '${feature}' dinonaktifkan.`;
+                showNotification(message);
+            }
+
+            function updateDocument() {
+                docContainer.style.padding = state.margin ? '3cm 3cm 2.5cm 4cm' : '';
+                docContainer.classList.toggle('bordered', state.border);
+
+                docContent.style.fontFamily = state.font ? "'Times New Roman', serif" : "";
+                docContent.style.fontSize = state.font ? "12pt" : "";
+
+                paragraphs.forEach(p => {
+                    p.style.lineHeight = state.spacing ? "1.5" : "";
+                    p.style.textAlign = state.spacing ? "justify" : "";
+                    p.style.textIndent = state.indent ? "1.27cm" : "";
+                });
+                
+                mainTitle.style.fontFamily = state.title ? "Arial, sans-serif" : "";
+                mainTitle.style.fontSize = state.title ? "14pt" : "";
+                mainTitle.style.fontWeight = state.title ? "bold" : "";
+                mainTitle.style.textAlign = state.title ? "center" : "left";
+                
+                if(!state.title) mainTitle.style.fontWeight = 'bold'; 
+
+                mainSubtitle.style.fontWeight = state.subtitle ? "bold" : "";
+                mainSubtitle.style.textDecoration = state.subtitle ? "underline" : "";
+                if(!state.subtitle) mainSubtitle.style.fontWeight = 'bold';
+
+                keywords.forEach(k => {
+                    k.style.fontStyle = state.italic ? "italic" : "normal";
+                    k.style.fontWeight = state.italic ? "normal" : "bold";
+                });
+
+                if (state.list) {
+                    listContainer.innerHTML = `
+                        <p>Berikut adalah beberapa alasan mengapa penguasaan Ms. Word itu penting:</p>
+                        <ul class="list-disc list-inside ml-4">
+                           <li>
+                                <ol class="list-[lower-roman] list-inside ml-4">
+                                    <li>Standarisasi Dokumen: Memastikan semua dokumen memiliki format yang seragam dan mudah dibaca.</li>
+                                    <li>Kolaborasi: Dokumen dapat dibagikan dan diedit oleh banyak pengguna secara bersamaan, mendukung kerja tim.</li>
+                                    <li>Efisiensi Waktu: Fitur seperti koreksi otomatis, pengecekan tata bahasa, dan penggunaan template mempercepat proses penulisan.</li>
+                                </ol>
+                           </li>
+                        </ul>`;
+                } else {
+                     listContainer.innerHTML = `
+                        <p>Berikut adalah beberapa alasan mengapa penguasaan Ms. Word itu penting:</p>
+                        <ol class="list-decimal list-inside">
+                            <li>Standarisasi Dokumen: Memastikan semua dokumen memiliki format yang seragam dan mudah dibaca.</li>
+                            <li>Kolaborasi: Dokumen dapat dibagikan dan diedit oleh banyak pengguna secara bersamaan, mendukung kerja tim.</li>
+                            <li>Efisiensi Waktu: Fitur seperti koreksi otomatis, pengecekan tata bahasa, dan penggunaan template mempercepat proses penulisan.</li>
+                        </ol>`;
+                }
+
+                if (state.footnote) {
+                    footnoteTarget.innerHTML = `literasi digital<sup>1</sup>`;
+                    footnoteArea.innerHTML = `<p><sup>1</sup> Diperlukan untuk partisipasi penuh di era informasi.</p>`;
+                } else {
+                    footnoteTarget.innerHTML = `literasi digital`;
+                    footnoteArea.innerHTML = ``;
+                }
+
+                if (state.table) {
+                    tableArea.innerHTML = `
+                        <table class="w-full border-collapse border border-gray-400 text-center mx-auto" style="max-width: 300px;">
+                            <thead>
+                                <tr>
+                                    <th class="border border-gray-300 p-2">Jenis Memori</th>
+                                    <th class="border border-gray-300 p-2">Fungsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">RAM</td>
+                                    <td class="border border-gray-300 p-2">Penyimpanan sementara</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">ROM</td>
+                                    <td class="border border-gray-300 p-2">Penyimpanan permanen</td>
+                                </tr>
+                            </tbody>
+                        </table>`;
+                } else {
+                    tableArea.innerHTML = ``;
+                }
+                
+                headerArea.innerHTML = state.header ? `LKPD Praktik MS Word - [Nama Siswa Anda]` : '';
+                footerArea.innerHTML = state.footer ? `1` : '';
+            }
+
+            function resetAll() {
+                for (const key in state) {
+                    state[key] = false;
+                }
+                document.querySelectorAll('.control-button').forEach(btn => btn.classList.remove('active'));
+                updateDocument();
+                docContent.innerHTML = initialContent;
+                showNotification('Semua pemformatan telah di-reset.');
+            }
+
+            document.querySelectorAll('.control-button').forEach(button => {
+                button.addEventListener('click', () => toggleFeature(button.dataset.feature));
+            });
+            document.getElementById('btn-reset').addEventListener('click', resetAll);
+
+            const ctx = document.getElementById('assessmentChart').getContext('2d');
+            const assessmentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Pengetikan (30)',
+                        'Margin, Kertas & Font (20)',
+                        'Format Teks (20)',
+                        'Daftar (15)',
+                        'Header & Footer (15)'
+                    ],
+                    datasets: [{
+                        label: 'Bobot Nilai',
+                        data: [30, 20, 20, 15, 15],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#10B981',
+                            '#F59E0B',
+                            '#EF4444',
+                            '#8B5CF6'
+                        ],
+                        borderColor: '#FDFBF8',
+                        borderWidth: 4,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                             labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + ' Poin';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
