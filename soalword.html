@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif MS Word X TKJ</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom styling for the radio buttons to look like clickable options */
+        .quiz-option {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background-color: #e5e7eb; /* Gray-200 */
+        }
+        input[type="radio"]:checked + label {
+            border-color: #10b981; /* Emerald-500 */
+            background-color: #d1fae5; /* Green-100 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div id="quiz-container" class="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl p-6 sm:p-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2 text-center">
+            Ujian Semester MS Word
+        </h1>
+        <p class="text-center text-gray-600 mb-8 border-b pb-4">
+            Kelas X TKJ - Pilih jawaban yang paling tepat.
+        </p>
+
+        <form id="quiz-form">
+            <!-- Questions will be dynamically inserted here -->
+        </form>
+
+        <div class="mt-8 flex justify-center">
+            <button id="submit-button" onclick="submitQuiz()" 
+                    class="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:scale-[1.02] disabled:opacity-50">
+                Selesaikan Ujian (50 Soal)
+            </button>
+        </div>
+
+        <div id="result-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full text-center transform scale-100 transition-all duration-300">
+                <h2 id="result-title" class="text-3xl font-bold mb-4 text-indigo-600"></h2>
+                <p class="text-gray-700 mb-6">Anda telah menyelesaikan kuis.</p>
+                
+                <div class="text-2xl font-extrabold text-gray-800 mb-6 p-4 bg-gray-100 rounded-lg">
+                    Skor Akhir: <span id="score-display" class="text-emerald-600"></span> / 50
+                </div>
+
+                <p id="feedback-message" class="text-lg mb-6"></p>
+
+                <button onclick="location.reload()" 
+                        class="w-full px-4 py-2 bg-rose-500 text-white font-semibold rounded-lg hover:bg-rose-600 transition duration-300">
+                    Ulangi Ujian
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Kuis (Dibuat berdasarkan soal_ujian_ms_word_final_v2.md)
+        // Catatan: Indeks jawaban benar (correct: 0) dalam data ini MEREFERENSIKAN opsi di indeks 0.
+        // Opsi ini akan diacak sebelum kuis ditampilkan.
+        const quizData = [
+            {
+                question: "Tab utama pada Ribbon MS Word yang berisi kelompok perintah paling sering digunakan seperti Font, Paragraph, dan Clipboard adalah:",
+                options: ["Home", "Insert", "Layout", "Review", "View"],
+                correct: 0 
+            },
+            {
+                question: "Perintah pintasan keyboard (**shortcut**) yang digunakan untuk **menyimpan dokumen** MS Word yang sedang aktif adalah:",
+                options: ["Ctrl + S", "Ctrl + O", "Ctrl + N", "Ctrl + P", "Ctrl + Z"],
+                correct: 0 
+            },
+            {
+                question: "Kelompok perintah (group) pada tab **Home** yang berfungsi untuk mengatur perataan teks (rata kiri, rata kanan, rata tengah, rata kiri-kanan) adalah:",
+                options: ["Paragraph", "Font", "Styles", "Clipboard", "Editing"],
+                correct: 0 
+            },
+            {
+                question: "Untuk membuat judul atau teks terpilih menjadi **tebal**, perintah pintasan keyboard yang benar adalah:",
+                options: ["Ctrl + B", "Ctrl + I", "Ctrl + U", "Ctrl + M", "Ctrl + E"],
+                correct: 0 
+            },
+            {
+                question: "Alat yang tepat digunakan untuk menyalin format (misalnya, jenis font, ukuran, warna) dari satu teks ke teks lain **tanpa menyalin isinya** adalah:",
+                options: ["Format Painter", "Copy", "Clear All Formatting", "Styles", "Cut"],
+                correct: 0 
+            },
+            {
+                question: "Perintah yang digunakan untuk **memindahkan blok teks** dari satu lokasi ke lokasi lain dalam dokumen, di mana teks asli akan hilang, adalah:",
+                options: ["Cut", "Copy", "Paste", "Find", "Replace"],
+                correct: 0 
+            },
+            {
+                question: "Untuk mengatur batas pengetikan (**margin**) pada dokumen, seperti batas atas, bawah, kiri, dan kanan, Anda harus mengakses tab:",
+                options: ["Layout", "Home", "Insert", "Design", "References"],
+                correct: 0 
+            },
+            {
+                question: "Perintah pintasan keyboard untuk membuat dokumen baru yang masih kosong adalah:",
+                options: ["Ctrl + N", "Ctrl + A", "Ctrl + C", "Ctrl + V", "Ctrl + X"],
+                correct: 0 
+            },
+            {
+                question: "Tombol pintasan yang digunakan untuk membuat teks menjadi **miring** (*Italic*) adalah:",
+                options: ["Ctrl + I", "Ctrl + B", "Ctrl + U", "Ctrl + J", "Ctrl + L"],
+                correct: 0 
+            },
+            {
+                question: "Untuk menyisipkan gambar dari komputer ke dalam dokumen MS Word, Anda harus menggunakan kelompok perintah **Illustrations** yang terdapat di tab:",
+                options: ["Insert", "Home", "Review", "Design", "Layout"],
+                correct: 0 
+            },
+            {
+                question: "Tipe perataan teks yang digunakan untuk membuat tepi kiri dan tepi kanan paragraf **rata secara bersamaan** adalah:",
+                options: ["Justify", "Align Left", "Align Right", "Center", "Indent"],
+                correct: 0 
+            },
+            {
+                question: "Perintah yang berfungsi untuk **membatalkan** satu atau serangkaian aksi yang baru saja dilakukan pada dokumen disebut:",
+                options: ["Undo", "Redo", "Repeat", "Revert", "Clear"],
+                correct: 0 
+            },
+            {
+                question: "Untuk mengubah orientasi halaman dari tegak menjadi mendatar, Anda harus memilih opsi:",
+                options: ["Landscape", "Portrait", "Margins", "Size", "Columns"],
+                correct: 0 
+            },
+            {
+                question: "Fungsi dari perintah **Page Break** adalah:",
+                options: ["Memaksa teks berikutnya untuk pindah ke halaman baru", "Memulai kolom baru pada halaman yang sama", "Mengakhiri dokumen secara keseluruhan", "Menambahkan jeda baris pada paragraf", "Mengubah ukuran kertas dokumen"],
+                correct: 0 
+            },
+            {
+                question: "Area di bagian atas atau bawah setiap halaman dokumen yang biasanya digunakan untuk mencantumkan nomor halaman, judul dokumen, atau tanggal disebut:",
+                options: ["Header and Footer", "Watermark", "Page Borders", "Status Bar", "Quick Access Toolbar"],
+                correct: 0 
+            },
+            {
+                question: "Kelompok perintah **Styles** (Gaya) pada tab Home berfungsi untuk:",
+                options: ["Menerapkan set pemformatan yang konsisten, seperti Heading 1 atau Normal", "Mengatur indentasi dan spasi baris secara detail", "Menyisipkan daftar isi dan daftar gambar secara otomatis", "Menemukan dan mengganti teks tertentu", "Mencetak dokumen dan melihat pratinjau cetak"],
+                correct: 0 
+            },
+            {
+                question: "Untuk membuat rumus kimia dengan angka kecil di bawah (misalnya $H_2O$), jenis pemformatan karakter yang digunakan adalah:",
+                options: ["Subscript", "Superscript", "Strikethrough", "Small Caps", "Hidden Text"],
+                correct: 0 
+            },
+            {
+                question: "Fitur di tab **Review** yang berfungsi untuk mencatat semua perubahan (penambahan, penghapusan, pemformatan) yang dilakukan pada dokumen oleh pengguna disebut:",
+                options: ["Track Changes", "Spelling & Grammar", "Compare", "Restrict Editing", "Thesaurus"],
+                correct: 0 
+            },
+            {
+                question: "Tombol pintasan keyboard yang digunakan untuk meratakan teks ke **tengah** (Center Alignment) adalah:",
+                options: ["Ctrl + E", "Ctrl + C", "Ctrl + R", "Ctrl + L", "Ctrl + J"],
+                correct: 0 
+            },
+            {
+                question: "Di manakah letak pengaturan **Line Spacing** (Spasi Baris) pada MS Word?",
+                options: ["Kelompok Paragraph di tab Home", "Kelompok Font di tab Home", "Kelompok Page Setup di tab Layout", "Kelompok Proofing di tab Review", "Kelompok Illustrations di tab Insert"],
+                correct: 0 
+            },
+            {
+                question: "Untuk menuliskan pangkat atau indeks matematika dengan angka kecil di atas (misalnya $x^2$), jenis pemformatan karakter yang digunakan adalah:",
+                options: ["Superscript", "Subscript", "Strikethrough", "Underline", "Shadow"],
+                correct: 0 
+            },
+            {
+                question: "Langkah yang tepat untuk mengganti kata 'komputer' menjadi 'laptop' di seluruh dokumen secara serentak adalah dengan menggunakan perintah:",
+                options: ["Replace", "Find", "Select", "Spelling & Grammar", "Thesaurus"],
+                correct: 0 
+            },
+            {
+                question: "Dalam menu **File**, perintah yang digunakan untuk mencetak dokumen dan menampilkan pratinjau sebelum cetak adalah:",
+                options: ["Print", "Save As", "Export", "Info", "Options"],
+                correct: 0 
+            },
+            {
+                question: "Tombol pintasan keyboard yang digunakan untuk membuka kotak dialog **Font** (pengaturan huruf) secara cepat adalah:",
+                options: ["Ctrl + D", "Ctrl + F", "Ctrl + G", "Ctrl + T", "Ctrl + K"],
+                correct: 0 
+            },
+            {
+                question: "Mode tampilan (**View Mode**) yang menampilkan dokumen sebagaimana akan terlihat ketika dicetak, lengkap dengan margin dan jeda halaman, adalah:",
+                options: ["Print Layout", "Read Mode", "Web Layout", "Outline", "Draft"],
+                correct: 0 
+            },
+            {
+                question: "Fitur yang memungkinkan Anda untuk mencari kata-kata yang mirip (**sinonim**) dari kata yang dipilih untuk meningkatkan variasi bahasa dalam dokumen adalah:",
+                options: ["Thesaurus", "Spelling & Grammar", "Word Count", "Translate", "Research"],
+                correct: 0 
+            },
+            {
+                question: "Kelompok perintah di tab **Layout** yang digunakan untuk membagi satu halaman menjadi dua atau lebih kolom vertikal (seperti tata letak koran) adalah:",
+                options: ["Columns", "Margins", "Breaks", "Size", "Indentation"],
+                correct: 0 
+            },
+            {
+                question: "Di antara opsi berikut, yang merupakan ekstensi file default untuk dokumen MS Word versi 2007 ke atas adalah:",
+                options: [".docx", ".doc", ".xlsx", ".pptx", ".pdf"],
+                correct: 0 
+            },
+            {
+                question: "Perintah pintasan keyboard untuk membuat baris **spasi ganda** (double line spacing) pada paragraf yang dipilih adalah:",
+                options: ["Ctrl + 2", "Ctrl + 1", "Ctrl + 5", "Ctrl + 0", "Ctrl + L"],
+                correct: 0 
+            },
+            {
+                question: "Kelompok perintah di tab **Insert** yang digunakan untuk menyisipkan Bagan/Grafik (Chart) dan SmartArt adalah:",
+                options: ["Illustrations", "Links", "Text", "Header & Footer", "Tables"],
+                correct: 0 
+            },
+            {
+                question: "Pintasan keyboard untuk membuka kotak dialog **Find** (Cari) agar dapat mencari teks dalam dokumen adalah:",
+                options: ["Ctrl + F", "Ctrl + H", "Ctrl + G", "Ctrl + J", "Ctrl + K"],
+                correct: 0 
+            },
+            {
+                question: "Fungsi dari perintah **Save As** yang terletak di menu File adalah:",
+                options: ["Menyimpan salinan dokumen dengan nama atau lokasi yang berbeda", "Menyimpan dokumen dan menutupnya secara otomatis", "Menyimpan dokumen dan mengubah format file", "Membuka dokumen yang terakhir disimpan", "Mengirim dokumen melalui email"],
+                correct: 0 
+            },
+            {
+                question: "Untuk mengatur **ukuran kertas** (misalnya A4, Letter, Legal) sebelum mencetak dokumen, Anda harus menggunakan perintah **Size** yang terletak di tab:",
+                options: ["Layout", "Home", "Insert", "Review", "Design"],
+                correct: 0 
+            },
+            {
+                question: "Pintasan keyboard untuk perataan **rata kanan** (Align Right) pada paragraf adalah:",
+                options: ["Ctrl + R", "Ctrl + L", "Ctrl + E", "Ctrl + J", "Ctrl + T"],
+                correct: 0 
+            },
+            {
+                question: "Fitur yang digunakan untuk membuat daftar **berurutan** (misalnya 1., 2., 3., atau a., b., c.) adalah:",
+                options: ["Numbering", "Bullets", "Multilevel List", "Outline", "Indentation"],
+                correct: 0 
+            },
+            {
+                question: "Alat **Drop Cap** yang ditemukan di tab Insert berfungsi untuk:",
+                options: ["Membuat huruf kapital yang besar di awal paragraf (seperti koran)", "Menyisipkan teks yang terdistribusi secara vertikal", "Mengubah semua teks menjadi huruf kapital", "Menyisipkan tanggal dan waktu secara otomatis", "Membuat bingkai teks khusus"],
+                correct: 0 
+            },
+            {
+                question: "Pintasan keyboard untuk perataan **rata kiri** (Align Left) pada paragraf adalah:",
+                options: ["Ctrl + L", "Ctrl + R", "Ctrl + E", "Ctrl + J", "Ctrl + T"],
+                correct: 0 
+            },
+            {
+                question: "Perintah yang berfungsi untuk **mengembalikan aksi** yang sebelumnya dibatalkan oleh perintah Undo adalah:",
+                options: ["Redo", "Repeat", "Undo", "Revert", "Clear"],
+                correct: 0 
+            },
+            {
+                question: "Fitur **Watermark** yang digunakan untuk menambahkan teks pudar di latar belakang setiap halaman dokumen berada di tab:",
+                options: ["Design", "Layout", "Insert", "View", "Review"],
+                correct: 0 
+            },
+            {
+                question: "Kelompok perintah di tab **Home** yang berisi perintah untuk mengubah jenis huruf, ukuran, dan menerapkan efek seperti warna atau garis bawah adalah:",
+                options: ["Font", "Paragraph", "Clipboard", "Styles", "Editing"],
+                correct: 0 
+            },
+            {
+                question: "Untuk memilih **seluruh konten dokumen** MS Word (**Select All**), pintasan keyboard yang digunakan adalah:",
+                options: ["Ctrl + A", "Ctrl + G", "Ctrl + H", "Ctrl + S", "Ctrl + X"],
+                correct: 0 
+            },
+            {
+                question: "Mode tampilan (**View Mode**) yang paling cocok digunakan untuk proses mengedit cepat pada teks panjang, dengan menyembunyikan gambar dan tata letak halaman yang rumit adalah:",
+                options: ["Draft", "Print Layout", "Read Mode", "Web Layout", "Outline"],
+                correct: 0 
+            },
+            {
+                question: "Untuk menyisipkan **Hyperlink** (tautan ke alamat web atau bagian lain dalam dokumen), pintasan keyboard yang dapat digunakan adalah:",
+                options: ["Ctrl + K", "Ctrl + H", "Ctrl + J", "Ctrl + I", "Ctrl + L"],
+                correct: 0 
+            },
+            {
+                question: "Fitur di tab **Mailings** yang memungkinkan Anda membuat surat atau label massal yang dipersonalisasi dari sumber data, seperti daftar alamat, adalah:",
+                options: ["Mail Merge", "Labels", "Start Mailing", "Envelopes", "Review"],
+                correct: 0 
+            },
+            {
+                question: "Perintah yang digunakan untuk mengatur batas paragraf agar **menjorok ke dalam** (meningkatkan jarak dari margin kiri) adalah:",
+                options: ["Increase Indent", "Decrease Indent", "Tab Stop", "Line Spacing", "First Line Indent"],
+                correct: 0 
+            },
+            {
+                question: "Jika Anda ingin memastikan dokumen MS Word **tidak dapat diedit** oleh orang lain, tetapi tetap dapat dibaca, Anda dapat menggunakan opsi **Restrict Editing** yang terletak di tab:",
+                options: ["Review", "File", "Layout", "Design", "Insert"],
+                correct: 0 
+            },
+            {
+                question: "Perintah pintasan keyboard untuk perataan **rata kiri-kanan** (Justify) pada paragraf adalah:",
+                options: ["Ctrl + J", "Ctrl + L", "Ctrl + R", "Ctrl + E", "Ctrl + T"],
+                correct: 0 
+            },
+            {
+                question: "Di mana letak **Bilah Status** (Status Bar) pada jendela MS Word, dan fungsi utamanya adalah:",
+                options: ["Bagian paling bawah jendela, menampilkan jumlah kata dan mode tampilan", "Di atas Ribbon, menampilkan pintasan perintah cepat", "Di sebelah kiri dokumen, menampilkan Ruler", "Di kanan atas jendela, menampilkan opsi Minimize dan Close", "Di atas area pengetikan, menampilkan nama file"],
+                correct: 0 
+            },
+            {
+                question: "Pintasan keyboard untuk **memotong** (**Cut**) teks yang dipilih adalah:",
+                options: ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + Z", "Ctrl + W"],
+                correct: 0 
+            },
+            {
+                question: "Untuk menyisipkan **Tabel** ke dalam dokumen, opsi perintah ini berada di tab **Insert** pada kelompok:",
+                options: ["Tables", "Illustrations", "Links", "Text", "Pages"],
+                correct: 0 
+            },
+        ];
+        
+        const optionLabels = ['A', 'B', 'C', 'D', 'E'];
+        const quizForm = document.getElementById('quiz-form');
+        const resultModal = document.getElementById('result-modal');
+        const scoreDisplay = document.getElementById('score-display');
+        const resultTitle = document.getElementById('result-title');
+        const feedbackMessage = document.getElementById('feedback-message');
+
+        /**
+         * Fungsi utilitas untuk mengacak urutan elemen dalam array (Fisher-Yates Shuffle).
+         * @param {Array<any>} array - Array yang akan diacak.
+         * @returns {Array<any>} Array yang sudah diacak.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        /**
+         * Mengatur kuis: mengacak opsi jawaban untuk setiap pertanyaan
+         * dan memperbarui indeks jawaban yang benar.
+         */
+        function setupQuiz() {
+            quizData.forEach(item => {
+                // 1. Gabungkan opsi dengan penanda kebenaran
+                const optionsWithCorrectness = item.options.map((text, index) => ({
+                    text: text,
+                    isCorrect: index === item.correct // Cek opsi mana yang benar berdasarkan data awal (semua 0)
+                }));
+
+                // 2. Acak array opsi
+                shuffleArray(optionsWithCorrectness);
+
+                // 3. Update item kuis dengan opsi yang sudah diacak dan indeks yang benar yang baru
+                item.options = optionsWithCorrectness.map(o => o.text);
+                item.correct = optionsWithCorrectness.findIndex(o => o.isCorrect);
+            });
+
+            renderQuiz();
+        }
+
+
+        /**
+         * Renders all questions and options dynamically into the quiz form.
+         */
+        function renderQuiz() {
+            quizData.forEach((item, index) => {
+                const questionNumber = index + 1;
+                // Item.options dan item.correct sekarang sudah diacak dan diperbarui
+                const questionHtml = `
+                    <div class="mb-8 p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <p class="text-lg font-semibold text-gray-800 mb-4">
+                            ${questionNumber}. ${item.question}
+                        </p>
+                        <div class="space-y-3">
+                            ${item.options.map((option, optIndex) => `
+                                <div>
+                                    <input type="radio" id="q${questionNumber}opt${optIndex}" name="q${questionNumber}" value="${optIndex}" class="hidden">
+                                    <label for="q${questionNumber}opt${optIndex}" class="quiz-option block p-3 border-2 border-gray-300 rounded-md bg-white text-gray-700">
+                                        <span class="font-bold text-indigo-500 mr-2">${optionLabels[optIndex]}.</span> ${option}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                quizForm.innerHTML += questionHtml;
+            });
+        }
+
+        /**
+         * Calculates the score and displays the results in a modal.
+         */
+        function submitQuiz() {
+            let score = 0;
+            let totalAnswered = 0;
+            let totalQuestions = quizData.length;
+            
+            quizData.forEach((item, index) => {
+                const questionNumber = index + 1;
+                const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+                
+                if (selectedOption) {
+                    totalAnswered++;
+                    // The value is the index of the selected option (0 to 4)
+                    const selectedValue = parseInt(selectedOption.value); 
+                    
+                    // Gunakan item.correct yang sudah diperbarui setelah pengacakan
+                    if (selectedValue === item.correct) {
+                        score++;
+                    }
+                }
+            });
+
+            // Display results
+            scoreDisplay.textContent = score;
+
+            if (score === totalQuestions) {
+                resultTitle.textContent = "Sempurna!";
+                feedbackMessage.textContent = "Kerja bagus! Anda menguasai materi ini sepenuhnya.";
+            } else if (score >= totalQuestions * 0.8) {
+                resultTitle.textContent = "Hasil Memuaskan!";
+                feedbackMessage.textContent = "Anda hampir sempurna. Sedikit lagi untuk mencapai nilai maksimal!";
+            } else if (score >= totalQuestions * 0.6) {
+                resultTitle.textContent = "Lulus!";
+                feedbackMessage.textContent = "Hasil yang baik, namun ada beberapa area yang perlu ditingkatkan.";
+            } else {
+                resultTitle.textContent = "Perlu Belajar Lebih!";
+                feedbackMessage.textContent = "Jangan patah semangat. Tinjau kembali materi ini dan coba lagi!";
+            }
+
+            // Show the modal
+            resultModal.classList.remove('hidden');
+            document.getElementById('submit-button').disabled = true;
+        }
+
+        // Initialize quiz by setting up the data (shuffling) and then rendering
+        window.onload = setupQuiz;
+    </script>
+</body>
+</html>
