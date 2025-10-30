@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Chosen Palette: Warm Neutrals (Stone background, Teal accent) -->
+    <!-- Application Structure Plan: Struktur navigasi SPA dipertahankan. Peningkatan dilakukan pada kedalaman konten di setiap tab (detail arsitektur CPU, fungsi Kernel OS, perbandingan Compiler vs. Interpreter, perintah CLI tingkat lanjut). Penambahan section Kuis dengan 35 soal, 5 opsi, dan feedback mendalam per soal. -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFORMATIKA X TKJ 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+            color: #374151;
+            white-space: nowrap;
+        }
+        .nav-link:hover {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+        .nav-link.active {
+            background-color: #0d9488;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        .content-section {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .accordion-header {
+            transition: background-color 0.2s ease;
+        }
+        .accordion-header.open {
+            background-color: #f0fdfa;
+            color: #0d9488;
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+        }
+        .accordion-content.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .table-auto th {
+            background-color: #f3f4f6;
+        }
+        .step-diagram-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+        }
+        .step-diagram-arrow {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #9ca3af;
+            margin: 0 0.5rem;
+        }
+        /* New styles for Quiz */
+        .question-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .option-label:hover {
+            background-color: #f9fafb;
+        }
+        .result-correct {
+            border-left: 5px solid #059669; /* Green for correct */
+            background-color: #f0fdfa;
+        }
+        .result-incorrect {
+            border-left: 5px solid #dc2626; /* Red for incorrect */
+            background-color: #fef2f2;
+        }
+        .explanation-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-teal-700">Materi Ajar Informatika Kelas X TKJ 1</h1>
+            <p class="text-lg text-stone-600 mt-2">SISTEM KOMPUTASI ( By : Akhmad Noor Effendi, S.Kom )</p>
+        </header>
+
+        <div class="flex flex-col md:flex-row gap-8">
+            
+            <nav class="w-full md:w-1/4">
+                <ul class="sticky top-8 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-4 md:pb-0">
+                    <li><a href="#" class="nav-link active" data-target="pengantar">Pengantar</a></li>
+                    <li><a href="#" class="nav-link" data-target="hardware">Perangkat Keras</a></li>
+                    <li><a href="#" class="nav-link" data-target="software">Perangkat Lunak</a></li>
+                    <li><a href="#" class="nav-link" data-target="os">Sistem Operasi</a></li>
+                    <li><a href="#" class="nav-link" data-target="integrasi">Integrasi & Penggunaan</a></li>
+                    <li><a href="#" class="nav-link" data-target="latihan">Latihan Mendalam</a></li>
+                    <li><a href="#" class="nav-link" data-target="kuis">Soal Pilihan Ganda (35)</a></li> <!-- Menu Item -->
+                </ul>
+            </nav>
+
+            <main class="w-full md:w-3/4 bg-white rounded-lg shadow-lg p-6 md:p-8 min-h-[60vh]">
+                
+                <section id="pengantar" class="content-section space-y-4">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">Selamat Datang!</h2>
+                    <p class="text-stone-700 leading-relaxed">
+                        Bagian ini akan membawa Anda melampaui konsep dasar. Sebagai calon teknisi, sangat penting untuk menguasai dasar-dasar terlebih dahulu. Kita akan membahas detail fungsional dari CPU, Kernel OS, hingga manajemen berkas.
+                    </p>
+                    <p class="text-stone-700 leading-relaxed">
+                        Sistem komputer adalah orkestrasi tiga elemen: Hardware (fisik), Software (instruksi), dan OS (manajer). Gunakan navigasi untuk menjelajahi arsitektur dan fungsionalitas mendalam setiap komponen.
+                    </p>
+                </section>
+
+                <section id="hardware" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">I. Perangkat Keras (Hardware) Mendalam</h2>
+                    <p class="text-stone-700 leading-relaxed pb-4 border-b border-stone-200">
+                        Memahami Hardware tidak cukup hanya mengetahui nama, tetapi juga bagaimana komponen utamanya—terutama CPU dan RAM—didesain untuk kecepatan dan efisiensi.
+                    </p>
+
+                    <h3 class="text-xl font-semibold">A. Klasifikasi Utama dan Sifat Data</h3>
+                    <div class="overflow-x-auto rounded-lg border border-stone-200">
+                        <table class="w-full table-auto">
+                            <thead class="bg-stone-50">
+                                <tr>
+                                    <th class="p-3 text-left font-semibold text-stone-700">Kategori</th>
+                                    <th class="p-3 text-left font-semibold text-stone-700">Contoh Perangkat</th>
+                                    <th class="p-3 text-left font-semibold text-stone-700">Sifat Data</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-200">
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>Process Device (CPU, RAM)</strong></td>
+                                    <td class="p-3">CPU, RAM (DDR4/DDR5), Motherboard.</td>
+                                    <td class="p-3">Volatile (sementara, hilang saat mati).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>Storage Device (HDD, SSD)</strong></td>
+                                    <td class="p-3">HDD (mekanik), SSD (flash/NAND).</td>
+                                    <td class="p-3">Non-Volatile (permanen, tidak hilang).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>Input/Output</strong></td>
+                                    <td class="p-3">NIC (Network Card), Monitor, Keyboard.</td>
+                                    <td class="p-3">Interfacing (antarmuka).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-semibold pt-4">B. Arsitektur CPU dan Memori</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">Detail CPU (Processor)</h4>
+                            <ul class="list-disc list-outside space-y-1 pl-6 text-stone-700 mt-2">
+                                <li><strong>Cores (Inti):</strong> Unit pemrosesan fisik yang mengeksekusi instruksi. Lebih banyak Core = multitasking lebih baik.</li>
+                                <li><strong>Threads (Benang):</strong> Jalur eksekusi virtual. Hyper-Threading/SMT (Simultaneous Multithreading) memungkinkan 1 Core memproses 2 Thread.</li>
+                                <li><strong>Cache L1/L2/L3:</strong> Memori super cepat di dalam chip CPU untuk menyimpan data yang sering diakses, mengurangi latensi ke RAM.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">Detail RAM (Random Access Memory)</h4>
+                            <ul class="list-disc list-outside space-y-1 pl-6 text-stone-700 mt-2">
+                                <li><strong>Jenis:</strong> Dari DDR3 ke DDR5, perbedaannya adalah kecepatan transfer data (diukur dalam MT/s) dan efisiensi daya.</li>
+                                <li><strong>Dual/Quad-Channel:</strong> Pengaturan RAM (2 atau 4 keping) untuk menggandakan/melipatgandakan *bandwidth* antara RAM dan CPU.</li>
+                                <li><strong>Latency:</strong> Waktu tunda antara permintaan CPU dan respons RAM (diukur dalam CL / CAS Latency).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold pt-4">Visualisasi Contoh Per Kategori Hardware</h3>
+                    <div class="chart-container">
+                        <canvas id="hardwareChart"></canvas>
+                    </div>
+                </section>
+
+                <section id="software" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">II. Perangkat Lunak (Software) Mendalam</h2>
+                    <p class="text-stone-700 leading-relaxed pb-4 border-b border-stone-200">
+                        Pemahaman mendalam tentang perangkat lunak mencakup bagaimana perangkat lunak dibuat, dieksekusi, dan klasifikasinya berdasarkan tujuan.
+                    </p>
+
+                    <h3 class="text-xl font-semibold">A. Perangkat Lunak Sistem vs. Aplikasi</h3>
+                    <div class="space-y-4">
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">1. Sistem Operasi dan Driver</h4>
+                            <p class="text-stone-700 mt-2">OS (misal, Linux Kernel) berinteraksi langsung dengan Hardware. Ini dibantu oleh **Driver**, yaitu perangkat lunak khusus yang menerjemahkan instruksi OS agar Hardware tertentu (misal, printer atau NIC) dapat berfungsi.</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">2. Perangkat Lunak Utilitas</h4>
+                            <p class="text-stone-700 mt-2">Dirancang untuk membantu mengelola, memelihara, dan mengoptimalkan sumber daya komputer. Ini membantu OS dan Aplikasi bekerja lebih baik.</p>
+                            <p class="text-sm text-stone-600 mt-2"><em>Contoh: Disk Defragmenter, Antivirus, Backup Software.</em></p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold pt-4">B. Mekanisme Bahasa Pemrograman (Compiler vs. Interpreter)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">Compiler</h4>
+                            <p class="text-stone-700 mt-2">Menerjemahkan seluruh kode sumber (source code) menjadi file yang dapat dieksekusi (executable) dalam Bahasa Mesin **sebelum** program dijalankan.</p>
+                            <p class="text-sm text-stone-600 mt-2"><em>Kelebihan: Eksekusi program sangat cepat. Contoh Bahasa: C, C++.</em></p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-lg text-teal-700">Interpreter</h4>
+                            <p class="text-stone-700 mt-2">Menerjemahkan dan mengeksekusi kode sumber **baris demi baris saat program dijalankan**. Membutuhkan program interpreter untuk selalu berjalan.</p>
+                            <p class="text-sm text-stone-600 mt-2"><em>Kelebihan: Lebih fleksibel untuk testing. Contoh Bahasa: Python, JavaScript.</em></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="os" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">III. Sistem Operasi (OS) Mendalam</h2>
+                    <p class="text-stone-700 leading-relaxed pb-4 border-b border-stone-200">
+                        Sistem Operasi adalah manajer terpusat. Agar tuntas, kita harus memahami apa yang terjadi di inti sistem, yaitu Kernel, dan bagaimana data diorganisasi.
+                    </p>
+
+                    <h3 class="text-xl font-semibold">A. Fungsionalitas Inti: Kernel</h3>
+                    <div class="accordion-item border border-stone-200 rounded-lg">
+                        <button class="accordion-header w-full text-left p-4 font-semibold text-lg hover:bg-stone-50 rounded-lg flex justify-between items-center">
+                            Fungsi dan Tugas Utama Kernel OS (Inti Sistem)
+                            <span class="accordion-icon text-teal-600 font-bold text-xl">+</span>
+                        </button>
+                        <div class="accordion-content p-4 pt-0 border-t border-stone-200">
+                            <ul class="list-disc list-outside space-y-2 pl-6 text-stone-700">
+                                <li><strong>Manajemen Proses (Multitasking):</strong> Kernel menggunakan algoritma *Scheduling* untuk memutuskan kapan dan berapa lama setiap program (Proses) akan menggunakan CPU.</li>
+                                <li><strong>Manajemen Memori:</strong> Kernel bertanggung jawab membagi dan mengalokasikan RAM secara aman kepada setiap Proses, mencegah konflik (*memory leak* atau *segmentation fault*).</li>
+                                <li><strong>Sistem Berkas:</strong> Kernel mengimplementasikan File System (misal NTFS/EXT4) untuk membaca dan menulis data ke Storage Device.</li>
+                                <li><strong>I/O Device Management:</strong> Kernel berinteraksi dengan Driver perangkat keras untuk menangani Input/Output.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold pt-4">B. Sistem Berkas (File System) Kunci</h3>
+                    <p class="text-stone-600">Sistem Berkas adalah metode dan struktur data yang digunakan OS untuk mengorganisasi dan melacak berkas pada Storage Device. </p>
+                    <div class="overflow-x-auto rounded-lg border border-stone-200">
+                        <table class="w-full table-auto">
+                            <thead class="bg-stone-50">
+                                <tr>
+                                    <th class="p-3 text-left font-semibold text-stone-700">File System</th>
+                                    <th class="p-3 text-left font-semibold text-stone-700">Digunakan Pada OS</th>
+                                    <th class="p-3 text-left font-semibold text-stone-700">Kelebihan Kunci</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-200">
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>NTFS</strong></td>
+                                    <td class="p-3">Windows (Modern)</td>
+                                    <td class="p-3">Dukungan keamanan tingkat lanjut (Permission/ACL), journaling (pemulihan data lebih baik).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>EXT4</strong></td>
+                                    <td class="p-3">Linux (Standard)</td>
+                                    <td class="p-3">Sangat stabil, skalabel, dan merupakan pilihan utama untuk server.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium"><strong>exFAT</strong></td>
+                                    <td class="p-3">Flash Drive, Universal</td>
+                                    <td class="p-3">Kompatibilitas tinggi antar berbagai OS dan mendukung ukuran file besar (>4GB).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section id="integrasi" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">IV. Siklus Booting & Keterampilan Teknis</h2>
+                    <p class="text-stone-700 leading-relaxed pb-4 border-b border-stone-200">
+                        Integrasi sistem dapat dilihat dari proses Booting, yaitu transfer kontrol dari Hardware ke Sistem Operasi. Keterampilan teknis menuntut penguasaan GUI dan CLI tingkat administrator.
+                    </p>
+
+                    <h3 class="text-xl font-semibold">A. Siklus Booting Lanjutan</h3>
+                    <p class="text-stone-600">Alur teknis yang tepat dari menyalakan komputer hingga OS siap digunakan.</p>
+                    <div class="flex flex-wrap md:flex-nowrap justify-between items-center gap-2 md:gap-4 p-4 bg-stone-50 rounded-lg overflow-x-auto">
+                        <div class="step-diagram-item">
+                            <div class="text-2xl font-bold text-white bg-teal-600 rounded-full w-10 h-10 flex items-center justify-center mb-2">1</div>
+                            <h4 class="font-semibold">Power On</h4>
+                            <p class="text-xs text-stone-600">Arus listrik masuk.</p>
+                        </div>
+                        <div class="step-diagram-arrow hidden md:block">→</div>
+                        <div class="step-diagram-item">
+                            <div class="text-2xl font-bold text-white bg-teal-600 rounded-full w-10 h-10 flex items-center justify-center mb-2">2</div>
+                            <h4 class="font-semibold">BIOS/UEFI & POST</h4>
+                            <p class="text-xs text-stone-600">Hardware memeriksa dirinya sendiri (*Power-On Self-Test*).</p>
+                        </div>
+                        <div class="step-diagram-arrow hidden md:block">→</div>
+                        <div class="step-diagram-item">
+                            <div class="text-2xl font-bold text-white bg-teal-600 rounded-full w-10 h-10 flex items-center justify-center mb-2">3</div>
+                            <h4 class="font-semibold">Bootloader</h4>
+                            <p class="text-xs text-stone-600">Memuat Kernel OS dari Storage ke RAM.</p>
+                        </div>
+                        <div class="step-diagram-arrow hidden md:block">→</div>
+                        <div class="step-diagram-item">
+                            <div class="text-2xl font-bold text-white bg-teal-600 rounded-full w-10 h-10 flex items-center justify-center mb-2">4</div>
+                            <h4 class="font-semibold">Kernel Init</h4>
+                            <p class="text-xs text-stone-600">Kernel mengambil alih, memuat Driver perangkat keras.</p>
+                        </div>
+                        <div class="step-diagram-arrow hidden md:block">→</div>
+                        <div class="step-diagram-item">
+                            <div class="text-2xl font-bold text-white bg-teal-600 rounded-full w-10 h-10 flex items-center justify-center mb-2">5</div>
+                            <h4 class="font-semibold">User Interface</h4>
+                            <p class="text-xs text-stone-600">Desktop/Prompt siap digunakan.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold pt-4">B. Keterampilan Command Line Interface (CLI) Lanjutan</h3>
+                    <p class="text-stone-600">Sebagai teknisi, Anda harus mahir dalam administrasi dan diagnostik melalui CLI.</p>
+                    <div id="accordion-container" class="space-y-2">
+                        <div class="accordion-item border border-stone-200 rounded-lg">
+                            <button class="accordion-header w-full text-left p-4 font-semibold text-lg hover:bg-stone-50 rounded-lg flex justify-between items-center">
+                                1. Perintah Dasar Manipulasi dan Diagnostik Jaringan
+                                <span class="accordion-icon text-teal-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-4 pt-0 border-t border-stone-200">
+                                <div class="overflow-x-auto rounded-lg border border-stone-200">
+                                    <table class="w-full table-auto">
+                                        <thead class="bg-stone-50">
+                                            <tr>
+                                                <th class="p-3 text-left font-semibold text-stone-700">Perintah</th>
+                                                <th class="p-3 text-left font-semibold text-stone-700">OS</th>
+                                                <th class="p-3 text-left font-semibold text-stone-700">Fungsi Teknis</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-stone-200">
+                                            <tr>
+                                                <td class="p-3 font-mono"><code>ipconfig</code> / <code>ifconfig</code></td>
+                                                <td class="p-3">Windows / Linux</td>
+                                                <td class="p-3">Menampilkan konfigurasi jaringan (IP Address, Gateway, Subnet Mask).</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 font-mono"><code>tracert</code> / <code>traceroute</code></td>
+                                                <td class="p-3">Windows / Linux</td>
+                                                <td class="p-3">Melacak jalur paket data melintasi jaringan (*hops*), mendiagnosis rute lambat.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 font-mono"><code>netstat -an</code></td>
+                                                <td class="p-3">Windows / Linux</td>
+                                                <td class="p-3">Menampilkan semua koneksi jaringan aktif dan port yang sedang digunakan/didengarkan.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border border-stone-200 rounded-lg">
+                            <button class="accordion-header w-full text-left p-4 font-semibold text-lg hover:bg-stone-50 rounded-lg flex justify-between items-center">
+                                2. Diagnostik dan Monitoring Sumber Daya OS
+                                <span class="accordion-icon text-teal-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-4 pt-0 border-t border-stone-200">
+                                <ul class="list-disc list-outside space-y-2 pl-6 text-stone-700">
+                                    <li><strong>Tasklist / ps:</strong> Melihat daftar proses yang berjalan, penggunaan RAM, dan ID proses (`PID`) untuk *troubleshooting* aplikasi yang macet.</li>
+                                    <li><strong>Top / Htop:</strong> Monitoring sumber daya (CPU, RAM) secara *real-time* di Linux/Unix untuk mengidentifikasi *bottleneck* sistem.</li>
+                                    <li><strong>Diskpart:</strong> Alat Windows untuk manajemen partisi disk (Storage) secara mendalam, termasuk format dan alokasi.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="latihan" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">V. Latihan Pemahaman Mendalam (20 Studi Kasus Teknisi Pemula)</h2>
+                    <p class="text-stone-700 leading-relaxed pb-4 border-b border-stone-200">
+                        Selesaikan 20 skenario praktis berikut untuk mengasah kemampuan identifikasi dan pemecahan masalah dasar Anda.
+                    </p>
+                    <div class="space-y-4">
+                        
+                        <!-- Skenario 1 (Hardware Dasar) - RAM -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">1. Skenario Kecepatan Aplikasi</h4>
+                            <p class="text-stone-700 mt-2">Seorang pengguna mengeluh bahwa semua programnya berjalan sangat lambat dan muncul peringatan 'Low Memory' padahal ia hanya membuka dua aplikasi. Bagian Hardware utama apa yang kemungkinan besar perlu di-upgrade? Jelaskan alasannya.</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: RAM, karena berfungsi sebagai memori kerja yang menampung data aplikasi saat berjalan.</div>
+                        </div>
+
+                        <!-- Skenario 2 (Software dan Driver) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">2. Skenario Instalasi Perangkat I/O</h4>
+                            <p class="text-stone-700 mt-2">Setelah menginstal printer baru, printer tersebut tidak bisa digunakan meskipun sudah terhubung kabelnya. Anda harus menginstal **perangkat lunak jenis apa** agar printer bisa berfungsi? Apa fungsi spesifiknya?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Driver, berfungsi sebagai penerjemah instruksi antara OS dan Hardware (Printer).</div>
+                        </div>
+
+                        <!-- Skenario 3 (CLI Dasar dan Jaringan) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">3. Skenario Diagnostik Jaringan</h4>
+                            <p class="text-stone-700 mt-2">Anda tidak bisa membuka situs web apa pun. Sebagai langkah diagnostik pertama, Anda ingin memastikan bahwa komputer Anda masih mendapatkan alamat IP. Perintah CLI apa di Windows yang akan Anda gunakan?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Perintah <code>ipconfig</code> (Windows).</div>
+                        </div>
+
+                        <!-- Skenario 4 (Storage Speed - Booting) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">4. Skenario Peningkatan Kecepatan Booting</h4>
+                            <p class="text-stone-700 mt-2">Komputer lama pengguna masih menggunakan Hard Disk Drive (HDD) dan butuh 5 menit untuk booting ke desktop. Perangkat penyimpanan apa yang sebaiknya diganti untuk mempercepat proses loading OS secara drastis?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Solid State Drive (SSD), karena kecepatannya jauh lebih tinggi daripada HDD.</div>
+                        </div>
+                        
+                        <!-- Skenario 5 (OS File System - Restore) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">5. Skenario Manajemen File</h4>
+                            <p class="text-stone-700 mt-2">Anda menghapus dokumen penting, tetapi kemudian menyadari bahwa Anda masih bisa mengembalikannya dari Recycle Bin. Siapa yang bertanggung jawab untuk mengelola sistem penyimpanan sementara ini?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Sistem Operasi (OS) dan File System (misal NTFS) yang mengelola struktur berkas.</div>
+                        </div>
+
+                        <!-- Skenario 6 (Networking Basics - Connectivity) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">6. Skenario Uji Koneksi</h4>
+                            <p class="text-stone-700 mt-2">Jaringan internet di kantor Anda bermasalah. Anda ingin menguji apakah komputer Anda dapat menjangkau server di luar jaringan lokal (misalnya Google). Perintah CLI apa yang Anda gunakan untuk mengirim paket data uji?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Perintah <code>ping</code>.</div>
+                        </div>
+                        
+                        <!-- Skenario 7 (Booting Sequence Failure) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">7. Skenario Bootloader Rusak</h4>
+                            <p class="text-stone-700 mt-2">Saat komputer dinyalakan, layar menampilkan pesan error "Operating System not found" segera setelah logo Motherboard. Manakah tahapan dalam siklus booting yang paling mungkin gagal?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Tahap Bootloader / Mencari OS, karena OS tidak berhasil dimuat dari Storage ke RAM.</div>
+                        </div>
+
+                        <!-- Skenario 8 (Multitasking/Process Management) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">8. Skenario Aplikasi Macet (Hang)</h4>
+                            <p class="text-stone-700 mt-2">Sebuah aplikasi (misalnya browser) tiba-tiba tidak merespons (hang). Di Windows, utilitas sistem apa yang Anda buka (biasanya dengan `Ctrl+Shift+Esc`) untuk menghentikan paksa (End Task) aplikasi yang macet ini?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Task Manager (Pengelola Tugas).</div>
+                        </div>
+
+                        <!-- Skenario 9 (Memory Volatility) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">9. Skenario Sifat Data</h4>
+                            <p class="text-stone-700 mt-2">Anda sedang bekerja di Word tetapi lupa menyimpan. Tiba-tiba listrik padam dan semua data pekerjaan Anda hilang. Data tersebut hilang karena berada di perangkat keras yang bersifat...</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Volatile (RAM), data yang tersimpan di RAM akan hilang saat tidak ada daya.</div>
+                        </div>
+
+                        <!-- Skenario 10 (Input/Output Differentiation) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">10. Skenario Interaksi Audio</h4>
+                            <p class="text-stone-700 mt-2">Sebutkan satu perangkat I/O yang berfungsi untuk menangkap suara Anda (Input) dan satu perangkat I/O yang berfungsi untuk mengeluarkan suara balasan dari komputer (Output).</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Input: Microphone (Mikrofon); Output: Speaker (Pengeras Suara) atau Headset.</div>
+                        </div>
+                        
+                         <!-- Skenario 11 (OS Kernel Function) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">11. Skenario Alokasi Waktu CPU</h4>
+                            <p class="text-stone-700 mt-2">Di dalam inti Sistem Operasi, manajer manakah yang memutuskan kapan proses A mendapatkan waktu CPU, dan kapan proses B mendapatkan waktu CPU?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Kernel OS (melalui fungsi Manajemen Proses atau *Scheduler*).</div>
+                        </div>
+
+                        <!-- Skenario 12 (Compiler vs Interpreter) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">12. Skenario Debugging Kode</h4>
+                            <p class="text-stone-700 mt-2">Seorang pengembang Python menemukan *bug* pada baris ke-50 saat program sedang berjalan. Mekanisme penerjemahan program apa (Compiler/Interpreter) yang digunakan oleh Python, dan mengapa *bug* ini baru terdeteksi saat eksekusi?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Interpreter, karena Interpreter membaca dan mengeksekusi kode baris demi baris saat dijalankan.</div>
+                        </div>
+
+                        <!-- Skenario 13 (Hardware Bottleneck) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">13. Skenario Gaming dan Grafis</h4>
+                            <p class="text-stone-700 mt-2">Pengguna ingin bermain game 3D terbaru dengan pengaturan tertinggi, tetapi *frame rate* sangat rendah. Komponen apa yang paling berperan dalam memproses grafis 3D secara cepat?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: GPU (Graphics Processing Unit) atau VGA Card.</div>
+                        </div>
+
+                        <!-- Skenario 14 (OS File System Compatibility) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">14. Skenario Transfer Data Lintas OS</h4>
+                            <p class="text-stone-700 mt-2">Anda perlu memformat flash drive agar bisa dibaca dan ditulis oleh komputer Windows, Linux, dan macOS, serta mendukung file tunggal berukuran lebih dari 4GB. File System apa yang paling cocok?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: exFAT, karena kompatibilitas lintas OS dan dukungan file besar.</div>
+                        </div>
+
+                        <!-- Skenario 15 (CLI Advanced Networking) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">15. Skenario Jalur Jaringan</h4>
+                            <p class="text-stone-700 mt-2">Anda dapat melakukan ping ke server Google, tetapi situs webnya sangat lambat dibuka. Perintah CLI mana yang harus Anda gunakan untuk melihat rute mana saja yang dilalui paket data dan mencari tahu di mana terjadi kelambatan?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: <code>tracert</code> (Windows) atau <code>traceroute</code> (Linux).</div>
+                        </div>
+
+                        <!-- Skenario 16 (Hardware Cache) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">16. Skenario Kecepatan Akses Data CPU</h4>
+                            <p class="text-stone-700 mt-2">CPU memiliki memori internal yang sangat kecil dan sangat cepat (jauh lebih cepat dari RAM) untuk menyimpan instruksi dan data yang paling sering digunakan. Nama memori ini adalah...</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Cache (L1, L2, L3).</div>
+                        </div>
+
+                        <!-- Skenario 17 (Booting Stage - POST) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">17. Skenario Gagal POST</h4>
+                            <p class="text-stone-700 mt-2">Komputer menyala, kipas berputar, tetapi layar tetap hitam dan Motherboard mengeluarkan bunyi bip (beep codes) secara berulang. Tahap awal siklus booting manakah yang menunjukkan kegagalan Hardware di sini?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: POST (Power-On Self-Test) yang dijalankan oleh BIOS/UEFI.</div>
+                        </div>
+
+                        <!-- Skenario 18 (Software Utility vs System) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">18. Skenario Pemeliharaan Disk</h4>
+                            <p class="text-stone-700 mt-2">Untuk komputer yang masih menggunakan HDD, program **Utilitas** apa yang harus dijalankan secara berkala untuk menyusun ulang fragmen data agar waktu akses lebih cepat?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: Disk Defragmenter.</div>
+                        </div>
+
+                        <!-- Skenario 19 (Networking Monitoring) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">19. Skenario Identifikasi Malware</h4>
+                            <p class="text-stone-700 mt-2">Anda mencurigai ada program tersembunyi mengirimkan data dari komputer Anda tanpa izin. Perintah CLI mana (misalnya di Linux) yang dapat Anda gunakan untuk melihat semua koneksi jaringan aktif dan port yang sedang digunakan?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: <code>netstat -an</code>.</div>
+                        </div>
+
+                        <!-- Skenario 20 (CPU Threads) -->
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-semibold text-lg text-stone-800">20. Skenario Multithreading</h4>
+                            <p class="text-stone-700 mt-2">Sebuah CPU memiliki 4 Core dan mendukung teknologi *Hyper-Threading*. Berapakah total jumlah Thread (jalur eksekusi virtual) yang dapat ditangani oleh CPU ini secara simultan?</p>
+                            <div class="mt-2 text-sm text-teal-700 italic">Target Jawaban: 8 Threads (karena 1 Core dapat menangani 2 Thread virtual).</div>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+                <!-- QUIZ SECTION -->
+                <section id="kuis" class="content-section space-y-6 hidden">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4">VI. Soal Pilihan Ganda (35 Soal Dasar - Teracak)</h2>
+                    <p class="text-stone-700 leading-relaxed">
+                        Uji pemahaman dasar Anda mengenai Hardware, Software, dan Sistem Operasi. Soal dan pilihan jawaban diacak setiap kali halaman dibuka.
+                    </p>
+
+                    <div id="quizForm" class="mt-6">
+                        <!-- Quiz questions will be rendered here by JavaScript -->
+                    </div>
+
+                    <button id="submitQuizBtn" onclick="submitQuiz()" class="w-full md:w-auto px-6 py-3 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700 transition duration-150 shadow-md">
+                        Kumpulkan Jawaban (Lihat Hasil & Penjelasan)
+                    </button>
+
+                    <div id="quizResults" class="mt-10 hidden">
+                        <h3 class="text-2xl font-bold text-teal-800 mb-4">Hasil Kuis Anda</h3>
+                        <p id="quizScore" class="text-xl font-semibold mb-6"></p>
+                        <div id="quizExplanations" class="space-y-8">
+                            <!-- Explanations will be rendered here -->
+                        </div>
+                    </div>
+                </section>
+                <!-- END QUIZ SECTION -->
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- UPDATED QUIZ DATA (35 SOAL DASAR) ---
+        // PENTING: Penomoran di awal teks pertanyaan telah DIHAPUS, akan digantikan oleh penomoran dinamis.
+        const quizData = [
+            // PERANGKAT KERAS (Hardware) - 10 Soal
+            {q: "Komponen yang berfungsi sebagai 'otak' komputer dan bertugas melakukan semua perhitungan serta pemrosesan data adalah...", a: ["RAM", "Monitor", "CPU", "Motherboard", "Speaker"], correct: 2, explanation: "CPU (Central Processing Unit) adalah unit pemrosesan utama. RAM adalah memori kerja sementara, sedangkan Monitor dan Speaker adalah perangkat output."
+            },
+            {q: "Perangkat keras yang menyimpan data dan program secara permanen, agar tidak hilang saat listrik mati, adalah...", a: ["RAM", "Keyboard", "Hard Drive / SSD", "Printer", "VGA Card"], correct: 2, explanation: "Hard Drive (HDD) dan Solid State Drive (SSD) adalah memori non-volatil yang menyimpan data permanen. RAM bersifat sementara (volatile)."
+            },
+            {q: "Memori komputer yang berfungsi sebagai tempat penyimpanan data sementara (memori kerja) saat program sedang berjalan adalah...", a: ["ROM", "RAM", "CPU Cache", "CD-ROM", "Flash Drive"], correct: 1, explanation: "RAM (Random Access Memory) adalah memori kerja yang cepat, menyimpan data program yang sedang digunakan, tetapi bersifat sementara."
+            },
+            {q: "Manakah dari perangkat berikut yang dikategorikan sebagai perangkat Input (masukan)?", a: ["Monitor", "Printer", "Keyboard dan Mouse", "Speaker", "VGA Card"], correct: 2, explanation: "Keyboard dan Mouse digunakan untuk memasukkan perintah dan data. Monitor, Printer, dan Speaker adalah perangkat keluaran (Output)."
+            },
+            {q: "Perangkat keras yang berfungsi untuk menampilkan informasi visual (gambar atau teks) hasil pemrosesan komputer disebut...", a: ["Speaker", "CPU", "Scanner", "Monitor", "Webcam"], correct: 3, explanation: "Monitor adalah perangkat output yang mengubah sinyal data menjadi tampilan visual yang dapat dilihat pengguna."
+            },
+            {q: "Komponen ini menyediakan koneksi fisik dan jalur komunikasi (bus) untuk semua komponen lain, seperti CPU, RAM, dan perangkat I/O. Nama komponen tersebut adalah...", a: ["PSU (Power Supply)", "VGA Card", "Motherboard", "Hard Drive", "Processor"], correct: 2, explanation: "Motherboard (papan utama) adalah papan sirkuit utama yang menghubungkan semua komponen fisik komputer."
+            },
+            {q: "Perangkat keras yang mengubah arus listrik AC dari stopkontak menjadi arus listrik DC yang dibutuhkan oleh semua komponen komputer adalah...", a: ["Monitor", "UPS (Uninterruptible Power Supply)", "PSU (Power Supply Unit)", "RAM", "Motherboard"], correct: 2, explanation: "PSU bertugas mengatur dan mengkonversi tegangan listrik agar aman dan sesuai dengan kebutuhan setiap komponen."
+            },
+            {q: "Slot ekspansi pada Motherboard yang sering digunakan untuk memasang kartu grafis (VGA Card) berkecepatan tinggi adalah...", a: ["Slot RAM", "Slot SATA", "PCI Express (PCIe)", "Slot USB", "Slot AGP"], correct: 2, explanation: "PCIe adalah standar bus utama saat ini untuk menghubungkan perangkat berkecepatan tinggi seperti kartu grafis dan SSD modern."
+            },
+            {q: "Perangkat keras mana yang bersifat *Non-Volatile* (data tetap tersimpan meski tanpa listrik)?", a: ["RAM", "Cache L1", "SSD", "RAM DDR4", "CPU"], correct: 2, explanation: "SSD (Solid State Drive) adalah perangkat penyimpanan permanen (non-volatile). RAM dan Cache bersifat sementara (volatile)."
+            },
+            {q: "Di antara pilihan berikut, manakah yang merupakan perangkat Output?", a: ["Microphone", "Scanner", "Printer", "Mouse", "Joystick"], correct: 2, explanation: "Printer mengeluarkan data (mencetak). Microphone, Scanner, Mouse, dan Joystick semuanya adalah perangkat input."
+            },
+            
+            // PERANGKAT LUNAK (Software) - 10 Soal
+            {q: "Kelompok perangkat lunak yang bertugas mengelola dan mengkoordinasikan semua perangkat keras dan perangkat lunak di komputer disebut...", a: ["Perangkat Lunak Aplikasi", "Perangkat Lunak Driver", "Perangkat Lunak Sistem", "Utilitas Kreatif", "Game"], correct: 2, explanation: "Perangkat Lunak Sistem (seperti Sistem Operasi) adalah manajer utama yang mengontrol seluruh operasi komputer."
+            },
+            {q: "Contoh dari Perangkat Lunak Aplikasi yang digunakan untuk membuat dan mengedit dokumen teks adalah...", a: ["Linux Kernel", "Windows Defender", "Microsoft Word", "Google Chrome", "Driver Chipset"], correct: 2, explanation: "Microsoft Word (bagian dari MS Office) adalah aplikasi produktivitas yang dirancang untuk tugas spesifik pengguna."
+            },
+            {q: "Perangkat lunak yang berfungsi sebagai penerjemah antara Sistem Operasi dan Perangkat Keras tertentu (misalnya, Printer atau Wi-Fi Card) adalah...", a: ["Antivirus", "Browser", "Driver", "Microsoft Word", "OS Kernel"], correct: 2, explanation: "Driver adalah perangkat lunak jembatan yang memberitahu OS cara menggunakan perangkat keras tertentu."
+            },
+            {q: "Program seperti Disk Cleaner atau Antivirus dikelompokkan sebagai jenis perangkat lunak...", a: ["Sistem Operasi", "Aplikasi Kreatif", "Utilitas", "Bahasa Pemrograman", "Freeware"], correct: 2, explanation: "Utilitas adalah program yang dirancang untuk membantu pemeliharaan, optimalisasi, atau keamanan sistem."
+            },
+            {q: "Manakah yang termasuk Perangkat Lunak Sistem?", a: ["Adobe Photoshop", "Microsoft Excel", "Sistem Operasi Windows 10", "Game PUBG", "Spotify"], correct: 2, explanation: "Windows 10 adalah Sistem Operasi, yang merupakan contoh utama dari Perangkat Lunak Sistem."
+            },
+            {q: "Bahasa pemrograman seperti C++ biasanya menggunakan metode penerjemahan kode yang disebut...", a: ["Interpreting (Interpreter)", "Compiling (Compiler)", "Debugging", "Linking", "Runtime"], correct: 1, explanation: "Compiler menerjemahkan seluruh kode sumber menjadi file executable Bahasa Mesin sebelum program dijalankan, menghasilkan eksekusi cepat."
+            },
+            {q: "Program yang mengeksekusi kode sumber program baris demi baris saat program sedang berjalan disebut...", a: ["Compiler", "Assembler", "Linker", "Interpreter", "Debugger"], correct: 3, explanation: "Interpreter menerjemahkan dan menjalankan kode secara dinamis, baris demi baris, seperti yang terjadi pada bahasa Python atau JavaScript."
+            },
+            {q: "Keuntungan utama dari Perangkat Lunak Sumber Terbuka (Open Source Software) adalah...", a: ["Harganya selalu mahal.", "Kode sumbernya dapat dilihat dan dimodifikasi oleh siapa saja.", "Hanya dapat digunakan di satu jenis komputer.", "Jarang diperbarui.", "Selalu memiliki dukungan teknis resmi."], correct: 1, explanation: "Ciri khas utama Open Source adalah ketersediaan kode sumber yang dapat dipelajari, dimodifikasi, dan didistribusikan secara bebas."
+            },
+            {q: "Perangkat lunak yang memungkinkan satu komputer bertindak seolah-olah memiliki beberapa sistem operasi sekaligus (misalnya, menjalankan Linux di dalam Windows) disebut...", a: ["Antivirus", "Utilitas Defragmentasi", "Virtualisasi", "Compiler", "Driver"], correct: 2, explanation: "Virtualisasi menciptakan lingkungan virtual (Virtual Machine) yang memungkinkan beberapa OS berjalan secara bersamaan pada satu perangkat keras fisik."
+            },
+            {q: "Perangkat lunak yang fokus utamanya adalah melindungi komputer dari virus, malware, dan ancaman berbahaya adalah...", a: ["Firewall", "Registry Cleaner", "Antivirus", "Optimizer", "Backup Manager"], correct: 2, explanation: "Antivirus adalah utilitas keamanan yang memindai, mendeteksi, dan menghilangkan perangkat lunak berbahaya (malware)."
+            },
+            
+            // SISTEM OPERASI (OS) - 10 Soal
+            {q: "Sistem Operasi yang paling dominan digunakan pada komputer desktop dan laptop di seluruh dunia, yang dikembangkan oleh Microsoft, adalah...", a: ["macOS", "Linux", "Chrome OS", "Windows", "Android"], correct: 3, explanation: "Windows (seperti Windows 10 dan 11) adalah OS desktop yang paling banyak digunakan secara global."
+            },
+            {q: "Sistem Operasi yang khusus digunakan pada iPhone dan iPad (perangkat seluler Apple) adalah...", a: ["macOS", "watchOS", "tvOS", "Android", "iOS"], correct: 4, explanation: "iOS adalah Sistem Operasi yang dirancang khusus oleh Apple untuk perangkat mobile mereka seperti iPhone."
+            },
+            {q: "Apa nama inti (kernel) dari Sistem Operasi Linux?", a: ["Windows Core", "Kernel", "Macintosh", "UNIX", "Android"], correct: 1, explanation: "Kernel adalah inti dari semua Sistem Operasi, termasuk Linux. Linux sendiri merujuk pada kernel yang dikembangkan oleh Linus Torvalds."
+            },
+            {q: "Fungsionalitas utama Sistem Operasi sebagai 'Manajer Sumber Daya' berarti OS bertanggung jawab atas...", a: ["Mengedit foto dan video.", "Membuat koneksi internet secara otomatis.", "Mengalokasikan CPU, RAM, dan perangkat I/O secara adil.", "Membuat laporan keuangan.", "Mencetak dokumen."], correct: 2, explanation: "OS mengatur sumber daya perangkat keras, memastikan setiap program mendapatkan bagian yang dibutuhkan tanpa mengganggu yang lain."
+            },
+            {q: "Manakah dari OS berikut yang dikenal sebagai OS sumber terbuka (Open Source) dan sering digunakan pada server atau untuk tujuan belajar/modifikasi?", a: ["Windows Server", "macOS", "iOS", "Linux (misal, Ubuntu)", "Chrome OS"], correct: 3, explanation: "Linux adalah OS Open Source, yang kode sumbernya terbuka untuk publik, menjadikannya populer di server dan pengembangan."
+            },
+            {q: "Jenis antarmuka pengguna (interface) yang menggunakan ikon, jendela, dan mouse untuk berinteraksi dengan komputer disebut...", a: ["CLI (Command Line Interface)", "Text-based Interface", "GUI (Graphical User Interface)", "Terminal", "Kernel Interface"], correct: 2, explanation: "GUI adalah antarmuka visual yang umum pada Windows, macOS, dan sebagian besar OS modern lainnya."
+            },
+            {q: "Sistem Operasi yang dikembangkan oleh Apple dan digunakan pada komputer desktop mereka (iMac, MacBook) adalah...", a: ["iOS", "Windows", "macOS", "Android", "Linux"], correct: 2, explanation: "macOS adalah Sistem Operasi desktop Apple."
+            },
+            {q: "Ketika Anda membuka banyak aplikasi sekaligus di komputer, OS menggunakan teknik yang disebut...", a: ["Single-tasking", "Kernel Panic", "Paging", "Multitasking", "Compiling"], correct: 3, explanation: "Multitasking adalah kemampuan OS untuk menjalankan beberapa proses (aplikasi) secara bersamaan atau bergantian dengan cepat."
+            },
+            {q: "Perangkat penyimpanan apa yang dikelola oleh Sistem Operasi menggunakan struktur data yang disebut File System (misal NTFS, FAT32)?", a: ["RAM", "CPU Cache", "Hard Drive / SSD", "Processor Register", "Monitor"], correct: 2, explanation: "File System (Sistem Berkas) adalah cara OS mengatur data pada perangkat penyimpanan permanen (Hard Drive/SSD)."
+            },
+            {q: "Sistem Operasi yang paling banyak digunakan pada perangkat seluler secara global (bukan Apple) adalah...", a: ["Windows Mobile", "Symbian", "Android", "BlackBerry OS", "Chrome OS"], correct: 2, explanation: "Android, yang berbasis Kernel Linux, mendominasi pasar OS untuk smartphone non-Apple."
+            },
+
+            // PENGGUNAAN DAN FUNGSI DASAR - 5 Soal
+            {q: "Perintah sederhana yang digunakan dalam Command Line Interface (CLI) untuk memeriksa apakah komputer Anda terhubung ke alamat IP atau situs web tertentu adalah...", a: ["ipconfig", "format C:", "ping", "tracert", "netstat"], correct: 2, explanation: "`ping` adalah alat diagnostik jaringan dasar yang menguji konektivitas dan waktu respons ke host lain."
+            },
+            {q: "Apa fungsi tombol 'Delete' atau 'Hapus' pada keyboard saat mengelola file di Windows Explorer atau File Manager?", a: ["Membuat salinan file.", "Mengubah nama file.", "Memindahkan file ke Recycle Bin/Trash.", "Menjalankan file.", "Mengubah izin akses file."], correct: 2, explanation: "Tombol 'Delete' biasanya mengirim file yang dipilih ke folder sampah, memungkinkannya dipulihkan jika diperlukan."
+            },
+            {q: "Tindakan 'klik ganda' (double-click) pada ikon file aplikasi (misalnya, Word) biasanya berfungsi untuk...", a: ["Memilih ikon file.", "Menampilkan menu konteks (klik kanan).", "Membuka dan menjalankan aplikasi tersebut.", "Mengubah ukuran ikon.", "Menghapus ikon."], correct: 2, explanation: "Klik ganda adalah tindakan standar untuk mengeksekusi atau membuka suatu program atau dokumen di GUI."
+            },
+            {q: "Anda ingin melihat alamat IP komputer Anda saat ini. Perintah dasar di Command Prompt (Windows) adalah...", a: ["ls", "ipconfig", "cd ..", "mkdir", "top"], correct: 1, explanation: "`ipconfig` adalah perintah Windows yang menampilkan konfigurasi TCP/IP, termasuk alamat IP lokal."
+            },
+            {q: "Ketika Anda menekan kombinasi tombol `Ctrl + S` di sebagian besar aplikasi, fungsi yang dilakukan adalah...", a: ["Menyalin teks (Copy).", "Menempelkan teks (Paste).", "Menyimpan (Save) dokumen yang sedang aktif.", "Mencetak dokumen.", "Membatalkan aksi (Undo)."], correct: 2, explanation: "Kombinasi `Ctrl + S` adalah pintasan keyboard universal untuk menyimpan pekerjaan Anda."
+            }
+        ];
+        // --- END UPDATED QUIZ DATA ---
+
+        
+        // --- JAVASCRIPT LOGIC (MODIFIKASI PENGACAKAN) ---
+
+        // Fungsi utilitas untuk mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            const quizForm = document.getElementById('quizForm');
+            
+            // Variabel untuk menyimpan urutan kuis yang sudah diacak
+            let shuffledQuizData = [];
+
+            // Function to handle navigation
+            const handleNavigation = (e) => {
+                e.preventDefault();
+                
+                const targetId = e.currentTarget.getAttribute('data-target');
+                
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                
+                contentSections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                // Render quiz only when the quiz section is opened
+                if (targetId === 'kuis' && quizForm.children.length === 0) {
+                    renderQuiz();
+                }
+            };
+            
+            navLinks.forEach(link => link.addEventListener('click', handleNavigation));
+
+            // Function to handle accordion toggle
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.accordion-icon');
+                    const isOpen = content.classList.contains('open');
+
+                    const parentContainer = header.closest('#accordion-container');
+                    
+                    if (parentContainer) {
+                         parentContainer.querySelectorAll('.accordion-item').forEach(item => {
+                            const otherHeader = item.querySelector('.accordion-header');
+                            const otherContent = item.querySelector('.accordion-content');
+                            const otherIcon = item.querySelector('.accordion-icon');
+                            
+                            if (otherHeader !== header) {
+                                otherHeader.classList.remove('open');
+                                otherContent.classList.remove('open');
+                                otherIcon.textContent = '+';
+                            }
+                        });
+                    }
+
+                    if (!isOpen) {
+                        header.classList.add('open');
+                        content.classList.add('open');
+                        icon.textContent = '−';
+                    } else {
+                         header.classList.remove('open');
+                        content.classList.remove('open');
+                        icon.textContent = '+';
+                    }
+                });
+            });
+
+            // --- QUIZ FUNCTIONS ---
+            
+            // Utility function to generate a unique ID
+            const generateUniqueId = () => 'q-' + Math.random().toString(36).substring(2, 9);
+
+            function renderQuiz() {
+                let quizHTML = '';
+
+                // 1. Acak urutan pertanyaan
+                shuffledQuizData = shuffleArray([...quizData]); // Clone and shuffle the main array
+
+                shuffledQuizData.forEach((item, index) => {
+                    const uniqueName = generateUniqueId();
+                    quizHTML += `<div class="question-card" data-question-index="${index}">`;
+                    // Hanya menambahkan penomoran dinamis (index + 1)
+                    quizHTML += `<p class="font-bold text-lg mb-4">${index + 1}. ${item.q}</p>`; 
+                    
+                    // 2. Acak urutan pilihan jawaban (item.a)
+                    const shuffledOptions = shuffleArray([...item.a]); // Clone and shuffle options
+
+                    shuffledOptions.forEach((option, optionIndex) => {
+                        const optionId = `${uniqueName}-${optionIndex}`;
+                        
+                        // Penting: Set VALUE radio button ke teks jawaban
+                        quizHTML += `
+                            <label class="option-label" for="${optionId}">
+                                <input type="radio" id="${optionId}" name="${uniqueName}" value="${option}" class="mr-3 align-middle">
+                                ${String.fromCharCode(65 + optionIndex)}. ${option}
+                            </label>
+                        `;
+                    });
+                    
+                    quizHTML += '</div>';
+                });
+
+                quizForm.innerHTML = quizHTML;
+                
+                // Pastikan tombol submit aktif
+                document.getElementById('submitQuizBtn').disabled = false;
+                document.getElementById('quizResults').classList.add('hidden');
+            }
+
+            window.submitQuiz = function() {
+                let score = 0;
+                let resultsHTML = '';
+                const quizResults = document.getElementById('quizResults');
+                const quizExplanations = document.getElementById('quizExplanations');
+                const quizScoreElement = document.getElementById('quizScore');
+
+                const questionCards = quizForm.querySelectorAll('.question-card');
+                
+                // Iterasi menggunakan shuffledQuizData yang sudah diacak
+                shuffledQuizData.forEach((data, index) => {
+                    const card = questionCards[index];
+                    const questionName = card.querySelector('input').name;
+                    const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                    
+                    // Ambil teks jawaban yang benar dari data asli
+                    const correctAnswerText = data.a[data.correct]; 
+                    
+                    // Ambil teks jawaban dari user
+                    const userAnswerText = selectedOption ? selectedOption.value : "Tidak Dijawab";
+                    
+                    // Cek koreksi berdasarkan teks
+                    const isCorrect = userAnswerText === correctAnswerText;
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    // Prepare explanation card
+                    const statusClass = isCorrect ? 'result-correct' : 'result-incorrect';
+                    const statusText = isCorrect ? 'Jawaban Anda BENAR' : 'Jawaban Anda SALAH';
+
+                    resultsHTML += `
+                        <div class="p-4 rounded-lg ${statusClass}">
+                            <p class="font-bold text-lg">${index + 1}. ${data.q}</p>
+                            <p class="mt-2"><strong>Status:</strong> ${statusText}</p>
+                            <p><strong>Jawaban Anda:</strong> ${userAnswerText}</p>
+                            <p><strong>Jawaban Benar:</strong> ${correctAnswerText}</p>
+                            <div class="explanation-box">
+                                <p class="font-semibold">Penjelasan Mendalam:</p>
+                                <p>${data.explanation}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Non-aktifkan radio buttons
+                    card.querySelectorAll('input').forEach(input => input.disabled = true);
+                });
+
+                // Display score and results
+                const percentage = ((score / shuffledQuizData.length) * 100).toFixed(2);
+                quizScoreElement.innerHTML = `Anda menjawab <span class="text-teal-600 font-extrabold">${score}</span> dari ${shuffledQuizData.length} soal dengan benar (${percentage}%).`;
+                quizExplanations.innerHTML = resultsHTML;
+                quizResults.classList.remove('hidden');
+                
+                document.getElementById('submitQuizBtn').disabled = true;
+
+                // Scroll to results
+                quizResults.scrollIntoView({ behavior: 'smooth' });
+            };
+
+
+            // --- CHART.JS INITIALIZATION ---
+            try {
+                const ctx = document.getElementById('hardwareChart').getContext('2d');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Process Device (8)', 'Input Device (5)', 'Output Device (4)', 'Storage Device (3)'],
+                            datasets: [{
+                                label: 'Jumlah Contoh dalam Materi (Estimasi)',
+                                data: [8, 5, 4, 3],
+                                backgroundColor: [
+                                    'rgba(15, 118, 110, 0.6)',
+                                    'rgba(13, 148, 136, 0.6)',
+                                    'rgba(5, 150, 105, 0.6)',
+                                    'rgba(16, 185, 129, 0.6)'
+                                ],
+                                borderColor: [
+                                    'rgba(15, 118, 110, 1)',
+                                    'rgba(13, 148, 136, 1)',
+                                    'rgba(5, 150, 105, 1)',
+                                    'rgba(16, 185, 129, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Perbandingan Keragaman Contoh Kategori Hardware'
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error('Gagal menginisialisasi bagan:', e);
+            }
+
+        });
+    </script>
+
+</body>
+</html>
