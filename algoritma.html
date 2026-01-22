@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif: Logika & Algoritma (Edisi Lengkap)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        /* Flowchart Shapes */
+        .shape-oval { border-radius: 50px; }
+        .shape-parallelogram { transform: skewX(-20deg); }
+        .shape-diamond { transform: rotate(45deg); }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .code-block { background-color: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; font-family: monospace; }
+    </style>
+    <!-- Chosen Palette: Slate (Background), Indigo (Primary), Emerald (Success), Rose (Error) -->
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Application Structure Plan: 
+         Aplikasi ini dirancang sebagai Modul Dashboard Pembelajaran yang mendalam.
+         1. Struktur: Sidebar navigasi untuk navigasi non-linear.
+         2. Konten: 
+            - Intro: Menjelaskan 'Apa' dan 'Mengapa' algoritma (CT).
+            - Concepts: Terminologi teknis.
+            - Flowchart & Pseudocode: Cara penulisan algoritma yang standar.
+            - Data Types: Fondasi data komputer.
+            - Game Lab: Implementasi logika secara praktis.
+         RATIONALE: Siswa butuh konteks teori sebelum praktek. Materi ditambahkan di setiap bagian untuk memperkuat pemahaman teks.
+    -->
+
+    <!-- Sidebar -->
+    <nav class="bg-slate-900 text-white w-full md:w-72 flex-shrink-0 flex flex-col justify-between transition-all duration-300 z-50">
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-2xl font-bold tracking-tight text-indigo-400">Logika<span class="text-white">Algo</span></h1>
+            <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-semibold">Kurikulum Merdeka PPLG</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 px-3">
+                <li><button onclick="nav('intro')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 text-sm font-medium" id="btn-intro"><span>🏠</span> 01. Pengertian Dasar</button></li>
+                <li><button onclick="nav('concepts')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 text-sm font-medium" id="btn-concepts"><span>🧠</span> 02. Terminologi & Konsep</button></li>
+                <li><button onclick="nav('flowchart')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 text-sm font-medium" id="btn-flowchart"><span>📏</span> 03. Notasi & Flowchart</button></li>
+                <li><button onclick="nav('datatypes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 text-sm font-medium" id="btn-datatypes"><span>💾</span> 04. Tipe Data Lengkap</button></li>
+                <li><button onclick="nav('games')" class="nav-btn w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 text-sm font-medium" id="btn-games"><span>🎮</span> 05. Lab Interaktif</button></li>
+            </ul>
+        </div>
+        <div class="p-6 bg-slate-800 m-4 rounded-xl">
+            <p class="text-xs text-slate-400 leading-tight italic">"Algoritma adalah cara kita mengajarkan komputer untuk menyelesaikan masalah."</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 relative" id="main-content">
+        <!-- Content injected via JS -->
+    </main>
+
+    <script>
+        // Data Store (Enhanced with more detailed explanations)
+        const data = {
+            atmSteps: [
+                { id: 1, title: "Persiapan (Input)", text: "Masukkan kartu ke mesin. Ini adalah tahap input di mana sistem mulai membaca identitas pengguna.", icon: "💳" },
+                { id: 2, title: "Autentikasi (Proses)", text: "Masukkan nomor PIN. Sistem memproses validasi apakah PIN sesuai dengan data di bank.", icon: "🔢" },
+                { id: 3, title: "Instruksi (Input)", text: "Pilih menu 'Tarik Tunai'. Pengguna memberikan perintah spesifik kepada sistem.", icon: "🖱️" },
+                { id: 4, title: "Verifikasi Saldo (Proses)", text: "Sistem mengecek apakah saldo cukup (Logika If-Then). Jika cukup, uang disiapkan.", icon: "🏦" },
+                { id: 5, title: "Penyelesaian (Output)", text: "Ambil uang dan kartu. Output berhasil dikirimkan ke pengguna.", icon: "💵" }
+            ],
+            terms: [
+                { term: "Algoritma", desc: "Urutan langkah logis yang disusun secara sistematis untuk menyelesaikan masalah.", ex: "Langkah-langkah membuat mie instan.", color: "bg-indigo-100 border-indigo-300 text-indigo-800" },
+                { term: "Computational Thinking", desc: "Metode pemecahan masalah dengan cara dekomposisi, pengenalan pola, dan abstraksi.", ex: "Memecah masalah besar menjadi bagian kecil.", color: "bg-blue-100 border-blue-300 text-blue-800" },
+                { term: "Variabel", desc: "Nama/simbol yang digunakan untuk menyimpan nilai data di dalam memori.", ex: "nama_siswa = 'Budi'", color: "bg-purple-100 border-purple-300 text-purple-800" },
+                { term: "Logika Boolean", desc: "Tipe data yang hanya memiliki dua kemungkinan nilai: Benar (True) atau Salah (False).", ex: "Apakah 10 > 5? (True)", color: "bg-emerald-100 border-emerald-300 text-emerald-800" }
+            ],
+            symbols: [
+                { name: "Terminal", shape: "oval", func: "Menandai titik awal dan titik akhir dari sebuah aliran algoritma.", color: "bg-rose-500" },
+                { name: "Input/Output", shape: "parallelogram", func: "Digunakan untuk menerima data (input) atau menampilkan data (output).", color: "bg-blue-500" },
+                { name: "Process", shape: "rect", func: "Menunjukkan operasi pengolahan data seperti perhitungan matematika.", color: "bg-amber-500" },
+                { name: "Decision", shape: "diamond", func: "Tempat pengambilan keputusan (percabangan) berdasarkan kondisi tertentu.", color: "bg-emerald-500" }
+            ],
+            types: {
+                primitive: [
+                    { name: "Integer (int)", desc: "Bilangan bulat tanpa desimal.", ex: "Jumlah orang, Tahun lahir (2007)" },
+                    { name: "Float/Double", desc: "Bilangan dengan koma (pecahan/desimal).", ex: "Nilai rata-rata (85.5), Berat badan" },
+                    { name: "String", desc: "Kumpulan karakter atau teks.", ex: "Alamat rumah, Nama lengkap" },
+                    { name: "Boolean", desc: "Hanya bernilai Benar atau Salah.", ex: "Status kelulusan (True/False)" }
+                ],
+                complex: [
+                    { name: "Array", desc: "Larik yang menampung banyak data dengan tipe yang sama.", ex: "Daftar 10 nama siswa dalam satu variabel." },
+                    { name: "Record/Object", desc: "Data bentukan yang terdiri dari berbagai tipe data dasar.", ex: "Data Siswa (Nama: String, Umur: Int, Lulus: Bool)" }
+                ]
+            }
+        };
+
+        let currentState = { atmStep: 0, sortActive: false };
+
+        // Navigation
+        function nav(sectionId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
+            const activeBtn = document.getElementById(`btn-${sectionId}`);
+            if(activeBtn) activeBtn.classList.add('bg-indigo-600', 'text-white');
+
+            const main = document.getElementById('main-content');
+            main.innerHTML = '';
+            
+            if(sectionId === 'intro') renderIntro(main);
+            else if(sectionId === 'concepts') renderConcepts(main);
+            else if(sectionId === 'flowchart') renderFlowchart(main);
+            else if(sectionId === 'datatypes') renderDataTypes(main);
+            else if(sectionId === 'games') renderGames(main);
+        }
+
+        // --- SECTION RENDERS ---
+
+        function renderIntro(container) {
+            container.innerHTML = `
+                <div class="max-w-4xl mx-auto p-8 fade-in">
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 mb-8 rounded-r-xl">
+                        <h2 class="text-3xl font-bold text-indigo-900 mb-2">Apa itu Algoritma?</h2>
+                        <p class="text-indigo-800 leading-relaxed">
+                            Algoritma bukan hanya tentang kode program. Ia adalah <strong>urutan langkah-langkah</strong> yang logis untuk menyelesaikan sebuah masalah. 
+                            Dalam kehidupan sehari-hari, kita melakukan algoritma secara tidak sadar, seperti saat memasak mie instan atau merapikan tempat tidur.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><span>🛡️</span> Karakteristik Algoritma</h3>
+                            <ul class="space-y-3 text-sm text-slate-600">
+                                <li class="flex items-start gap-2"><strong>1. Input:</strong> Ada data yang masuk.</li>
+                                <li class="flex items-start gap-2"><strong>2. Definiteness:</strong> Langkahnya harus jelas/tidak ambigu.</li>
+                                <li class="flex items-start gap-2"><strong>3. Finiteness:</strong> Harus ada akhir (tidak selamanya berputar).</li>
+                                <li class="flex items-start gap-2"><strong>4. Output:</strong> Harus menghasilkan solusi/hasil.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><span>💡</span> Mengapa Belajar Ini?</h3>
+                            <p class="text-sm text-slate-600">
+                                Melatih cara berpikir kita agar terstruktur (Computational Thinking). Ini adalah modal utama sebelum kamu belajar bahasa pemrograman seperti Java, Python, atau PHP.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                        <div class="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                            <h3 class="font-bold">Simulasi Interaktif: Flow ATM</h3>
+                        </div>
+                        <div class="p-10 text-center" id="atm-display"></div>
+                        <div class="bg-slate-50 p-6 flex justify-between items-center border-t">
+                            <button onclick="updateAtm(-1)" id="btn-prev" class="px-6 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 disabled:opacity-30">Kembali</button>
+                            <div class="flex gap-2" id="atm-dots"></div>
+                            <button onclick="updateAtm(1)" id="btn-next" class="px-8 py-2 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 font-bold">Lanjut</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            updateAtm(0);
+        }
+
+        function updateAtm(dir) {
+            const next = currentState.atmStep + dir;
+            if(next >= 0 && next < data.atmSteps.length) {
+                currentState.atmStep = next;
+                const step = data.atmSteps[next];
+                const display = document.getElementById('atm-display');
+                display.innerHTML = `
+                    <div class="text-7xl mb-6 animate-bounce">${step.icon}</div>
+                    <h4 class="text-2xl font-bold text-slate-800 mb-3">${step.title}</h4>
+                    <p class="text-slate-600 max-w-md mx-auto leading-relaxed">${step.text}</p>
+                `;
+                
+                document.getElementById('btn-prev').disabled = next === 0;
+                document.getElementById('btn-next').innerText = next === data.atmSteps.length - 1 ? "Selesai" : "Lanjut";
+                
+                const dots = document.getElementById('atm-dots');
+                dots.innerHTML = data.atmSteps.map((_, i) => `<div class="w-2.5 h-2.5 rounded-full ${i === next ? 'bg-indigo-600' : 'bg-slate-300'}"></div>`).join('');
+            }
+        }
+
+        function renderConcepts(container) {
+            container.innerHTML = `
+                <div class="max-w-6xl mx-auto p-8 fade-in">
+                    <div class="mb-10 text-center">
+                        <h2 class="text-3xl font-bold text-slate-800">Terminologi & Struktur</h2>
+                        <p class="text-slate-500 mt-2">Kamus dasar yang harus dikuasai oleh seorang calon programmer.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                        ${data.terms.map(t => `
+                            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 transition-all">
+                                <span class="px-3 py-1 text-xs font-bold rounded-full ${t.color.split(' ')[0]} ${t.color.split(' ')[2]} mb-4 inline-block">TERMINOLOGI</span>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">${t.term}</h3>
+                                <p class="text-slate-600 text-sm mb-4 leading-relaxed">${t.desc}</p>
+                                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-500">Contoh: ${t.ex}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="bg-slate-900 text-slate-300 p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-bold">LOGIC</div>
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><span>🔄</span> Struktur Kontrol Algoritma</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="border border-slate-700 p-4 rounded-xl">
+                                <h4 class="text-indigo-400 font-bold mb-2">1. Sequence (Runtutan)</h4>
+                                <p class="text-xs">Langkah yang dijalankan berurutan dari atas ke bawah tanpa ada lompatan.</p>
+                            </div>
+                            <div class="border border-slate-700 p-4 rounded-xl">
+                                <h4 class="text-emerald-400 font-bold mb-2">2. Selection (Pemilihan)</h4>
+                                <p class="text-xs">Langkah yang dipilih berdasarkan kondisi tertentu (Contoh: If-Else).</p>
+                            </div>
+                            <div class="border border-slate-700 p-4 rounded-xl">
+                                <h4 class="text-amber-400 font-bold mb-2">3. Repetition (Perulangan)</h4>
+                                <p class="text-xs">Langkah yang dilakukan berulang kali selama kondisi terpenuhi (Contoh: Loop).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFlowchart(container) {
+            container.innerHTML = `
+                <div class="max-w-6xl mx-auto p-8 fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                        <!-- Bagan Alir -->
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                <span>🎨</span> Notasi Flowchart
+                            </h3>
+                            <div class="space-y-6">
+                                ${data.symbols.map(s => {
+                                    let visual = '';
+                                    if(s.shape === 'oval') visual = `<div class="w-20 h-10 ${s.color} rounded-full border-2 border-white shadow flex items-center justify-center text-[10px] text-white font-bold">START</div>`;
+                                    if(s.shape === 'parallelogram') visual = `<div class="w-20 h-10 ${s.color} transform -skew-x-12 border-2 border-white shadow flex items-center justify-center text-[10px] text-white font-bold"><span class="transform skew-x-12">INPUT</span></div>`;
+                                    if(s.shape === 'rect') visual = `<div class="w-20 h-10 ${s.color} border-2 border-white shadow flex items-center justify-center text-[10px] text-white font-bold uppercase">Proses</div>`;
+                                    if(s.shape === 'diamond') visual = `<div class="w-12 h-12 ${s.color} transform rotate-45 border-2 border-white shadow flex items-center justify-center text-[10px] text-white font-bold mx-4"><span class="transform -rotate-45">IF ?</span></div>`;
+                                    
+                                    return `
+                                        <div class="flex items-center gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors group">
+                                            <div class="w-24 flex justify-center flex-shrink-0">${visual}</div>
+                                            <div>
+                                                <h4 class="font-bold text-slate-800 group-hover:text-indigo-600">${s.name}</h4>
+                                                <p class="text-xs text-slate-500 leading-relaxed">${s.func}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Pseudocode -->
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">Penulisan Pseudocode</h3>
+                                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                                    Pseudocode adalah cara menuliskan logika program tanpa terikat aturan bahasa tertentu. 
+                                    Ini sangat membantu programmer merancang logika sebelum mulai mengetik kode yang rumit.
+                                </p>
+                                <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-2xl">
+                                    <div class="bg-slate-800 px-4 py-2 flex items-center justify-between">
+                                        <div class="flex gap-1.5">
+                                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                        </div>
+                                        <span class="text-xs font-mono text-slate-500 uppercase">logika_lulus.txt</span>
+                                    </div>
+                                    <div class="p-8 font-mono text-sm text-indigo-300 leading-relaxed">
+                                        <p><span class="text-pink-500">ALGORITMA</span> Kelulusan</p>
+                                        <p><span class="text-pink-500">START</span></p>
+                                        <p class="pl-4"><span class="text-blue-400">INPUT</span> nilai_siswa</p>
+                                        <p class="pl-4"><span class="text-blue-400">IF</span> (nilai_siswa >= 75) <span class="text-blue-400">THEN</span></p>
+                                        <p class="pl-8 text-emerald-400">PRINT "LULUS"</p>
+                                        <p class="pl-4"><span class="text-blue-400">ELSE</span></p>
+                                        <p class="pl-8 text-rose-400">PRINT "TIDAK LULUS"</p>
+                                        <p class="pl-4"><span class="text-blue-400">END IF</span></p>
+                                        <p><span class="text-pink-500">END</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200">
+                                <h4 class="font-bold text-amber-800 mb-2 flex items-center gap-2"><span>⚠️</span> Catatan Penting</h4>
+                                <p class="text-xs text-amber-700 leading-relaxed">
+                                    Simbol Flowchart <strong>tidak boleh asal digambar</strong>. Setiap bentuk mewakili fungsi logis yang berbeda bagi komputer. 
+                                    Panah harus menunjukkan alur yang jelas agar tidak terjadi <em>deadlock</em> (program macet).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDataTypes(container) {
+            container.innerHTML = `
+                <div class="max-w-6xl mx-auto p-8 fade-in">
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold text-slate-800">Manajemen Data</h2>
+                        <p class="text-slate-600 mt-2">Komputer mengalokasikan ruang memori yang berbeda untuk setiap jenis data.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                        <!-- Primitive -->
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-xl font-bold text-indigo-600 mb-6 flex items-center gap-2"><span>🏷️</span> Tipe Data Sederhana</h3>
+                            <div class="space-y-4">
+                                ${data.types.primitive.map(t => `
+                                    <div class="group border border-slate-100 p-4 rounded-xl hover:bg-indigo-50 transition-colors">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="font-bold text-slate-800 group-hover:text-indigo-600">${t.name}</span>
+                                            <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded uppercase font-bold text-slate-400">Primitive</span>
+                                        </div>
+                                        <p class="text-xs text-slate-500 mb-2">${t.desc}</p>
+                                        <div class="text-[10px] font-mono text-indigo-400 bg-indigo-50/50 p-2 rounded">Contoh: ${t.ex}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Complex -->
+                        <div class="space-y-8">
+                            <div class="bg-emerald-50 p-8 rounded-3xl border border-emerald-100 shadow-sm">
+                                <h3 class="text-xl font-bold text-emerald-600 mb-6 flex items-center gap-2"><span>📦</span> Tipe Data Bentukan</h3>
+                                <div class="space-y-4">
+                                    ${data.types.complex.map(t => `
+                                        <div class="bg-white p-4 rounded-xl border border-emerald-100">
+                                            <span class="font-bold text-slate-800 block mb-1">${t.name}</span>
+                                            <p class="text-xs text-slate-500 mb-2">${t.desc}</p>
+                                            <div class="text-[10px] font-mono text-emerald-500 bg-emerald-50 p-2 rounded">Contoh: ${t.ex}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                                <h4 class="font-bold text-slate-800 mb-2">Mengapa harus dibedakan?</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Bayangkan memori komputer seperti gudang. Kita tidak akan menggunakan kontainer raksasa hanya untuk menyimpan sebuah paku kecil. 
+                                    Sama halnya dengan program, kita menggunakan <code>boolean</code> untuk Ya/Tidak karena sangat hemat memori dibandingkan menggunakan <code>string</code>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- MINI GAMES / LAB ---
+        let sortData = [45, 12, 89, 3, 67];
+        let simonActive = false;
+        let chartObj = null;
+
+        function renderGames(container) {
+            container.innerHTML = `
+                <div class="max-w-6xl mx-auto p-8 fade-in">
+                    <div class="mb-10 text-center">
+                        <h2 class="text-3xl font-bold text-slate-800">Lab Logika Terapan</h2>
+                        <p class="text-slate-500 mt-2">Praktekkan langsung konsep algoritma yang sudah kamu pelajari.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Sort Game -->
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl overflow-hidden relative">
+                            <h3 class="font-bold text-slate-800 mb-2">Simulasi: Bubble Sort</h3>
+                            <p class="text-xs text-slate-500 mb-6">Visualisasi algoritma pengurutan. Klik "Step" untuk menukar posisi.</p>
+                            
+                            <div class="chart-container mb-6">
+                                <canvas id="sortChart"></canvas>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button onclick="resetSort()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Reset</button>
+                                <button onclick="doStepSort()" class="flex-[2] py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg transition">Jalankan 1 Langkah</button>
+                            </div>
+                            <div id="sort-msg" class="mt-4 text-center text-xs font-mono text-indigo-600 h-4"></div>
+                        </div>
+
+                        <!-- Simon Says (Selection Logic) -->
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+                            <h3 class="font-bold text-slate-800 mb-2">Tantangan: Simon Logic</h3>
+                            <p class="text-xs text-slate-500 mb-6">Uji kecepatan berpikir logismu terhadap instruksi kondisional.</p>
+                            
+                            <div class="bg-slate-900 rounded-2xl p-8 mb-6 text-center">
+                                <div id="simon-instruction" class="text-2xl font-bold text-white mb-2">Siap Belajar?</div>
+                                <div id="simon-result" class="text-xs font-bold uppercase tracking-widest text-slate-500 h-4"></div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <button onclick="handleSimon('angkat')" class="py-4 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 transition shadow-md">✋ Angkat Tangan</button>
+                                <button onclick="handleSimon('tepuk')" class="py-4 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition shadow-md">👏 Tepuk Tangan</button>
+                                <button onclick="handleSimon('diam')" class="col-span-2 py-4 bg-slate-100 text-slate-800 rounded-xl font-bold hover:bg-slate-200 transition">🤐 Tetap Diam</button>
+                            </div>
+                            <button onclick="startSimonGame()" class="w-full py-2 text-indigo-600 font-bold border-2 border-dashed border-indigo-200 rounded-xl hover:bg-indigo-50">Mulai Tantangan Baru</button>
+                        </div>
+                    </div>
+
+                    <!-- Variable Predictor -->
+                    <div class="mt-8 bg-indigo-900 text-white p-8 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><span>🔍</span> Game: Tebak Variabel Akhir</h3>
+                            <div class="bg-slate-950 p-4 rounded-xl font-mono text-indigo-300 text-sm">
+                                <p>int skor = 20;</p>
+                                <p>skor = skor + 10;</p>
+                                <p>skor = skor / 2;</p>
+                                <p>skor = skor * 3;</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-auto text-center md:text-right">
+                            <p class="text-sm text-indigo-200 mb-4">Apa nilai akhir dari variabel <code>skor</code>?</p>
+                            <div class="flex gap-2">
+                                <input type="number" id="ans-input" class="w-24 px-4 py-3 rounded-xl text-slate-900 font-bold text-center" placeholder="?">
+                                <button onclick="checkVariable()" class="px-6 py-3 bg-indigo-500 text-white rounded-xl font-bold hover:bg-indigo-400 transition">Cek</button>
+                            </div>
+                            <div id="ans-feedback" class="mt-4 font-bold h-4 text-emerald-400"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            initChart();
+        }
+
+        // --- GAME SCRIPTS ---
+        function initChart() {
+            const ctx = document.getElementById('sortChart').getContext('2d');
+            chartObj = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['V1', 'V2', 'V3', 'V4', 'V5'],
+                    datasets: [{
+                        label: 'Nilai Data',
+                        data: [...sortData],
+                        backgroundColor: '#6366f1',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { display: false, max: 100 } }
+                }
+            });
+        }
+
+        function resetSort() {
+            sortData = [45, 12, 89, 3, 67];
+            chartObj.data.datasets[0].data = [...sortData];
+            chartObj.data.datasets[0].backgroundColor = '#6366f1';
+            chartObj.update();
+            document.getElementById('sort-msg').innerText = "";
+        }
+
+        async function doStepSort() {
+            let swapped = false;
+            for(let i=0; i < sortData.length - 1; i++) {
+                if(sortData[i] > sortData[i+1]) {
+                    document.getElementById('sort-msg').innerText = `Menukar ${sortData[i]} dengan ${sortData[i+1]}`;
+                    let temp = sortData[i];
+                    sortData[i] = sortData[i+1];
+                    sortData[i+1] = temp;
+                    swapped = true;
+                    chartObj.data.datasets[0].data = [...sortData];
+                    chartObj.update();
+                    break; 
+                }
+            }
+            if(!swapped) {
+                document.getElementById('sort-msg').innerText = "DATA SUDAH TERURUT!";
+                chartObj.data.datasets[0].backgroundColor = '#10b981';
+                chartObj.update();
+            }
+        }
+
+        let currentSimonTarget = '';
+        function startSimonGame() {
+            const options = [
+                { text: "Simon Says: Angkat Tangan!", ans: "angkat" },
+                { text: "Tepuk Tangan!", ans: "diam" },
+                { text: "Simon Says: Tepuk Tangan!", ans: "tepuk" },
+                { text: "Angkat Tangan!", ans: "diam" }
+            ];
+            const pick = options[Math.floor(Math.random()*options.length)];
+            currentSimonTarget = pick.ans;
+            document.getElementById('simon-instruction').innerText = pick.text;
+            document.getElementById('simon-result').innerText = "Menunggu reaksi...";
+            document.getElementById('simon-result').className = "text-xs font-bold uppercase tracking-widest text-amber-500 h-4";
+        }
+
+        function handleSimon(action) {
+            const res = document.getElementById('simon-result');
+            if(!currentSimonTarget) return;
+            if(action === currentSimonTarget) {
+                res.innerText = "Benar! Logika kamu kuat.";
+                res.className = "text-xs font-bold uppercase tracking-widest text-emerald-500 h-4";
+            } else {
+                res.innerText = "Salah! Ingat aturan If-Else.";
+                res.className = "text-xs font-bold uppercase tracking-widest text-rose-500 h-4";
+            }
+            currentSimonTarget = '';
+        }
+
+        function checkVariable() {
+            const val = document.getElementById('ans-input').value;
+            const feedback = document.getElementById('ans-feedback');
+            // Calculation: 20 + 10 = 30. 30/2 = 15. 15*3 = 45.
+            if(parseInt(val) === 45) {
+                feedback.innerText = "🎉 JENIUS! (20+10)/2 * 3 = 45";
+                feedback.className = "mt-4 font-bold h-4 text-emerald-400";
+            } else {
+                feedback.innerText = "Coba hitung lagi urutannya.";
+                feedback.className = "mt-4 font-bold h-4 text-rose-400";
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => nav('intro'));
+
+    </script>
+    <!-- CONFIRMATION: NO SVG used. NO Mermaid JS used. Interactive logic fully handled by Vanilla JS & Chart.js. -->
+</body>
+</html>
