@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknologi Search Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            color: #1f2937;
+        }
+        
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .active-nav {
+            border-bottom: 3px solid #3b82f6;
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .terminal-window {
+            background-color: #1e293b;
+            color: #10b981;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .node-card {
+            transition: all 0.3s ease;
+        }
+        .node-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    
+    <!-- Chosen Palette: Technical Blue & Slate -->
+    <!-- Application Structure Plan:
+         1. Dashboard/Home: Quick overview and introduction to the module.
+         2. Infrastructure (Arsitektur): Interactive cards explaining the physical and logical components.
+         3. The Process (Cara Kerja): A step-by-step interactive simulator for Crawling -> Indexing -> Ranking.
+         4. Engine Comparison (Ragam): Radar chart comparing features of Google, Bing, DDG, etc.
+         5. Security Ops (Specialized): A 'Terminal' interface to simulate Shodan and Dorking for TKJ context.
+         
+         Reasoning: This structure moves from high-level concepts (Hardware/Infra) to logic (Process), then to market application (Variations), and finally to practical usage for Network Engineers (Security/Ops), mirroring the learning curve of a TKJ student.
+    -->
+    
+    <!-- Visualization & Content Choices:
+         1. Infrastructure: Grid of cards. Goal: Define components. Interaction: Hover/Click to expand details.
+         2. Process: Flowchart + Interactive "Tokenizer". Goal: Explain Parsing/Indexing. User types text, JS splits it into tokens (Inverted Index demo).
+         3. Comparison: Radar Chart (Chart.js). Goal: Compare abstract qualities (Privacy, Integration, Features).
+         4. Specialized: Terminal Simulator. Goal: Show "Shodan" and "Dorking" in their native habitat (CLI feel). Interaction: Click buttons to "run commands".
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-slate-800 tracking-tight">TKJ<span class="text-blue-600">SMKN 1 TANJUNG</span></span>
+                </div>
+                <div class="hidden sm:flex space-x-8 items-center" id="desktop-nav">
+                    <!-- Nav items injected by JS -->
+                </div>
+                <!-- Mobile menu button -->
+                <div class="flex items-center sm:hidden">
+                    <button id="mobile-menu-btn" class="text-slate-500 hover:text-slate-700 focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav -->
+        <div id="mobile-nav" class="hidden sm:hidden bg-white border-t border-slate-200">
+            <div class="flex flex-col px-4 py-2 space-y-2" id="mobile-nav-items"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full" id="main-content">
+        <!-- Content injected by JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2">Modul Pembelajaran Informatika - Kelas 10 TKJ</p>
+            <p class="text-sm">Akhmad Noor Effendi - Teacher Of TKJ</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- Data & Content ---
+        const appData = {
+            currentSection: 'intro',
+            sections: {
+                intro: {
+                    title: "Pengantar Teknologi Pencarian",
+                    id: "intro",
+                    label: "Home"
+                },
+                infra: {
+                    title: "Infrastruktur & Komponen",
+                    id: "infra",
+                    label: "Arsitektur"
+                },
+                process: {
+                    title: "Cara Kerja (The Cycle)",
+                    id: "process",
+                    label: "Cara Kerja"
+                },
+                comparison: {
+                    title: "Ragam Search Engine",
+                    id: "comparison",
+                    label: "Perbandingan"
+                },
+                security: {
+                    title: "Security Ops (TKJ)",
+                    id: "security",
+                    label: "Security & Tools"
+                }
+            },
+            
+            // Content for Infrastructure
+            infraCards: [
+                {
+                    title: "Cluster Server",
+                    icon: "🖥️",
+                    desc: "Ribuan komputer yang bekerja secara paralel untuk memproses miliaran permintaan pencarian. Tidak ada satu server tunggal; ini adalah sistem terdistribusi."
+                },
+                {
+                    title: "Data Center",
+                    icon: "🏢",
+                    desc: "Lokasi fisik raksasa (gudang server) tempat penyimpanan indeks data internet dalam skala Exabytes. Memerlukan pendinginan dan daya besar."
+                },
+                {
+                    title: "Algoritma",
+                    icon: "⚙️",
+                    desc: "Instruksi matematika kompleks untuk menentukan relevansi. Contoh: Google RankBrain (AI) yang memahami konteks, bukan hanya kata kunci."
+                },
+                {
+                    title: "SERP",
+                    icon: "📄",
+                    desc: "Search Engine Results Page. Antarmuka grafis output yang dilihat user setelah algoritma selesai memproses kueri."
+                }
+            ],
+
+            // Content for Comparison
+            engines: [
+                { name: "Google", tech: "RankBrain (AI)", feature: "Integrasi Ekosistem & Akurasi Tinggi" },
+                { name: "Bing", tech: "Microsoft Graph", feature: "Integrasi Office & Pencarian Visual" },
+                { name: "DuckDuckGo", tech: "Non-tracking", feature: "Privasi Total (No Filter Bubble)" },
+                { name: "Yandex", tech: "Alice AI", feature: "Facial Recognition & Wilayah Rusia" }
+            ],
+
+            // Simulation Data for "How It Works"
+            simulationSteps: [
+                {
+                    step: "1. Crawling",
+                    detail: "Spider/Bot mengunjungi URL.",
+                    action: "Menjelajah web dari seed URL, mengikuti setiap hyperlink.",
+                    tech: "Robots.txt, Crawl Budget"
+                },
+                {
+                    step: "2. Indexing",
+                    detail: "Parsing & Tokenizing.",
+                    action: "Memecah teks menjadi kata kunci dan menyimpannya di Inverted Index.",
+                    tech: "Inverted Index, Metadata Analysis"
+                },
+                {
+                    step: "3. Ranking",
+                    detail: "Menghitung Relevansi.",
+                    action: "Menilai halaman berdasarkan otoritas, user signals, dan semantik.",
+                    tech: "PageRank, User Signals"
+                }
+            ]
+        };
+
+        // --- State Management ---
+        let state = {
+            activeTab: 'intro',
+            radarChartInstance: null,
+            termOutput: []
+        };
+
+        // --- DOM Elements & Navigation ---
+        const mainContent = document.getElementById('main-content');
+        const desktopNav = document.getElementById('desktop-nav');
+        const mobileNav = document.getElementById('mobile-nav-items');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNavContainer = document.getElementById('mobile-nav');
+
+        // Initialize App
+        function init() {
+            renderNav();
+            navigateTo('intro');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNavContainer.classList.toggle('hidden');
+            });
+        }
+
+        function renderNav() {
+            const navKeys = Object.keys(appData.sections);
+            
+            // Desktop
+            desktopNav.innerHTML = navKeys.map(key => `
+                <button onclick="navigateTo('${key}')" 
+                        class="px-3 py-2 text-sm font-medium transition-colors duration-200 
+                        ${state.activeTab === key ? 'active-nav' : 'text-slate-500 hover:text-slate-700'}">
+                    ${appData.sections[key].label}
+                </button>
+            `).join('');
+
+            // Mobile
+            mobileNav.innerHTML = navKeys.map(key => `
+                <button onclick="navigateTo('${key}'); toggleMobileNav()" 
+                        class="block w-full text-left px-3 py-2 rounded-md text-base font-medium 
+                        ${state.activeTab === key ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50'}">
+                    ${appData.sections[key].label}
+                </button>
+            `).join('');
+        }
+
+        function toggleMobileNav() {
+            mobileNavContainer.classList.add('hidden');
+        }
+
+        window.navigateTo = function(sectionId) {
+            state.activeTab = sectionId;
+            renderNav();
+            renderContent(sectionId);
+            window.scrollTo(0,0);
+        };
+
+        // --- Render Logic ---
+        function renderContent(sectionId) {
+            mainContent.innerHTML = ''; // Clear current content
+            
+            switch(sectionId) {
+                case 'intro':
+                    renderIntro();
+                    break;
+                case 'infra':
+                    renderInfra();
+                    break;
+                case 'process':
+                    renderProcess();
+                    break;
+                case 'comparison':
+                    renderComparison();
+                    break;
+                case 'security':
+                    renderSecurity();
+                    break;
+            }
+        }
+
+        // --- Section Renderers ---
+
+        function renderIntro() {
+            mainContent.innerHTML = `
+                <div class="text-center py-12 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl mb-4">
+                        Teknologi Search Engine
+                    </h1>
+                    <p class="max-w-2xl mx-auto text-xl text-slate-500 mb-8">
+                        Modul pembelajaran untuk Kelas 10 TKJ. Memahami infrastruktur, algoritma, dan peran mesin pencari dalam jaringan komputer.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-12">
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:border-blue-300 transition-colors cursor-pointer" onclick="navigateTo('infra')">
+                            <h3 class="text-lg font-bold text-blue-600 mb-2">Infrastruktur &rarr;</h3>
+                            <p class="text-slate-600">Pelajari tentang Data Center, Cluster Server, dan hardware dibalik pencarian.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:border-green-300 transition-colors cursor-pointer" onclick="navigateTo('security')">
+                            <h3 class="text-lg font-bold text-green-600 mb-2">Ops & Security &rarr;</h3>
+                            <p class="text-slate-600">Teknik lanjutan untuk TKJ: Shodan, Dorking, dan Audit Keamanan.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderInfra() {
+            mainContent.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">Infrastruktur Search Engine</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Bagi siswa TKJ, Search Engine bukan sekadar website, melainkan sebuah sistem raksasa. 
+                        Bagian ini membedah komponen fisik dan logis yang memungkinkan pencarian miliaran data dalam hitungan milidetik.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${appData.infraCards.map(card => `
+                        <div class="node-card bg-white rounded-xl border border-slate-200 p-6 flex flex-col items-start h-full">
+                            <div class="text-4xl mb-4">${card.icon}</div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">${card.title}</h3>
+                            <p class="text-slate-600 leading-relaxed">${card.desc}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="mt-12 bg-blue-50 rounded-xl p-8 border border-blue-100">
+                    <h3 class="text-xl font-bold text-blue-800 mb-4">Perspektif Jaringan</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-blue-900">
+                        <li><strong>Load Balancing:</strong> Mendistribusikan kueri pengguna ke ribuan server agar tidak overload.</li>
+                        <li><strong>Latency:</strong> Data center tersebar di seluruh dunia untuk mendekatkan data ke pengguna.</li>
+                        <li><strong>Redundancy:</strong> Backup data berlapis untuk mencegah kehilangan indeks.</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function renderProcess() {
+            mainContent.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">Siklus Hidup Data (The Process)</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Data tidak muncul di Google secara ajaib. Proses teknis yang terjadi melibatkan tiga tahap utama: 
+                        Crawling (Mengambil), Indexing (Mencatat), dan Ranking (Menilai). Gunakan simulator di bawah untuk memahami logika "Inverted Index".
+                    </p>
+                </div>
+
+                <!-- Process Flow Visualization -->
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-12">
+                    <div class="flex-1 bg-white p-6 rounded-lg border border-slate-200 text-center w-full">
+                        <div class="text-indigo-600 text-3xl font-bold mb-2">01</div>
+                        <h4 class="font-bold text-lg mb-2">Crawling</h4>
+                        <p class="text-sm text-slate-500">Spider bot menjelajah link & membaca Robots.txt</p>
+                    </div>
+                    <div class="hidden md:block text-slate-300 text-2xl">➝</div>
+                    <div class="md:hidden text-slate-300 text-2xl">↓</div>
+                    <div class="flex-1 bg-white p-6 rounded-lg border-2 border-blue-500 shadow-md text-center w-full relative">
+                        <div class="absolute -top-3 -right-3 bg-blue-500 text-white text-xs px-2 py-1 rounded">Focus</div>
+                        <div class="text-blue-600 text-3xl font-bold mb-2">02</div>
+                        <h4 class="font-bold text-lg mb-2">Indexing</h4>
+                        <p class="text-sm text-slate-500">Parsing teks menjadi struktur data searchable</p>
+                    </div>
+                    <div class="hidden md:block text-slate-300 text-2xl">➝</div>
+                    <div class="md:hidden text-slate-300 text-2xl">↓</div>
+                    <div class="flex-1 bg-white p-6 rounded-lg border border-slate-200 text-center w-full">
+                        <div class="text-indigo-600 text-3xl font-bold mb-2">03</div>
+                        <h4 class="font-bold text-lg mb-2">Ranking</h4>
+                        <p class="text-sm text-slate-500">Algoritma menentukan urutan prioritas</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Tokenizer Simulator -->
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="text-white font-mono font-bold">Simulator: Indexing & Tokenizing</h3>
+                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">Lab Interaktif</span>
+                    </div>
+                    <div class="p-6">
+                        <p class="mb-4 text-slate-600 text-sm">
+                            Mesin pencari tidak membaca kalimat seperti manusia. Mereka memecahnya menjadi "Token" dan menyimpannya di "Inverted Index". 
+                            Coba masukkan kalimat teknis di bawah ini (contoh: "Tutorial konfigurasi Mikrotik dasar").
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                            <input type="text" id="token-input" placeholder="Masukkan kalimat pencarian..." 
+                                class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono">
+                            <button onclick="runTokenizer()" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Proses Indexing
+                            </button>
+                        </div>
+
+                        <div id="token-output" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Raw Tokens -->
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h4 class="font-bold text-slate-700 mb-3 text-sm uppercase tracking-wide">1. Parsing (Tokenizing)</h4>
+                                    <div id="tokens-container" class="flex flex-wrap gap-2"></div>
+                                </div>
+                                
+                                <!-- Inverted Index Visual -->
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h4 class="font-bold text-slate-700 mb-3 text-sm uppercase tracking-wide">2. Inverted Index (Database)</h4>
+                                    <div class="bg-white border border-slate-200 rounded font-mono text-xs p-3">
+                                        <table class="w-full text-left">
+                                            <thead>
+                                                <tr class="border-b border-slate-100">
+                                                    <th class="pb-2">Keyword (Token)</th>
+                                                    <th class="pb-2">Doc ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="index-table-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.runTokenizer = function() {
+            const input = document.getElementById('token-input').value;
+            if(!input.trim()) return;
+
+            const outputDiv = document.getElementById('token-output');
+            const tokensContainer = document.getElementById('tokens-container');
+            const indexTableBody = document.getElementById('index-table-body');
+            
+            outputDiv.classList.remove('hidden');
+            
+            // Simple Parsing Logic: Split by space, lowercase, remove punctuation
+            const rawTokens = input.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(/\s+/);
+            const uniqueTokens = [...new Set(rawTokens)]; // Remove duplicates for index
+
+            // Render Tokens
+            tokensContainer.innerHTML = rawTokens.map(t => 
+                `<span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-mono border border-indigo-200">${t}</span>`
+            ).join('');
+
+            // Render Inverted Index (Simulation)
+            const randomDocID = Math.floor(Math.random() * 1000) + 100;
+            indexTableBody.innerHTML = uniqueTokens.map(t => `
+                <tr class="border-b border-slate-50 last:border-0">
+                    <td class="py-1 text-slate-700 font-bold">${t}</td>
+                    <td class="py-1 text-slate-500">[Doc_${randomDocID}, Doc_${randomDocID+5}, ...]</td>
+                </tr>
+            `).join('');
+        };
+
+        function renderComparison() {
+            mainContent.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">Ragam Mesin Pencari</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Setiap mesin pencari memiliki algoritma dan fokus yang berbeda. Google mendominasi, namun bagi profesional IT, memahami alternatif seperti DuckDuckGo (Privasi) atau Yandex (Visual) sangat penting.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <!-- Feature Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
+                            <h3 class="font-bold text-slate-700">Perbandingan Fitur Utama</h3>
+                        </div>
+                        <div class="p-0 overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 text-sm">
+                                        <th class="px-6 py-3 font-medium">Engine</th>
+                                        <th class="px-6 py-3 font-medium">Teknologi Inti</th>
+                                        <th class="px-6 py-3 font-medium">Keunggulan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    ${appData.engines.map(e => `
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="px-6 py-4 font-bold text-slate-800">${e.name}</td>
+                                            <td class="px-6 py-4 text-sm text-slate-600 font-mono">${e.tech}</td>
+                                            <td class="px-6 py-4 text-sm text-slate-600">${e.feature}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Radar Chart Section -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center">
+                        <h3 class="font-bold text-slate-700 mb-4 w-full text-left">Analisis Kemampuan (Ilustrasi)</h3>
+                        <div class="chart-container w-full">
+                            <canvas id="engineChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-4 text-center">
+                            *Grafik ini adalah representasi kualitatif dari karakteristik mesin pencari berdasarkan materi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Specialized Section Teaser -->
+                <div class="bg-indigo-900 rounded-xl p-8 text-center text-white">
+                    <h3 class="text-2xl font-bold mb-2">Ingin mencari perangkat IoT atau Server?</h3>
+                    <p class="text-indigo-200 mb-6">Google tidak mengindeks semuanya. Masuk ke modul Security Ops untuk mempelajari Specialized Engines.</p>
+                    <button onclick="navigateTo('security')" class="bg-white text-indigo-900 px-6 py-2 rounded-full font-bold hover:bg-indigo-50 transition-colors">
+                        Buka Security Ops
+                    </button>
+                </div>
+            `;
+
+            // Wait for DOM update then render chart
+            setTimeout(initChart, 100);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('engineChart');
+            if (!ctx) return;
+
+            // Destroy existing chart if any
+            if (state.radarChartInstance) {
+                state.radarChartInstance.destroy();
+            }
+
+            state.radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Privasi', 'Akurasi Pencarian', 'Integrasi Ekosistem', 'Fitur Visual', 'Keamanan (Filter)'],
+                    datasets: [{
+                        label: 'Google',
+                        data: [40, 95, 95, 80, 85],
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(59, 130, 246)'
+                    }, {
+                        label: 'DuckDuckGo',
+                        data: [95, 70, 40, 50, 60],
+                        fill: true,
+                        backgroundColor: 'rgba(234, 88, 12, 0.2)',
+                        borderColor: 'rgb(234, 88, 12)',
+                        pointBackgroundColor: 'rgb(234, 88, 12)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(234, 88, 12)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function renderSecurity() {
+            mainContent.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">Security Ops & Specialized Engines</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Bagian paling krusial untuk siswa TKJ. Di sini kita menggunakan search engine untuk 
+                        <strong>Troubleshooting</strong>, <strong>Cybersecurity Intelligence</strong>, dan <strong>Audit Jaringan</strong>.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Tools List -->
+                    <div class="lg:col-span-1 space-y-4">
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800 mb-2">Shodan.io</h3>
+                            <p class="text-sm text-slate-600 mb-3">Mesin pencari untuk perangkat terhubung internet (IoT, Router, Server). Cek port terbuka.</p>
+                            <button onclick="runSim('shodan')" class="w-full bg-slate-800 hover:bg-slate-700 text-green-400 font-mono text-sm py-2 rounded transition-colors text-left px-4">
+                                > shodan scan webcam
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800 mb-2">Google Dorking</h3>
+                            <p class="text-sm text-slate-600 mb-3">Teknik query lanjut untuk menemukan file spesifik atau celah keamanan.</p>
+                            <button onclick="runSim('dork')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-mono text-sm py-2 rounded transition-colors text-left px-4">
+                                > site:mikrotik.com filetype:pdf
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800 mb-2">Exploit-DB</h3>
+                            <p class="text-sm text-slate-600 mb-3">Database untuk mencari kode eksploitasi keamanan (CVE).</p>
+                            <button onclick="runSim('exploit')" class="w-full bg-red-600 hover:bg-red-700 text-white font-mono text-sm py-2 rounded transition-colors text-left px-4">
+                                > searchsploit windows_server
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Simulation -->
+                    <div class="lg:col-span-2">
+                        <div class="terminal-window h-96 p-4 font-mono text-sm flex flex-col relative overflow-hidden">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-2">
+                                <span class="text-slate-400">student@tkj-lab:~</span>
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                            </div>
+                            <div id="terminal-content" class="flex-1 overflow-y-auto space-y-2">
+                                <div class="text-slate-500"># Klik tombol di kiri untuk menjalankan simulasi alat...</div>
+                            </div>
+                            <!-- Typing cursor -->
+                            <div class="absolute bottom-4 left-4 animate-pulse">_</div>
+                        </div>
+                        <div class="mt-4 bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-sm text-yellow-800 flex items-start">
+                            <span class="text-xl mr-2">⚠️</span>
+                            <p><strong>Peringatan Etika:</strong> Alat seperti Shodan dan Dorking hanya boleh digunakan untuk audit keamanan jaringan milik sendiri atau untuk tujuan edukasi legal. Jangan gunakan untuk tindakan ilegal.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.runSim = function(type) {
+            const term = document.getElementById('terminal-content');
+            let command = "";
+            let output = "";
+
+            if (type === 'shodan') {
+                command = "shodan search 'Server: SQ-WEBCAM'";
+                output = `
+<span class="text-white">$ ${command}</span>
+<span class="text-blue-400">Searching for SQ-WEBCAM...</span>
+<span class="text-green-500">Result: 1,420 devices found</span>
+
+IP: 192.168.X.X
+<span class="text-slate-400">Host: static-ip-pool.isp.com</span>
+<span class="text-slate-400">Port: 80, 8080 (Open)</span>
+Server: SQ-WEBCAM
+Location: Jakarta, Indonesia
+
+IP: 10.20.X.X
+<span class="text-slate-400">Host: unknown</span>
+<span class="text-slate-400">Port: 80 (Open)</span>
+Server: SQ-WEBCAM
+...
+`;
+            } else if (type === 'dork') {
+                command = "google_search 'site:mikrotik.com filetype:pdf'";
+                output = `
+<span class="text-white">$ ${command}</span>
+<span class="text-blue-400">Initiating Advanced Query...</span>
+
+[1] <a href="#" class="underline">MikroTik RouterOS™ v3.0 Reference Manual.pdf</a>
+    <span class="text-green-600">https://mikrotik.com/documentation/manual.pdf</span>
+    <span class="text-slate-400">Description: Full configuration guide for RouterOS...</span>
+
+[2] <a href="#" class="underline">User Manager Setup Guide.pdf</a>
+    <span class="text-green-600">https://mikrotik.com/test/userman.pdf</span>
+    <span class="text-slate-400">Description: Step by step RADIUS server setup...</span>
+`;
+            } else if (type === 'exploit') {
+                command = "searchsploit windows_server_2019";
+                output = `
+<span class="text-white">$ ${command}</span>
+--------------------------------------------------------------------------------
+ Exploit Title                                 |  Path
+--------------------------------------------------------------------------------
+Microsoft Windows Server 2019 - RCE (CVE-2020) | windows/remote/48567.py
+Microsoft Windows Server 2019 - LPE            | windows/local/49123.cpp
+--------------------------------------------------------------------------------
+`;
+            }
+
+            // Append with typing delay effect (simulated by just appending HTML for now for responsiveness)
+            term.innerHTML += `<div class="mt-4 border-t border-slate-700 pt-2">${output}</div>`;
+            term.scrollTop = term.scrollHeight;
+        };
+
+        // Start App
+        init();
+
+    </script>
+</body>
+</html>
