@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery: Komunikasi Daring & Cloud (Deep Dive)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .tab-active {
+            border-bottom: 4px solid #0d9488;
+            color: #0d9488;
+            font-weight: 800;
+            background-color: rgba(13, 148, 136, 0.05);
+        }
+        .tab-inactive {
+            color: #6b7280;
+            border-bottom: 4px solid transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .content-card {
+            transition: all 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-0">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-black text-teal-800 tracking-tighter uppercase italic">INFORMATIKA KEREN BANGET</h1>
+                    <p class="text-sm text-slate-500 font-medium">Modul Pembelajaran Komprehensif: Komunikasi Daring & Teknologi Cloud</p>
+                </div>
+                <div class="mt-4 md:mt-0 bg-teal-100 px-4 py-2 rounded-lg border border-teal-200">
+                    <span class="text-xs font-bold text-teal-900">Oleh : Akhmad Noor Effendi, S.Kom</span>
+                </div>
+            </div>
+            
+            <nav class="flex space-x-2 overflow-x-auto no-scrollbar" aria-label="Main Tabs">
+                <button onclick="switchTab('comm')" id="tab-comm" class="tab-active whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest">
+                    💬 Komunikasi Daring
+                </button>
+                <button onclick="switchTab('cloud')" id="tab-cloud" class="tab-inactive whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest">
+                    ☁️ Teknologi Cloud
+                </button>
+                <button onclick="switchTab('synergy')" id="tab-synergy" class="tab-inactive whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest">
+                    🔄 Sinergi Sistem
+                </button>
+                <button onclick="switchTab('security')" id="tab-security" class="tab-inactive whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest">
+                    🛡️ Keamanan & Etika
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- JS injects detailed content -->
+    </main>
+
+    <footer class="bg-slate-900 text-white py-10 mt-10">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h4 class="font-bold text-teal-400 mb-2">Tentang Modul</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Dirancang untuk memberikan pemahaman mendalam mengenai infrastruktur digital. Membantu siswa memahami bagaimana data bergerak dari perangkat ke awan dan kembali lagi melalui media komunikasi yang tepat.</p>
+            </div>
+            <div class="text-right flex flex-col justify-end">
+                <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Gemini support AI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const contentData = {
+            comm: {
+                intro: "Komunikasi daring bukan sekadar mengirim teks, melainkan proses kompleks **transmisi paket data** melalui protokol internet. Pemilihan jenis komunikasi menentukan seberapa cepat informasi harus diproses oleh otak dan server.",
+                types: [
+                    { 
+                        name: "Komunikasi Sinkron", 
+                        sub: "Real-time (Waktu Nyata) / Latensi Rendah", 
+                        desc: "Metode ini menuntut kehadiran pengirim dan penerima secara bersamaan di saluran komunikasi. Informasi dikirim dan diterima dalam hitungan milidetik, menciptakan alur bicara yang natural seperti pertemuan fisik.",
+                        technical: "Mengandalkan bandwidth (lebar pita) yang stabil dan latency (keterlambatan data) rendah. Jika koneksi terputus sesaat, data seringkali 'dibuang' (UDP) demi menjaga kecepatan bicara nyata.",
+                        examples: ["Konferensi Video (Zoom/Meet)", "Panggilan Suara VoIP (Suara melalui Protokol Internet)", "Layanan Chat Instan"], 
+                        icon: "⚡", 
+                        color: "teal" 
+                    },
+                    { 
+                        name: "Komunikasi Asinkron", 
+                        sub: "Delayed (Tertunda) / Berbasis Antrean", 
+                        desc: "Komunikasi ini tidak menuntut respon seketika. Pesan disimpan dalam server terlebih dahulu (store-and-forward / simpan-dan-teruskan) sampai penerima siap membukanya. Ini memberikan waktu bagi partisipan untuk berpikir dan meriset jawaban.",
+                        technical: "Menggunakan protokol seperti SMTP (untuk email) yang mengutamakan data integrity (keutuhan data) daripada kecepatan pengiriman instan.",
+                        examples: ["Email Perusahaan", "Forum Diskusi / Reddit", "Sistem Pembelajaran (LMS)"], 
+                        icon: "⏳", 
+                        color: "indigo" 
+                    }
+                ]
+            },
+            cloud: {
+                intro: "Cloud Computing (Komputasi Awan) adalah revolusi infrastruktur di mana kita tidak lagi memiliki 'komputer fisik' di bawah meja, melainkan menyewa **kapasitas komputasi raksasa** di pusat data global.",
+                models: [
+                    { 
+                        id: 'saas', name: "SaaS", full: "Software as a Service (Perangkat Lunak sebagai Layanan)", 
+                        analogy: "Makan di Restoran",
+                        detail: "Anda tinggal datang dan makan. Semua bahan, koki, meja, dan piring sudah disediakan. Anda hanya membayar makanan yang dipesan. Tidak perlu pusing memikirkan bagaimana cara server bekerja.", 
+                        examples: "Google Workspace, Spotify, Zoom", 
+                        icon: "📱" 
+                    },
+                    { 
+                        id: 'paas', name: "PaaS", full: "Platform as a Service (Platform sebagai Layanan)", 
+                        analogy: "Pesan Antar Pizza",
+                        detail: "Seseorang menyediakan pangkalan, oven, dan bahan. Anda hanya fokus membuat 'toping' (aplikasi Anda sendiri). Cloud menyediakan sistem operasinya, Anda menyediakan kodenya.", 
+                        examples: "Google App Engine, Microsoft Azure App Service", 
+                        icon: "🛠️" 
+                    },
+                    { 
+                        id: 'iaas', name: "IaaS", full: "Infrastructure as a Service (Infrastruktur sebagai Layanan)", 
+                        analogy: "Dapur Sewaan",
+                        detail: "Penyedia hanya memberikan ruangan kosong, kompor, dan kulkas. Anda harus membawa bahan sendiri, memasak sendiri, dan membereskan semuanya. Ini memberikan kontrol penuh atas server, penyimpanan, dan jaringan virtual.", 
+                        examples: "AWS (Amazon Web Services), DigitalOcean, GCE (Google Compute Engine)", 
+                        icon: "🏗️" 
+                    }
+                ]
+            }
+        };
+
+        let activeTab = 'comm';
+
+        function switchTab(tabId) {
+            activeTab = tabId;
+            const container = document.getElementById('main-content');
+            
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = btn.id === `tab-${tabId}` ? "tab-active whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest" : "tab-inactive whitespace-nowrap pb-4 pt-2 px-6 text-sm transition-all uppercase tracking-widest";
+            });
+
+            if (tabId === 'comm') {
+                container.innerHTML = renderComm();
+                initCommChart();
+            } else if (tabId === 'cloud') {
+                container.innerHTML = renderCloud();
+                focusCloud(0);
+            } else if (tabId === 'synergy') {
+                container.innerHTML = renderSynergy();
+            } else if (tabId === 'security') {
+                container.innerHTML = renderSecurity();
+                initSecChart();
+            }
+        }
+
+        function renderComm() {
+            return `
+                <div class="animate-fade-in space-y-10">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                        <h2 class="text-3xl font-black text-slate-800 mb-4">Deep Dive (Pendalaman): Komunikasi Daring</h2>
+                        <p class="text-slate-600 text-lg leading-relaxed">${contentData.comm.intro}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        ${contentData.comm.types.map(t => `
+                            <div class="content-card bg-white p-8 rounded-3xl shadow-sm border-t-8 border-${t.color}-600">
+                                <div class="flex items-center gap-5 mb-6">
+                                    <span class="text-5xl">${t.icon}</span>
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-slate-800">${t.name}</h3>
+                                        <span class="bg-${t.color}-100 text-${t.color}-700 px-3 py-1 rounded text-xs font-black uppercase tracking-widest">${t.sub}</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-4 mb-6">
+                                    <p class="text-slate-600 leading-relaxed font-medium">${t.desc}</p>
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Penjelasan Teknis:</h4>
+                                        <p class="text-xs text-slate-500 italic">${t.technical}</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-sm font-bold text-slate-800">Implementasi Nyata:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${t.examples.map(ex => `<span class="bg-slate-100 text-slate-700 px-4 py-1.5 rounded-lg text-xs font-bold border border-slate-200">${ex}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Materi Tambahan Komunikasi -->
+                    <div class="bg-slate-100 p-8 rounded-3xl border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="p-2 bg-teal-600 text-white rounded-lg text-sm">PRO</span> Performa Jaringan
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <h4 class="font-bold text-teal-700 text-sm mb-2 uppercase">Bandwidth (Lebar Pita)</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Kapasitas maksimum jalur komunikasi untuk mengirim data dalam waktu tertentu. Seperti jumlah jalur pada jalan tol; semakin lebar, semakin banyak kendaraan (data) yang bisa lewat.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <h4 class="font-bold text-teal-700 text-sm mb-2 uppercase">Latency (Keterlambatan)</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Waktu yang dibutuhkan data untuk berpindah dari sumber ke tujuan. Dalam komunikasi sinkron (video call), latency tinggi menyebabkan suara "delay" atau gambar patah-patah.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <h4 class="font-bold text-teal-700 text-sm mb-2 uppercase">Jitter (Variasi Latency)</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Variasi dalam waktu kedatangan paket data. Jitter yang tinggi membuat kualitas audio video tidak stabil meskipun bandwidth-nya besar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-8 text-center uppercase tracking-tighter">Analisis Matriks Komunikasi</h3>
+                        <div class="chart-container">
+                            <canvas id="commChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCloud() {
+            return `
+                <div class="animate-fade-in space-y-10">
+                    <div class="bg-indigo-900 p-10 rounded-[3rem] shadow-2xl text-white relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-800 rounded-full opacity-50"></div>
+                        <h2 class="text-4xl font-black mb-6 tracking-tight">Anatomi Teknologi Cloud</h2>
+                        <p class="text-indigo-100 text-lg leading-relaxed max-w-3xl">${contentData.cloud.intro}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        ${contentData.cloud.models.map((m, i) => `
+                            <button onclick="focusCloud(${i})" id="cloud-btn-${i}" class="bg-white p-8 rounded-3xl shadow-sm border-2 border-slate-100 text-left hover:border-indigo-500 transition-all group">
+                                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">${m.icon}</div>
+                                <h3 class="text-2xl font-black text-slate-800">${m.name}</h3>
+                                <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest">${m.full}</p>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="cloud-focus" class="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-inner min-h-[300px] flex items-center justify-center">
+                    </div>
+
+                    <!-- Materi Tambahan Cloud -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">
+                                <span class="p-2 bg-blue-100 rounded-lg">📂</span> Storage vs Computing
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-blue-500 pl-4">
+                                    <h4 class="font-bold text-sm">Cloud Storage (Penyimpanan Awan)</h4>
+                                    <p class="text-xs text-slate-600">Hanya digunakan untuk menyimpan file (seperti Flashdisk online). Contoh: Google Drive, Dropbox.</p>
+                                </div>
+                                <div class="border-l-4 border-purple-500 pl-4">
+                                    <h4 class="font-bold text-sm">Cloud Computing (Komputasi Awan)</h4>
+                                    <p class="text-xs text-slate-600">Menggunakan server untuk menjalankan program, memproses data, atau meng-host website. Contoh: Menjalankan AI di Google Colab.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">
+                                <span class="p-2 bg-indigo-100 rounded-lg">🌐</span> Model Implementasi Cloud
+                            </h3>
+                            <div class="grid grid-cols-3 gap-2 text-center">
+                                <div class="p-3 bg-slate-50 rounded-xl">
+                                    <h5 class="text-[10px] font-black uppercase text-slate-400">Public</h5>
+                                    <p class="text-[10px] text-slate-600">Terbuka untuk umum (AWS/Azure)</p>
+                                </div>
+                                <div class="p-3 bg-slate-50 rounded-xl">
+                                    <h5 class="text-[10px] font-black uppercase text-slate-400">Private</h5>
+                                    <p class="text-[10px] text-slate-600">Khusus 1 organisasi (Intranet)</p>
+                                </div>
+                                <div class="p-3 bg-slate-50 rounded-xl">
+                                    <h5 class="text-[10px] font-black uppercase text-slate-400">Hybrid</h5>
+                                    <p class="text-[10px] text-slate-600">Campuran Public & Private</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 p-10 rounded-3xl text-white">
+                        <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                            <span class="w-2 h-8 bg-teal-400 rounded"></span> Karakteristik Esensial (Penting) Awan
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <div class="space-y-3">
+                                <h4 class="text-teal-400 font-bold uppercase text-xs">On-demand Self-service (Layanan Mandiri sesuai Permintaan)</h4>
+                                <p class="text-sm text-slate-400">Pengguna dapat mengalokasikan daya prosesor atau penyimpanan tanpa interaksi manusia dengan penyedia layanan.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-teal-400 font-bold uppercase text-xs">Broad Network Access (Akses Jaringan Luas)</h4>
+                                <p class="text-sm text-slate-400">Kemampuan akses dari berbagai perangkat (smartphone, laptop, tablet) selama terhubung ke jaringan luas.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-teal-400 font-bold uppercase text-xs">Resource Pooling (Penyatuan Sumber Daya)</h4>
+                                <p class="text-sm text-slate-400">Sumber daya komputasi dari penyedia disatukan untuk melayani banyak pengguna menggunakan model multi-tenancy (multi-penyewa).</p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-teal-400 font-bold uppercase text-xs">Rapid Elasticity (Elastisitas Cepat)</h4>
+                                <p class="text-sm text-slate-400">Kapasitas dapat ditambah atau dikurangi secara otomatis dan cepat sesuai dengan beban kerja aplikasi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function focusCloud(idx) {
+            const m = contentData.cloud.models[idx];
+            const container = document.getElementById('cloud-focus');
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center animate-fade-in w-full">
+                    <div class="bg-indigo-50 p-10 rounded-[2rem] text-center border border-indigo-100">
+                        <div class="text-6xl mb-4">🏠</div>
+                        <h4 class="text-indigo-900 font-black text-xl mb-2">Analogi (Perumpamaan): ${m.analogy}</h4>
+                        <p class="text-indigo-700 text-sm font-medium">Cara termudah memahami model ${m.name}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-black text-slate-800 mb-4">${m.full}</h4>
+                        <p class="text-slate-600 leading-relaxed mb-6">${m.detail}</p>
+                        <div class="flex items-center gap-4">
+                            <span class="text-xs font-black text-slate-400 uppercase">Digunakan Oleh:</span>
+                            <span class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-xs font-bold">${m.examples}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            contentData.cloud.models.forEach((_, i) => {
+                const btn = document.getElementById(`cloud-btn-${i}`);
+                if (btn) btn.className = i === idx ? 
+                    "bg-white p-8 rounded-3xl shadow-lg border-2 border-indigo-500 text-left group scale-[1.02]" : 
+                    "bg-white p-8 rounded-3xl shadow-sm border-2 border-slate-100 text-left hover:border-indigo-500 transition-all group";
+            });
+        }
+
+        function renderSynergy() {
+            return `
+                <div class="animate-fade-in space-y-10">
+                    <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-200 text-center max-w-4xl mx-auto">
+                        <h2 class="text-3xl font-black text-slate-800 mb-6">Mekanisme Sinergi (Kerja Sama) Sistem</h2>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-4">Tanpa Cloud, komunikasi tidak memiliki memori permanen. Tanpa Komunikasi, Cloud tidak memiliki akses dari pengguna. Inilah simbiosis mutualisme (saling menguntungkan) antara infrastruktur penyimpanan dan jalur transmisi data.</p>
+                        <div class="bg-teal-50 p-6 rounded-2xl border border-teal-100 text-left italic text-teal-800 text-sm">
+                            <strong>Konsep Kunci:</strong> Jaringan bertindak sebagai "jembatan" atau <em>Transport Layer</em> (Lapisan Pengangkut), sedangkan Cloud bertindak sebagai "gudang cerdas" atau <em>Storage & Computing Layer</em> (Lapisan Penyimpanan & Pemrosesan).
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-12">
+                        <!-- Detailed Scenario 1 -->
+                        <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col lg:flex-row">
+                            <div class="bg-teal-600 p-10 text-white lg:w-1/3 flex flex-col justify-center">
+                                <h3 class="font-black text-2xl uppercase tracking-tighter mb-4">Skenario A: Collaborative Real-time Editing</h3>
+                                <p class="text-sm opacity-90 leading-relaxed">Bagaimana tulisan teman Anda muncul seketika di layar Anda saat mengerjakan tugas kelompok di Google Docs?</p>
+                            </div>
+                            <div class="p-10 lg:w-2/3 space-y-8">
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center font-black text-xl shadow-sm">1</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Data Transmission</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Saat keyboard ditekan, perangkat mengirimkan paket data kecil melalui koneksi internet sinkron menggunakan protokol WebSockets untuk meminimalisir delay.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center font-black text-xl shadow-sm">2</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Conflict Resolution in Cloud</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Server Cloud melakukan <em>Operational Transformation</em> untuk memastikan urutan ketikan tidak berantakan jika dua orang mengetik bersamaan.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center font-black text-xl shadow-sm">3</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Instant Broadcasting</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Setelah disimpan di Cloud Database, server langsung "menyiarkan" perubahan tersebut ke semua anggota tim melalui jalur komunikasi aktif.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Scenario 2 -->
+                        <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col lg:flex-row-reverse">
+                            <div class="bg-indigo-600 p-10 text-white lg:w-1/3 flex flex-col justify-center">
+                                <h3 class="font-black text-2xl uppercase tracking-tighter mb-4">Skenario B: Adaptive Video Streaming</h3>
+                                <p class="text-sm opacity-90 leading-relaxed">Mengapa saat internet melambat, video YouTube menjadi buram tetapi tidak langsung berhenti?</p>
+                            </div>
+                            <div class="p-10 lg:w-2/3 space-y-8">
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xl shadow-sm">1</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Edge Computing & CDN</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Video dikirim dari <em>Cache</em> (penyimpanan sementara) di Cloud yang paling dekat dengan lokasi fisik Anda agar perjalanan data lebih pendek.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xl shadow-sm">2</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Buffer Management</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Aplikasi melakukan <em>Buffering</em>. Cloud mengirimkan data secara bertahap dalam potongan-potongan kecil bernama <em>Chunks</em>.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-xl shadow-sm">3</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Auto-scaling Quality</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Cloud terus memantau kecepatan internet Anda. Jika lambat, Cloud beralih mengirimkan file video dengan resolusi lebih rendah agar tetap lancar.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NEW Scenario 3 -->
+                        <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col lg:flex-row">
+                            <div class="bg-blue-600 p-10 text-white lg:w-1/3 flex flex-col justify-center">
+                                <h3 class="font-black text-2xl uppercase tracking-tighter mb-4">Skenario C: Automated Disaster Recovery</h3>
+                                <p class="text-sm opacity-90 leading-relaxed">Bagaimana data di HP Anda tetap aman meskipun HP tersebut hilang atau rusak?</p>
+                            </div>
+                            <div class="p-10 lg:w-2/3 space-y-8">
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl shadow-sm">1</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Background Sync</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Sistem menggunakan komunikasi asinkron untuk melakukan <em>Upload</em> data saat perangkat dalam keadaan <em>Idle</em> (Diam).</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl shadow-sm">2</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Data Redundancy</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Cloud melakukan <em>Replication</em> (Penggandaan) data ke beberapa pusat data di zona geografis berbeda.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl shadow-sm">3</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">One-Click Restore</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Saat menggunakan HP baru, verifikasi identitas dilakukan dan data ditarik kembali dari Cloud dalam hitungan menit.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NEW Scenario 4 -->
+                        <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col lg:flex-row-reverse">
+                            <div class="bg-emerald-600 p-10 text-white lg:w-1/3 flex flex-col justify-center">
+                                <h3 class="font-black text-2xl uppercase tracking-tighter mb-4">Skenario D: Big Data Analytics for Research</h3>
+                                <p class="text-sm opacity-90 leading-relaxed">Bagaimana ilmuwan bisa memprediksi cuaca atau tren pasar global dengan akurat?</p>
+                            </div>
+                            <div class="p-10 lg:w-2/3 space-y-8">
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl shadow-sm">1</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">IoT Ingestion</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Jutaan sensor (IoT) mengirimkan data mentah terus-menerus melalui jaringan komunikasi global ke <em>Data Lake</em> di Cloud.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl shadow-sm">2</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Parallel Processing</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Cloud menggunakan ribuan <em>Virtual Machines</em> untuk memproses data tersebut secara bersamaan (<em>Distributed Computing</em>).</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl shadow-sm">3</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-lg mb-2 italic">Insight Delivery</h4>
+                                        <p class="text-sm text-slate-600 leading-relaxed">Hasil analisis dikirimkan kembali melalui dashboard interaktif untuk pengambilan keputusan berbasis data.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSecurity() {
+            return `
+                <div class="animate-fade-in space-y-10">
+                    <div class="bg-red-900 p-12 rounded-[3.5rem] shadow-2xl text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl font-black">SECURITY</div>
+                        <h2 class="text-4xl font-black mb-8 border-b-4 border-red-500 pb-4 inline-block">Protokol Keamanan & Etika Digital</h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h3 class="text-xl font-bold text-red-400 uppercase tracking-widest italic">Ancaman & Perlindungan Teknis</h3>
+                                <div class="bg-red-800/40 p-6 rounded-2xl border border-red-700/50 space-y-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="text-2xl">🔐</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">End-to-End Encryption</h4>
+                                            <p class="text-xs text-red-100/70 leading-relaxed">Proses mengubah data menjadi <em>Ciphertext</em> (teks tersandi). Hanya pemegang kunci privat yang bisa membacanya.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-red-700/30 pt-4">
+                                        <div class="text-2xl">🛑</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Zero Trust Architecture</h4>
+                                            <p class="text-xs text-red-100/70 leading-relaxed">Konsep keamanan "jangan pernah percaya, selalu verifikasi". Setiap permintaan akses harus diverifikasi identitasnya.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-red-700/30 pt-4">
+                                        <div class="text-2xl">🛡️</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Firewall & IPS</h4>
+                                            <p class="text-xs text-red-100/70 leading-relaxed">Lapisan keamanan yang bertindak seperti satpam, memeriksa paket data dan memblokir lalu lintas berbahaya.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-red-700/30 pt-4">
+                                        <div class="text-2xl">🔑</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">MFA (Otentikasi Multi-Faktor)</h4>
+                                            <p class="text-xs text-red-100/70 leading-relaxed">Metode masuk akun yang mewajibkan lebih dari sekadar kata sandi, misalnya kode SMS atau sidik jari.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-6">
+                                <h3 class="text-xl font-bold text-teal-400 uppercase tracking-widest italic">Tanggung Jawab & Etika (Netiquette)</h3>
+                                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50 space-y-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="text-2xl">👣</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Digital Footprint (Jejak Digital)</h4>
+                                            <p class="text-xs text-slate-100/70 leading-relaxed">Setiap data di Cloud tersimpan permanen. Jejak digital sulit dihapus sepenuhnya.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-slate-700/30 pt-4">
+                                        <div class="text-2xl">🌍</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Data Sovereignty (Kedaulatan Data)</h4>
+                                            <p class="text-xs text-slate-100/70 leading-relaxed">Data tunduk pada hukum negara tempat data itu disimpan. Kita harus tahu di mana server Cloud kita berada.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-slate-700/30 pt-4">
+                                        <div class="text-2xl">🤝</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Data Privacy & Consent</h4>
+                                            <p class="text-xs text-slate-100/70 leading-relaxed">Etika tidak menyebarkan data pribadi orang lain tanpa izin resmi. Melindungi informasi sensitif.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 border-t border-slate-700/30 pt-4">
+                                        <div class="text-2xl">⚖️</div>
+                                        <div>
+                                            <h4 class="font-black text-white text-sm uppercase italic">Intellectual Property</h4>
+                                            <p class="text-xs text-slate-100/70 leading-relaxed">Menghargai hasil karya orang lain di internet. Hindari penjiplakan dan gunakan lisensi yang tepat.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">
+                                <span class="p-2 bg-orange-100 rounded-lg">🚫</span> Menghadapi Cyberbullying
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600">
+                                <li class="flex gap-3"><strong>1.</strong> <span>Jangan Membalas: Membalas hanya akan memperburuk situasi.</span></li>
+                                <li class="flex gap-3"><strong>2.</strong> <span>Simpan Bukti: Ambil tangkapan layar sebagai bukti.</span></li>
+                                <li class="flex gap-3"><strong>3.</strong> <span>Blokir & Laporkan: Gunakan fitur keamanan di platform.</span></li>
+                                <li class="flex gap-3"><strong>4.</strong> <span>Cari Bantuan: Berbicaralah dengan orang dewasa yang dipercaya.</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">
+                                <span class="p-2 bg-blue-100 rounded-lg">🔍</span> Mendeteksi Hoax
+                            </h3>
+                            <ul class="space-y-3 text-sm text-slate-600">
+                                <li class="flex gap-3"><strong>1.</strong> <span>Cek Sumber: Pastikan berasal dari media resmi.</span></li>
+                                <li class="flex gap-3"><strong>2.</strong> <span>Verifikasi Gambar: Gunakan pencarian gambar terbalik.</span></li>
+                                <li class="flex gap-3"><strong>3.</strong> <span>Waspada Judul: Hoax sering menggunakan judul clickbait.</span></li>
+                                <li class="flex gap-3"><strong>4.</strong> <span>Periksa Tanggal: Terkadang berita lama disebarkan kembali.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-8 text-center uppercase tracking-tighter">Statistik Global: Tren Keamanan Digital</h3>
+                        <div class="chart-container">
+                            <canvas id="secChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-slate-400 mt-6 italic">Visualisasi peningkatan penggunaan sistem keamanan berlapis di berbagai penyedia layanan Cloud.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initCommChart() {
+            const ctx = document.getElementById('commChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Responsivitas', 'Keamanan Data', 'Kapasitas Pesan', 'Fleksibilitas Waktu', 'Kedekatan Emosional'],
+                    datasets: [
+                        { label: 'Sinkron (Video/Call)', data: [98, 70, 40, 20, 90], borderColor: '#0d9488', backgroundColor: 'rgba(13, 148, 136, 0.2)', borderWidth: 3 },
+                        { label: 'Asinkron (Email/Forum)', data: [30, 90, 95, 98, 40], borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.2)', borderWidth: 3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 100, ticks: { display: false } } },
+                    plugins: { legend: { position: 'bottom', labels: { font: { weight: 'bold' } } } }
+                }
+            });
+        }
+
+        function initSecChart() {
+            const ctx = document.getElementById('secChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'Adopsi MFA (%)',
+                        data: [15, 28, 45, 62, 78, 92],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        fill: true,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#dc2626',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Adopsi (%)' } } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => switchTab('comm'));
+    </script>
+</body>
+</html>
