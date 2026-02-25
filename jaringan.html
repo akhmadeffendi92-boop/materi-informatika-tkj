@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFORMATIKA KEREN BANGET GUYS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .extra-info {
+            border-left: 4px solid #3b82f6;
+            background-color: #eff6ff;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .update-box {
+            border-left: 4px solid #10b981;
+            background-color: #f0fdf4;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Game Specific Styles */
+        .game-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background: #fff;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- Header Area -->
+    <header class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-blue-600 rounded-lg">
+                    <i class="fas fa-shield-halved text-white text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-slate-800">Informatika TKJ <span class="text-blue-600">Keren Banget Guys</span></h1>
+            </div>
+            <div class="hidden md:block text-sm font-medium text-slate-500">
+                Keamanan Jaringan Dasar - Akhmad Noor Effendi, S.Kom
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Navigation -->
+        <nav class="lg:w-1/4 space-y-2 flex flex-col">
+            <button onclick="showTab(1)" id="btn-1" class="nav-link p-4 text-left rounded-xl transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-book-open w-6 text-center"></i> 1. Pengertian Materi
+            </button>
+            <button onclick="showTab(2)" id="btn-2" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-circle-exclamation w-6 text-center"></i> 2. Kenapa Penting?
+            </button>
+            <button onclick="showTab(3)" id="btn-3" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-gears w-6 text-center"></i> 3. Fungsi Utama
+            </button>
+            <button onclick="showTab(4)" id="btn-4" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-microchip w-6 text-center"></i> 4. Relevansi Saat Ini
+            </button>
+            <button onclick="showTab(5)" id="btn-5" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-lightbulb w-6 text-center"></i> 5. Contoh Realistis
+            </button>
+            <button onclick="showTab(6)" id="btn-6" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-network-wired w-6 text-center"></i> 6. Topologi Jaringan
+            </button>
+            <button onclick="showTab(7)" id="btn-7" class="nav-link p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-gamepad w-6 text-center"></i> 7. Game Interaktif
+            </button>
+            <button onclick="showTab(8)" id="btn-8" class="nav-link active p-4 text-left rounded-xl hover:bg-white transition-all font-semibold flex items-center gap-3">
+                <i class="fas fa-tasks w-6 text-center"></i> 8. Studi Kasus
+            </button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="lg:w-3/4">
+            
+            <!-- Tab 1: Pengertian -->
+            <div id="tab-1" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Apa Itu Keamanan Jaringan Dasar?</h2>
+                <div class="prose prose-slate max-w-none text-slate-600">
+                    <p class="text-lg leading-relaxed mb-6">
+                        <strong>Keamanan Jaringan</strong> adalah sebuah disiplin ilmu dan praktik teknis yang bertujuan untuk mengamankan infrastruktur komunikasi data dari akses yang tidak sah, penyalahgunaan, modifikasi, atau penghancuran. Bagi siswa TKJ, ini bukan hanya soal "pasang password", tapi soal membangun benteng digital yang kokoh di atas perangkat keras dan lunak jaringan.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                            <h3 class="font-bold text-blue-800 mb-2">Jaringan Kabel (Wired)</h3>
+                            <p class="text-sm">Pengamanan fisik pada media transmisi (UTP/Fiber Optic). Meliputi <strong>Port Security</strong> pada Switch (membatasi siapa yang boleh colok kabel), manajemen <strong>VLAN</strong> untuk memisahkan lalu lintas data sensitif, dan proteksi perangkat dari akses langsung.</p>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-xl border border-purple-100">
+                            <h3 class="font-bold text-purple-800 mb-2">Jaringan Nirkabel (Wireless)</h3>
+                            <p class="text-sm">Pengamanan pada gelombang radio (Medium Udara). Meliputi protokol enkripsi seperti <strong>WPA3</strong>, teknik <strong>Hidden SSID</strong>, <strong>MAC Filtering</strong>, serta pengaturan daya pancar antena agar sinyal tidak bocor ke luar area gedung.</p>
+                        </div>
+                    </div>
+
+                    <div class="update-box">
+                        <h4 class="font-bold text-green-800 mb-3"><i class="fas fa-graduation-cap mr-2"></i>Komponen Utama dalam Sistem Pertahanan:</h4>
+                        <ul class="space-y-3 text-sm text-slate-700">
+                            <li><strong>1. Keamanan Fisik:</strong> Melindungi Router, Switch, dan Server di dalam rak yang terkunci untuk mencegah sabotase fisik.</li>
+                            <li><strong>2. Keamanan Perangkat Lunak:</strong> Memastikan sistem operasi (MikroTik/Cisco IOS/Linux) selalu di-update (patching) untuk menutup celah keamanan.</li>
+                            <li><strong>3. Kebijakan Pengguna (Policy):</strong> Aturan operasional seperti kebijakan ganti password berkala dan pembatasan hak akses user sesuai fungsinya.</li>
+                            <li><strong>4. Intrusion Prevention:</strong> Penggunaan sistem yang mampu mendeteksi dan secara otomatis memblokir serangan yang mencoba masuk ke gateway jaringan.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="extra-info">
+                        <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-plus-circle mr-2"></i>Prinsip Utama: Segitiga CIA (Dasar Tujuan Pembelajaran)</h4>
+                        <p class="text-sm">Tujuan akhir dari setiap teknisi TKJ dalam mengelola jaringan adalah mencapai tiga hal:</p>
+                        <ul class="text-xs mt-2 space-y-1">
+                            <li><strong>Confidentiality:</strong> Data tidak bocor ke pihak yang tidak berhak.</li>
+                            <li><strong>Integrity:</strong> Data tetap asli, tidak berubah/rusak selama proses pengiriman.</li>
+                            <li><strong>Availability:</strong> Layanan jaringan (Internet/Intranet) selalu aktif dan dapat diakses kapan saja dibutuhkan.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Pentingnya -->
+            <div id="tab-2" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Kenapa Ini Penting Dibahas?</h2>
+                <div class="prose prose-slate max-w-none text-slate-600 mb-6">
+                    <p>Memahami keamanan jaringan bukan hanya tentang teori, tetapi tentang tanggung jawab profesional seorang teknisi dalam menjaga aset digital. Berikut adalah alasan fundamental mengapa materi ini menjadi pilar utama dalam kurikulum TKJ:</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex gap-4 items-start bg-red-50 p-4 rounded-xl border border-red-100">
+                        <i class="fas fa-shield-virus text-red-500 text-2xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Menjaga Kepercayaan Publik & Bisnis</h3>
+                            <p class="text-sm text-slate-600">Kebocoran data dapat menghancurkan reputasi perusahaan dalam sekejap. Teknisi jaringan adalah garda terdepan dalam memastikan data pelanggan tetap aman.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <i class="fas fa-network-wired text-orange-500 text-2xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Efisiensi & Stabilitas Sistem</h3>
+                            <p class="text-sm text-slate-600">Serangan jaringan (seperti broadcast storm atau loop) dapat melumpuhkan seluruh gedung. Keamanan yang baik memastikan trafik data berjalan lancar tanpa gangguan teknis.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <i class="fas fa-gavel text-blue-500 text-2xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Kepatuhan Hukum (Compliance)</h3>
+                            <p class="text-sm text-slate-600">Banyak sektor (perbankan, kesehatan, pemerintahan) memiliki standar hukum ketat terkait cara data dikirimkan melalui jaringan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="update-box">
+                    <h4 class="font-bold text-green-800 mb-3"><i class="fas fa-list-check mr-2"></i>Dampak Jika Mengabaikan Keamanan Jaringan:</h4>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3"><i class="fas fa-triangle-exclamation text-red-500 mt-1"></i> <div><strong>Kerugian Finansial:</strong> Biaya perbaikan sistem pasca serangan jauh lebih mahal daripada biaya investasi keamanan di awal.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-triangle-exclamation text-red-500 mt-1"></i> <div><strong>Penyalahgunaan Infrastruktur:</strong> Perangkat jaringan Anda bisa dijadikan "Zombie" (Botnet) oleh hacker untuk menyerang target lain tanpa sepengetahuan Anda.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-triangle-exclamation text-red-500 mt-1"></i> <div><strong>Pencurian Identitas Teknisi:</strong> Tanpa keamanan, kredensial login admin router/switch bisa dicuri, memberikan akses penuh kepada orang asing ke seluruh infrastruktur.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-triangle-exclamation text-red-500 mt-1"></i> <div><strong>Interupsi Layanan:</strong> Serangan DoS (Denial of Service) dapat memutus koneksi internet sekolah atau kantor, menghentikan seluruh aktivitas produktif.</div></li>
+                    </ul>
+                </div>
+
+                <div class="extra-info bg-indigo-50 border-indigo-500">
+                    <h4 class="font-bold text-indigo-800 mb-2"><i class="fas fa-brain mr-2"></i>Sudut Pandang Karier TKJ</h4>
+                    <p class="text-sm text-slate-700">Keahlian di bidang keamanan jaringan adalah salah satu kompetensi dengan gaji tertinggi dan permintaan kerja yang sangat masif di industri IT saat ini.</p>
+                </div>
+            </div>
+
+            <!-- Tab 3: Fungsi -->
+            <div id="tab-3" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Fungsi Utama Keamanan Jaringan</h2>
+                <div class="prose prose-slate max-w-none text-slate-600 mb-8">
+                    <p>Fungsi keamanan jaringan bukan sekadar memblokir akses, melainkan menciptakan ekosistem komunikasi data yang terkendali. Berikut adalah fungsi-fungsi kritis yang harus dikuasai oleh teknisi:</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-blue-300 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-blue-100 rounded-lg"><i class="fas fa-user-check text-blue-600"></i></div>
+                            <h3 class="font-bold text-slate-800">Akses Kontrol (Identification)</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Memastikan hanya pengguna dan perangkat yang sah yang bisa terhubung ke sumber daya jaringan. Contoh teknis: Penggunaan <strong>RADIUS Server</strong> atau <strong>Captive Portal</strong> di lingkungan hotspot SMK.</p>
+                    </div>
+
+                    <div class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-purple-300 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-purple-100 rounded-lg"><i class="fas fa-file-shield text-purple-600"></i></div>
+                            <h3 class="font-bold text-slate-800">Integritas Data (Data Integrity)</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Melindungi data agar tidak dimodifikasi secara ilegal saat transit. Contoh teknis: Implementasi <strong>Hashing</strong> dan sertifikat digital <strong>SSL/TLS</strong> pada layanan web server lokal.</p>
+                    </div>
+
+                    <div class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-green-300 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-green-100 rounded-lg"><i class="fas fa-eye-slash text-green-600"></i></div>
+                            <h3 class="font-bold text-slate-800">Privasi (Confidentiality)</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Menyembunyikan konten informasi dari pihak yang menyadap kabel atau frekuensi. Contoh teknis: Penerapan enkripsi <strong>AES-256</strong> pada jalur komunikasi <strong>VPN</strong>.</p>
+                    </div>
+
+                    <div class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-orange-300 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-orange-100 rounded-lg"><i class="fas fa-history text-orange-600"></i></div>
+                            <h3 class="font-bold text-slate-800">Audit & Akuntabilitas</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Mencatat semua kejadian dalam jaringan (siapa, kapan, melakukan apa). Contoh teknis: Konfigurasi <strong>Syslog</strong> pada MikroTik untuk memantau log login admin secara real-time.</p>
+                    </div>
+                </div>
+
+                <div class="update-box">
+                    <h4 class="font-bold text-green-800 mb-3"><i class="fas fa-tools mr-2"></i>Fungsi Preventif bagi Teknisi TKJ:</h4>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-500 mt-1"></i> <div><strong>Network Segmentation:</strong> Membagi jaringan besar menjadi sub-jaringan kecil (VLAN) untuk membatasi penyebaran serangan virus.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-500 mt-1"></i> <div><strong>Traffic Filtering:</strong> Mengatur <i>Firewall Filter Rules</i> untuk membuang paket data yang mencurigakan sebelum masuk ke server.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-500 mt-1"></i> <div><strong>Resource Management:</strong> Mencegah satu user menghabiskan seluruh bandwidth yang bisa dianggap sebagai serangan DoS tidak sengaja.</div></li>
+                    </ul>
+                </div>
+
+                <div class="extra-info bg-amber-50 border-amber-500">
+                    <h4 class="font-bold text-amber-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Non-Repudiation (Fungsi Penyangkalan)</h4>
+                    <p class="text-sm text-slate-700">Memastikan seseorang tidak bisa menyangkal bahwa ia telah mengirimkan data atau melakukan perubahan konfigurasi tertentu. Ini sangat penting untuk menjaga integritas tim IT dalam sebuah organisasi.</p>
+                </div>
+            </div>
+
+            <!-- Tab 4: Relevansi -->
+            <div id="tab-4" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Relevansi di Era Modern</h2>
+                <div class="bg-indigo-900 text-white p-8 rounded-3xl mb-6">
+                    <h3 class="text-2xl font-bold mb-4">Kenapa Wajib Dipelajari Sekarang?</h3>
+                    <p class="opacity-90">Hacker sekarang menyerang segalanya, dari Smart Lamp hingga Sistem Industri.</p>
+                </div>
+
+                <div class="update-box">
+                    <h4 class="font-bold text-green-800 mb-3"><i class="fas fa-plus-circle mr-2"></i>5 Penjelasan Tambahan Relevansi:</h4>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3"><i class="fas fa-check text-green-500 mt-1"></i> <div><strong>Era Internet of Things (IoT):</strong> Setiap perangkat rumah tangga kini punya IP address. Tanpa keamanan dasar, kulkas atau CCTV Anda bisa jadi pintu masuk hacker.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check text-green-500 mt-1"></i> <div><strong>Ketergantungan Cloud Computing:</strong> Karena hampir semua data sekolah dan kerja ada di "awan", keamanan jalur (jaringan) menuju cloud menjadi sangat kritis.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check text-green-500 mt-1"></i> <div><strong>Perlindungan Data Pribadi (UU PDP):</strong> Di Indonesia sudah ada undang-undang yang mewajibkan perlindungan data. Orang TKJ bertanggung jawab secara teknis atas hal ini.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check text-green-500 mt-1"></i> <div><strong>Ancaman Ransomware:</strong> Serangan yang mengunci data dan meminta tebusan menyebar lewat celah jaringan. Mengamankan jaringan berarti menyelamatkan aset bisnis.</div></li>
+                        <li class="flex gap-3"><i class="fas fa-check text-green-500 mt-1"></i> <div><strong>Kebutuhan Remote Working:</strong> Kerja dari rumah (WFH) memerlukan VPN dan jaringan lokal yang aman agar rahasia perusahaan tidak bocor.</div></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 5: Contoh -->
+            <div id="tab-5" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Contoh Realistis</h2>
+                <div class="space-y-6">
+                    <div class="p-4 bg-slate-50 border rounded-xl">
+                        <h3 class="font-bold text-blue-700">Analogi: Rumah Kita</h3>
+                        <p class="text-sm text-slate-600">Password = Kunci, Firewall = Satpam, Enkripsi = Bahasa Rahasia.</p>
+                    </div>
+
+                    <div class="update-box">
+                        <h4 class="font-bold text-green-800 mb-3"><i class="fas fa-plus-circle mr-2"></i>5 Contoh Realistis Tambahan:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-3 bg-white border rounded-lg">
+                                <strong>1. Tamu Tak Diundang:</strong> Tetangga menggunakan aplikasi pembobol WiFi sederhana untuk mendownload film, mengakibatkan ping game online Anda lag parah.
+                            </div>
+                            <div class="p-3 bg-white border rounded-lg">
+                                <strong>2. Man-in-the-Middle:</strong> Seseorang di cafe membuat WiFi bernama "Free_WiFi_Cafe" (palsu). Saat Anda login IG, penjahat tersebut merekam username Anda.
+                            </div>
+                            <div class="p-3 bg-white border rounded-lg">
+                                <strong>3. Kebocoran Database Sekolah:</strong> Karena server lokal sekolah tidak dipasangi firewall, data nilai siswa bisa diakses dan diubah oleh siswa dari luar Lab.
+                            </div>
+                            <div class="p-3 bg-white border rounded-lg">
+                                <strong>4. Serangan Trojan:</strong> Anda mendownload game bajakan, lalu virus di dalamnya menyebarkan diri ke seluruh komputer di rumah melalui jaringan LAN tanpa hambatan.
+                            </div>
+                            <div class="p-3 bg-white border rounded-lg">
+                                <strong>5. IP Cam Terbuka:</strong> CCTV rumah dipasang tanpa ganti password default. Akibatnya, orang asing bisa melihat aktivitas rumah Anda lewat website khusus penyaji IP Cam terbuka.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 6: Topologi -->
+            <div id="tab-6" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Topologi Jaringan Aman</h2>
+                <div class="bg-white p-4 rounded-xl border flex justify-center mb-6">
+                    <svg viewBox="0 0 800 400" class="w-full max-w-2xl h-auto">
+                        <path d="M50,150 Q70,100 120,110 Q150,80 200,100 Q250,90 270,130 Q300,150 250,180 Q220,210 150,200 Q100,220 70,190 Q40,180 50,150" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+                        <text x="120" y="155" font-family="Arial" font-size="14" font-weight="bold">INTERNET</text>
+                        <rect x="350" y="125" width="80" height="60" rx="5" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="360" y="160" fill="white" font-family="Arial" font-size="12" font-weight="bold">FIREWALL</text>
+                        <rect x="550" y="125" width="100" height="60" rx="5" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                        <text x="560" y="160" fill="white" font-family="Arial" font-size="12" font-weight="bold">MAIN ROUTER</text>
+                        <circle cx="750" cy="80" r="25" fill="#10b981"/><circle cx="750" cy="160" r="25" fill="#10b981"/><circle cx="750" cy="240" r="25" fill="#10b981"/>
+                        <line x1="270" y1="155" x2="350" y2="155" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="430" y1="155" x2="550" y2="155" stroke="#94a3b8" stroke-width="2"/>
+                        <line x1="650" y1="155" x2="725" y2="80" stroke="#94a3b8" stroke-width="2"/><line x1="650" y1="155" x2="725" y2="160" stroke="#94a3b8" stroke-width="2"/><line x1="650" y1="155" x2="725" y2="240" stroke="#94a3b8" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Tab 7: Game Interaktif -->
+            <div id="tab-7" class="tab-content glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Zona Game Interaktif</h2>
+                
+                <div class="space-y-12">
+                    <!-- Game 1: Password Strength Master -->
+                    <div class="game-container border-blue-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><i class="fas fa-key"></i></div>
+                            <h3 class="font-bold text-xl">1. Password Strength Master</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4">Ketik password di bawah untuk melihat seberapa aman rahasiamu.</p>
+                        <input type="text" id="pw-input" oninput="checkPassword()" placeholder="Ketik password di sini..." class="w-full p-3 border rounded-xl mb-4 focus:ring-2 focus:ring-blue-500 outline-none">
+                        <div class="bg-slate-100 p-4 rounded-xl">
+                            <div id="pw-status" class="text-sm font-bold text-slate-500 mb-2 uppercase">Menunggu input...</div>
+                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-3">
+                                <div id="pw-bar" class="h-full bg-slate-400 transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p id="pw-time" class="text-xs text-slate-500 italic">Hacker AI bisa menebak dalam: -</p>
+                        </div>
+                    </div>
+
+                    <!-- Game 2: Firewall Sort Challenge -->
+                    <div class="game-container border-green-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-green-100 rounded-lg text-green-600"><i class="fas fa-filter"></i></div>
+                            <h3 class="font-bold text-xl">2. Firewall Sort Challenge</h3>
+                        </div>
+                        <div id="firewall-game" class="relative bg-slate-900 rounded-xl h-48 flex items-center justify-center overflow-hidden">
+                            <div id="packet" class="absolute bg-blue-500 text-white px-3 py-1 rounded-lg font-bold text-xs transition-all duration-300">PAKET DATA</div>
+                            <div class="flex gap-4 z-10">
+                                <button onclick="sortPacket(true)" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-bold">IZINKAN</button>
+                                <button onclick="sortPacket(false)" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold">BLOKIR</button>
+                            </div>
+                            <div id="firewall-score" class="absolute top-2 right-4 text-white font-mono text-xl">Skor: 0</div>
+                            <div id="packet-desc" class="absolute bottom-2 left-4 text-blue-200 text-xs">Petunjuk: Izinkan hanya trafik port 80/443</div>
+                        </div>
+                    </div>
+
+                    <!-- Game 3: Encryption Decryptor Puzzle -->
+                    <div class="game-container border-purple-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-purple-100 rounded-lg text-purple-600"><i class="fas fa-lock-open"></i></div>
+                            <h3 class="font-bold text-xl">3. Encryption Decryptor Puzzle</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4">Dekripsi pesan rahasia berikut menggunakan kunci geser (Caesar Cipher).</p>
+                        <div class="bg-purple-50 p-6 rounded-xl text-center mb-4 border border-purple-200">
+                            <span class="text-2xl font-mono tracking-widest text-purple-800" id="cipher-text">TKJ</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold">Kunci Geser (Key):</label>
+                            <input type="number" id="cipher-key" value="0" min="0" max="25" onchange="updateCipher()" class="w-20 p-2 border rounded-lg">
+                            <div id="cipher-result" class="flex-1 bg-white p-2 border rounded-lg text-sm text-center font-bold">Hasil: TKJ</div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2 italic">*Kunci yang benar adalah 1. Pesan aslinya: SKI (Sistem Keamanan Informasi)</p>
+                    </div>
+
+                    <!-- Game 4: WiFi Hunter: Fake or Real? -->
+                    <div class="game-container border-orange-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-orange-100 rounded-lg text-orange-600"><i class="fas fa-wifi"></i></div>
+                            <h3 class="font-bold text-xl">4. WiFi Hunter: Fake or Real?</h3>
+                        </div>
+                        <div class="space-y-2">
+                            <div id="wifi-list" class="space-y-2">
+                                <!-- WiFi items -->
+                                <div onclick="checkWifi(this, true)" class="p-3 border rounded-xl hover:bg-orange-50 cursor-pointer flex justify-between items-center transition-all">
+                                    <span>SMK_OFFICIAL_SECURE</span>
+                                    <i class="fas fa-lock text-slate-400"></i>
+                                </div>
+                                <div onclick="checkWifi(this, false)" class="p-3 border rounded-xl hover:bg-orange-50 cursor-pointer flex justify-between items-center transition-all">
+                                    <span>FREE_INTERNET_CEPAT_TANPA_PASS</span>
+                                    <i class="fas fa-unlock text-red-400"></i>
+                                </div>
+                                <div onclick="checkWifi(this, false)" class="p-3 border rounded-xl hover:bg-orange-50 cursor-pointer flex justify-between items-center transition-all">
+                                    <span>Instagram_Login_Disini</span>
+                                    <i class="fas fa-lock text-slate-400"></i>
+                                </div>
+                            </div>
+                            <p id="wifi-feedback" class="text-xs text-center font-bold h-4"></p>
+                        </div>
+                    </div>
+
+                    <!-- Game 5: Network Tower Defense -->
+                    <div class="game-container border-red-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-red-100 rounded-lg text-red-600"><i class="fas fa-shield-virus"></i></div>
+                            <h3 class="font-bold text-xl">5. Network Tower Defense (Simulasi)</h3>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="defenseMove('firewall')" class="flex flex-col items-center p-3 border rounded-xl hover:bg-red-50">
+                                <i class="fas fa-wall-brick text-red-500 mb-1"></i>
+                                <span class="text-[10px] font-bold">FIREWALL</span>
+                            </button>
+                            <button onclick="defenseMove('antivirus')" class="flex flex-col items-center p-3 border rounded-xl hover:bg-red-50">
+                                <i class="fas fa-virus-slash text-blue-500 mb-1"></i>
+                                <span class="text-[10px] font-bold">ANTIVIRUS</span>
+                            </button>
+                            <button onclick="defenseMove('ids')" class="flex flex-col items-center p-3 border rounded-xl hover:bg-red-50">
+                                <i class="fas fa-eye text-green-500 mb-1"></i>
+                                <span class="text-[10px] font-bold">IDS/IPS</span>
+                            </button>
+                        </div>
+                        <div id="defense-log" class="mt-4 bg-slate-900 text-green-400 p-3 rounded-lg font-mono text-[10px] h-24 overflow-y-auto">
+                            > Inisialisasi pertahanan...<br>
+                            > Menunggu serangan virus...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 8: Studi Kasus -->
+            <div id="tab-8" class="tab-content active glass-card rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-4">Ayo Selesaikan Masalah Ini!</h2>
+                
+                <p class="text-slate-600 mb-6 italic">Bayangkan kamu adalah seorang teknisi jaringan di sekolahmu. Cobalah jawab tantangan di bawah ini!</p>
+
+                <div class="space-y-6">
+                    <!-- Kasus 1 -->
+                    <div class="p-6 bg-blue-50 border border-blue-100 rounded-xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                            <h3 class="font-bold text-blue-900 text-lg">Masalah: WiFi Sekolah Super Lambat</h3>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Pak Guru melapor WiFi di kantor guru sangat pelan. Setelah dicek, ternyata banyak siswa yang "numpang" WiFi kantor secara sembunyi-sembunyi karena tahu password-nya dari orang lain.
+                        </p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
+                            <p class="text-xs font-bold text-blue-800 mb-1 uppercase tracking-wider">Tugasmu:</p>
+                            <p class="text-sm text-slate-600">Sebutkan 2 cara paling mudah agar siswa tidak bisa lagi masuk ke WiFi kantor Guru!</p>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 2 -->
+                    <div class="p-6 bg-green-50 border border-green-100 rounded-xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                            <h3 class="font-bold text-green-900 text-lg">Masalah: Muncul WiFi Misterius</h3>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Saat istirahat, kamu melihat ada sinyal WiFi baru di HP-mu dengan nama <strong>"Beli_Pulsa_Gratis_Klik_Sini"</strong>. WiFi itu tidak pakai password, tapi kalau diklik, HP minta kita memasukkan nomor telepon.
+                        </p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-green-200">
+                            <p class="text-xs font-bold text-green-800 mb-1 uppercase tracking-wider">Tugasmu:</p>
+                            <p class="text-sm text-slate-600">Apakah WiFi ini aman? Mengapa kita dilarang sembarangan menyambungkan HP ke WiFi gratisan seperti itu?</p>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 3 -->
+                    <div class="p-6 bg-amber-50 border border-amber-100 rounded-xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-amber-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                            <h3 class="font-bold text-amber-900 text-lg">Masalah: Password "Pasaran"</h3>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Seorang temanmu menggunakan password <strong>"12345678"</strong> untuk akun login PC di Lab Komputer. Dia merasa itu aman karena PC-nya hanya dipakai di dalam sekolah.
+                        </p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-amber-200">
+                            <p class="text-xs font-bold text-amber-800 mb-1 uppercase tracking-wider">Tugasmu:</p>
+                            <p class="text-sm text-slate-600">Beri saran kepada temanmu! Buatkan 1 contoh password yang lebih kuat yang terdiri dari campuran huruf besar, angka, dan simbol.</p>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 4 (NEW) -->
+                    <div class="p-6 bg-purple-50 border border-purple-100 rounded-xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+                            <h3 class="font-bold text-purple-900 text-lg">Masalah: Flashdisk "Berhantu"</h3>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Temanmu meminjamkan flashdisk untuk menyalin tugas. Begitu flashdisk dicolok ke laptopmu, semua file di laptop tiba-tiba berubah menjadi shortcut dan tidak bisa dibuka.
+                        </p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-purple-200">
+                            <p class="text-xs font-bold text-purple-800 mb-1 uppercase tracking-wider">Tugasmu:</p>
+                            <p class="text-sm text-slate-600">Apa yang sebenarnya terjadi pada laptopmu? Apa langkah pertama yang harus kamu lakukan untuk mencegah kerusakan lebih lanjut?</p>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 5 (NEW) -->
+                    <div class="p-6 bg-rose-50 border border-rose-100 rounded-xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-rose-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</div>
+                            <h3 class="font-bold text-rose-900 text-lg">Masalah: CCTV Lab yang Tidak Privat</h3>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Kamu menemukan bahwa CCTV di Lab TKJ bisa dilihat oleh siapa saja di internet hanya dengan mengetik alamat IP-nya di browser, karena password adminnya masih bawaan pabrik (default).
+                        </p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-rose-200">
+                            <p class="text-xs font-bold text-rose-800 mb-1 uppercase tracking-wider">Tugasmu:</p>
+                            <p class="text-sm text-slate-600">Sebutkan 2 langkah teknis yang harus segera kamu lakukan agar rekaman CCTV Lab tidak bisa diintip oleh orang luar lagi!</p>
+                        </div>
+                    </div>
+
+                    <!-- Tips Belajar -->
+                    <div class="update-box">
+                        <h4 class="font-bold text-green-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>Tips untuk Siswa:</h4>
+                        <p class="text-sm text-slate-700">Dalam keamanan jaringan, <strong>kehati-hatian</strong> adalah senjata paling utama. Ingat: Tidak ada sistem yang 100% aman, tapi kita bisa membuatnya sangat sulit untuk ditembus!</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function showTab(tabIndex) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabIndex).classList.add('active');
+            document.getElementById('btn-' + tabIndex).classList.add('active');
+        }
+
+        // --- GAME 1: Password Master ---
+        function checkPassword() {
+            const val = document.getElementById('pw-input').value;
+            const bar = document.getElementById('pw-bar');
+            const status = document.getElementById('pw-status');
+            const time = document.getElementById('pw-time');
+            
+            let score = 0;
+            if (val.length > 8) score += 25;
+            if (/[A-Z]/.test(val)) score += 25;
+            if (/[0-9]/.test(val)) score += 25;
+            if (/[^A-Za-z0-9]/.test(val)) score += 25;
+
+            bar.style.width = score + '%';
+            if (score <= 25) { bar.className = 'h-full bg-red-500 transition-all'; status.innerText = 'Sangat Lemah'; time.innerText = 'Hacker AI bisa menebak dalam: 1 Detik'; }
+            else if (score <= 50) { bar.className = 'h-full bg-orange-500 transition-all'; status.innerText = 'Lemah'; time.innerText = 'Hacker AI bisa menebak dalam: 1 Jam'; }
+            else if (score <= 75) { bar.className = 'h-full bg-blue-500 transition-all'; status.innerText = 'Sedang'; time.innerText = 'Hacker AI bisa menebak dalam: 3 Tahun'; }
+            else { bar.className = 'h-full bg-green-500 transition-all'; status.innerText = 'Sangat Kuat!'; time.innerText = 'Hacker AI bisa menebak dalam: 100+ Tahun'; }
+            
+            if (val === '') { status.innerText = 'Menunggu input...'; time.innerText = 'Hacker AI bisa menebak dalam: -'; bar.style.width = '0%'; }
+        }
+
+        // --- GAME 2: Firewall Sort ---
+        let fwScore = 0;
+        let currentPacket = { name: 'HTTP Request', port: 80, isSafe: true };
+        const packets = [
+            { name: 'HTTP Request', port: 80, isSafe: true },
+            { name: 'HTTPS Data', port: 443, isSafe: true },
+            { name: 'Malware Port', port: 666, isSafe: false },
+            { name: 'Telnet Access', port: 23, isSafe: false },
+            { name: 'DDoS Attack', port: 0, isSafe: false }
+        ];
+
+        function sortPacket(allow) {
+            const isCorrect = (allow === currentPacket.isSafe);
+            if (isCorrect) fwScore += 10; else fwScore -= 5;
+            document.getElementById('firewall-score').innerText = 'Skor: ' + fwScore;
+            
+            // Generate next
+            currentPacket = packets[Math.floor(Math.random() * packets.length)];
+            const pElem = document.getElementById('packet');
+            pElem.innerText = currentPacket.name + ' (Port: ' + currentPacket.port + ')';
+            pElem.style.backgroundColor = isCorrect ? '#059669' : '#dc2626';
+            setTimeout(() => { pElem.style.backgroundColor = '#3b82f6'; }, 300);
+        }
+
+        // --- GAME 3: Caesar Cipher ---
+        function updateCipher() {
+            const key = parseInt(document.getElementById('cipher-key').value);
+            const str = "SKI"; // Target: Sistem Keamanan Informasi
+            const ciphered = "TKJ";
+            
+            // Logic caesar
+            let result = "";
+            for (let i = 0; i < str.length; i++) {
+                let charCode = str.charCodeAt(i) + key;
+                result += String.fromCharCode(charCode);
+            }
+            document.getElementById('cipher-result').innerText = "Hasil: " + result;
+        }
+
+        // --- GAME 4: WiFi Hunter ---
+        function checkWifi(elem, isSafe) {
+            const feedback = document.getElementById('wifi-feedback');
+            if (isSafe) {
+                elem.classList.add('bg-green-100', 'border-green-500');
+                feedback.innerText = "Benar! Selalu pilih WiFi dengan enkripsi WPA2/WPA3.";
+                feedback.className = "text-xs text-center font-bold h-4 text-green-600";
+            } else {
+                elem.classList.add('bg-red-100', 'border-red-500');
+                feedback.innerText = "Waspada! Ini bisa jadi WiFi jebakan (Rogue AP).";
+                feedback.className = "text-xs text-center font-bold h-4 text-red-600";
+            }
+        }
+
+        // --- GAME 5: Tower Defense ---
+        function defenseMove(type) {
+            const log = document.getElementById('defense-log');
+            const time = new Date().toLocaleTimeString();
+            let msg = "";
+            if (type === 'firewall') msg = "> Firewall memblokir koneksi luar mencurigakan.";
+            if (type === 'antivirus') msg = "> Antivirus menscan file dan menghapus Trojan.";
+            if (type === 'ids') msg = "> IDS mendeteksi aktivitas anomali pada port 22.";
+            
+            log.innerHTML += `<br><span class="text-slate-500">[${time}]</span> ${msg}`;
+            log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>
