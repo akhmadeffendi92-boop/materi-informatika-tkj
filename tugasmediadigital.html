@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Informatika X TKJ 1 - Mobile Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bottom-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid #e2e8f0;
+        }
+        .scroll-section {
+            scroll-margin-top: 20px;
+        }
+        * {
+            -webkit-font-smoothing: antialiased;
+        }
+        .card-task {
+            transition: transform 0.2s;
+        }
+        .card-task:active {
+            transform: scale(0.98);
+        }
+        .topic-pill {
+            display: inline-block;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 pb-24">
+
+    <!-- Header -->
+    <header class="p-6 bg-gradient-to-br from-blue-700 to-indigo-800 text-white rounded-b-[2.5rem] shadow-xl">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-white/20 rounded-lg">
+                <i data-lucide="rocket" class="w-6 h-6 text-yellow-300"></i>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-widest opacity-90">Laboratorium Kreatif X TKJ 1 SMK Negeri 1 Tanjung</span>
+        </div>
+        <h1 class="text-3xl font-extrabold leading-tight mb-2">Misi Transformasi Digital</h1>
+        <p class="text-blue-100 text-sm leading-relaxed opacity-80">Ubah peranmu dari pengguna menjadi pencipta konten yang berdampak.</p>
+    </header>
+
+    <main class="px-5 mt-8 space-y-8">
+        
+        <!-- Section: Penjelasan Singkat -->
+        <section id="materi" class="scroll-section">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-lg font-extrabold mb-3 text-slate-800 flex items-center gap-2">
+                    <i data-lucide="info" class="w-5 h-5 text-blue-600"></i> Apa Inti Tugasnya?
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Kalian tidak hanya membuat "gambar", tapi melakukan <strong>Transformasi</strong> informasi rumit menjadi konten yang mudah dipahami, lalu melakukan <strong>Diseminasi</strong> (penyebaran) agar orang lain bisa <strong>Berpartisipasi</strong>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section: Inspirasi Judul (NEW) -->
+        <section id="inspirasi" class="scroll-section">
+            <h2 class="text-xl font-extrabold mb-4 text-slate-800 px-1">💡 Inspirasi Judul Poster</h2>
+            <p class="text-xs text-slate-500 mb-4 px-1">Pilih salah satu tema viral untuk Misi 01 kalian:</p>
+            <div class="flex flex-wrap">
+                <div class="topic-pill shadow-sm">1. "Password-mu adalah Kuncimu: Jangan Berbagi!"</div>
+                <div class="topic-pill shadow-sm">2. "Kenali Phishing: Jangan Klik Link Sembarangan"</div>
+                <div class="topic-pill shadow-sm">3. "Digital Footprint: Jejakmu Abadi di Internet"</div>
+                <div class="topic-pill shadow-sm">4. "Think Before Post: Saring Sebelum Sharing"</div>
+                <div class="topic-pill shadow-sm">5. "Cyberbullying Bukan Candaan: Stop Sekarang!"</div>
+                <div class="topic-pill shadow-sm">6. "Privasi Data: Jaga Rahasia di Sosial Media"</div>
+                <div class="topic-pill shadow-sm">7. "Detektif Hoaks: Cara Cek Berita Asli vs Palsu"</div>
+                <div class="topic-pill shadow-sm">8. "Screen Time vs Real Time: Cari Barumu!"</div>
+                <div class="topic-pill shadow-sm">9. "Amankan Akun: Aktifkan 2-Factor Authentication"</div>
+                <div class="topic-pill shadow-sm">10. "Manners in Digital World: Netizen yang Santun"</div>
+            </div>
+        </section>
+
+        <!-- Section: Misi Utama -->
+        <section id="tugas" class="scroll-section">
+            <h2 class="text-xl font-extrabold mb-4 text-slate-800 px-1">Misi Kelompok</h2>
+            
+            <div class="space-y-4">
+                <!-- Misi 1 -->
+                <div class="card-task bg-white p-5 rounded-3xl shadow-sm border-l-4 border-blue-600">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Misi 01</span>
+                        <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Kampanye "Cyber-Safe" School</h3>
+                    <p class="text-xs text-slate-500 mb-4 italic">Pilih satu judul dari daftar inspirasi di atas untuk poster kalian.</p>
+                    <div class="bg-slate-50 p-3 rounded-xl space-y-2">
+                        <p class="text-[11px] font-semibold text-slate-700 leading-tight">• Buat poster kolaboratif di Canva.</p>
+                        <p class="text-[11px] font-semibold text-slate-700 leading-tight">• Tambahkan QR Code berisi kuis/polling.</p>
+                    </div>
+                </div>
+
+                <!-- Misi 2 -->
+                <div class="card-task bg-white p-5 rounded-3xl shadow-sm border-l-4 border-emerald-500">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Misi 02</span>
+                        <i data-lucide="video" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Micro-Blog: Tech Tips TKJ</h3>
+                    <div class="bg-slate-50 p-3 rounded-xl space-y-2">
+                        <p class="text-[11px] font-semibold text-slate-700 leading-tight">• Buat "Carousel" masing-masing judul yang sudah dipilih per kelompok.</p>
+                        <p class="text-[11px] font-semibold text-slate-700 leading-tight">• Diseminasi lewat status WA/IG.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instruksi Teknis -->
+        <section id="instruksi" class="scroll-section pb-12">
+            <div class="bg-slate-900 rounded-[2rem] p-6 text-white">
+                <h2 class="font-bold mb-4 flex items-center gap-2">
+                    <i data-lucide="list-checks" class="text-yellow-400"></i> Aturan Main
+                </h2>
+                <ul class="text-[11px] space-y-3 opacity-90">
+                    <li class="flex gap-3"><span class="text-yellow-400 font-bold">1.</span> Kerjakan secara kelompok (maks. 3 orang).</li>
+                    <li class="flex gap-3"><span class="text-yellow-400 font-bold">2.</span> Gunakan smartphone masing-masing.</li>
+                    <li class="flex gap-3"><span class="text-yellow-400 font-bold">3.</span> Hasil akhir wajib dipublikasikan (Go Public).</li>
+                    <li class="flex gap-3"><span class="text-yellow-400 font-bold">4.</span> Tunjukkan statistik respon audiens.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bottom-nav px-8 py-3">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <a href="#materi" class="flex flex-col items-center gap-1 text-blue-600">
+                <i data-lucide="book-text" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Info</span>
+            </a>
+            <a href="#inspirasi" class="flex flex-col items-center gap-1 text-slate-400">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Ide</span>
+            </a>
+            <a href="#tugas" class="flex flex-col items-center gap-1 text-slate-400">
+                <i data-lucide="target" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Misi</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        lucide.createIcons();
+        
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('nav a').forEach(l => l.classList.replace('text-blue-600', 'text-slate-400'));
+                this.classList.replace('text-slate-400', 'text-blue-600');
+            });
+        });
+    </script>
+</body>
+</html>
