@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatika Mastery: 4 Bagian Utama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --stone-50: #fafaf9;
+            --stone-900: #1c1917;
+            --teal-700: #0f766e;
+            --teal-800: #115e59;
+            --teal-900: #134e4a;
+        }
+        body { background-color: var(--stone-50); color: var(--stone-900); scroll-behavior: smooth; font-family: 'Inter', sans-serif; }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tab-nav { position: sticky; top: 0; z-index: 50; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #e7e5e4; }
+        .tab-btn { padding: 1.25rem 1rem; font-size: 0.875rem; font-weight: 500; color: #78716c; border-bottom: 2px solid transparent; transition: all 0.3s; }
+        .tab-btn.active { color: var(--teal-800); border-bottom-color: var(--teal-800); font-weight: 700; background: rgba(15, 118, 110, 0.05); }
+        
+        .content-card { background: white; border: 1px solid #e7e5e4; border-radius: 1.5rem; padding: 2.5rem; margin-bottom: 3rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        .expert-card { background: #f8fafc; border-left: 4px solid var(--teal-700); padding: 1.5rem; border-radius: 0.5rem; height: 100%; }
+        
+        .impact-box-pos { background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 1rem; padding: 1.5rem; }
+        .impact-box-neg { background: #fef2f2; border: 1px solid #fee2e2; border-radius: 1rem; padding: 1.5rem; }
+        
+        .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .strategy-item { background: white; border: 1px solid #e7e5e4; padding: 1.5rem; border-radius: 1rem; position: relative; }
+        .strategy-num { position: absolute; top: -10px; left: -10px; width: 30px; height: 30px; background: var(--stone-900); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; }
+        
+        .highlight-box { background: linear-gradient(135deg, var(--teal-900), #064e3b); color: white; padding: 2.5rem; border-radius: 1.5rem; margin: 2rem 0; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white border-b border-stone-200 py-6">
+        <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-stone-900 rounded-2xl flex items-center justify-center text-white text-2xl">🎓</div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight leading-none">Informatika Sekeren Ini</h1>
+                    <p class="text-[10px] uppercase tracking-widest text-teal-700 font-bold mt-1">Kurikulum Digital Terintegrasi</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tab-nav">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between overflow-x-auto no-scrollbar">
+            <button onclick="navTo('hukum')" id="btn-hukum" class="tab-btn active whitespace-nowrap">1. Etika & Hukum</button>
+            <button onclick="navTo('haki')" id="btn-haki" class="tab-btn whitespace-nowrap">2. Penghargaan HAKI</button>
+            <button onclick="navTo('budaya')" id="btn-budaya" class="tab-btn whitespace-nowrap">3. Budaya Nasional</button>
+            <button onclick="navTo('konten')" id="btn-konten" class="tab-btn whitespace-nowrap">4. Konten Negatif</button>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+
+        <!-- TAB 1: ETIKA DAN HUKUM -->
+        <section id="section-hukum" class="fade-in">
+            <div class="content-card">
+                <span class="text-teal-700 font-bold text-xs uppercase tracking-widest">Bagian 1</span>
+                <h2 class="text-4xl font-black mt-2 mb-6 text-stone-900">Aspek Etika & Hukum Informatika</h2>
+                
+                <div class="prose prose-stone max-w-none">
+                    <h3 class="text-xl font-bold mb-3">Pengertian Komprehensif</h3>
+                    <p class="text-stone-600 leading-relaxed mb-6">
+                        Etika Informatika adalah cabang filsafat yang mempelajari masalah-masalah moral yang timbul dari pengembangan dan penggunaan teknologi informasi. Ini bukan sekadar tentang apa yang "bisa" dilakukan oleh teknologi, tetapi apa yang "seharusnya" dilakukan demi kebaikan kemanusiaan. Secara hukum, ini dituangkan dalam <strong>Cyber Law</strong>, yaitu aturan hukum yang berlaku di ruang siber untuk memberikan kepastian hukum dan melindungi kepentingan para pihak di internet.
+                    </p>
+
+                    <h3 class="text-lg font-bold mb-4">Pengertian Menurut Para Ahli</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">James H. Moor (Dunia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Etika komputer adalah analisis tentang sifat dan dampak sosial teknologi komputer serta perumusan kebijakan yang tepat untuk penggunaan teknologi tersebut secara etis, terutama di area 'Policy Vacuums' (kekosongan kebijakan)."</p>
+                        </div>
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">Edmon Makarim (Indonesia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Hukum Telematika adalah konvergensi hukum yang mengatur pemanfaatan teknologi informasi dan komunikasi, mencakup perlindungan data, transaksi elektronik, dan kedaulatan informasi nasional."</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3">Urgensi: Mengapa Perlu Dimengerti?</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        Memahami etika dan hukum adalah "kompas" di dunia digital yang tanpa batas. Tanpanya, individu akan terjebak dalam perilaku merugikan seperti penyebaran data pribadi orang lain, pelanggaran privasi, atau bahkan terkena sanksi pidana UU ITE tanpa mereka sadari. Ini menjamin keamanan profesional dan integritas sosial.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="impact-box-pos">
+                            <h4 class="font-bold text-green-800 mb-2">Dampak Baik (Menjalankan)</h4>
+                            <ul class="text-xs text-green-700 space-y-2">
+                                <li>• Terwujudnya <strong>Trust</strong> (kepercayaan) dalam bisnis digital.</li>
+                                <li>• Perlindungan hak asasi manusia di ruang digital.</li>
+                                <li>• Keamanan identitas dan data dari ancaman siber.</li>
+                            </ul>
+                        </div>
+                        <div class="impact-box-neg">
+                            <h4 class="font-bold text-red-800 mb-2">Dampak Buruk (Melanggar)</h4>
+                            <ul class="text-xs text-red-700 space-y-2">
+                                <li>• Ancaman penjara dan denda miliaran rupiah (UU ITE).</li>
+                                <li>• Eksploitasi data pribadi oleh pihak tidak bertanggung jawab.</li>
+                                <li>• Diskriminasi algoritmik dan ketidakadilan sosial.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 class="text-xl font-bold mb-4 text-teal-200">Solusi & Pemikiran Logis</h4>
+                        <p class="text-sm leading-relaxed mb-6">
+                            Pemikiran logis yang harus dibangun adalah: <em>"Teknologi adalah alat, namun etika adalah pengendalinya."</em> Solusi agar bermanfaat adalah dengan menerapkan <strong>Ethical Design</strong>. Pengembang tidak hanya fokus pada profit, tetapi pada keberlanjutan moral.
+                        </p>
+                        <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                            <p class="text-xs"><strong>Contoh Relevan:</strong> Implementasi sistem yang meminta izin eksplisit sebelum melacak lokasi pengguna (App Tracking Transparency), memastikan transparansi penggunaan data.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-4">Solusi Zaman Ini & Langkah Strategis</h3>
+                    <p class="text-sm text-stone-600 mb-6 italic">Solusi tepat saat ini adalah adopsi UU Pelindungan Data Pribadi (UU PDP) secara menyeluruh dalam setiap level operasional IT.</p>
+                    <div class="strategy-grid">
+                        <div class="strategy-item">
+                            <div class="strategy-num">1</div>
+                            <p class="font-bold text-sm mb-1">Audit Compliance</p>
+                            <p class="text-xs text-stone-500">Lakukan peninjauan berkala terhadap kebijakan privasi layanan Anda agar sesuai regulasi terbaru.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">2</div>
+                            <p class="font-bold text-sm mb-1">Privacy by Design</p>
+                            <p class="text-xs text-stone-500">Integrasikan keamanan dan privasi sejak awal pembuatan sistem, bukan sebagai tambahan di akhir.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">3</div>
+                            <p class="font-bold text-sm mb-1">Edukasi Berkelanjutan</p>
+                            <p class="text-xs text-stone-500">Jangan pernah menganggap remeh 'Term of Service' (ToS); pelajari hak-hak Anda sebagai subjek data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: PENGHARGAAN HAKI -->
+        <section id="section-haki" class="hidden-section fade-in">
+            <div class="content-card">
+                <span class="text-teal-700 font-bold text-xs uppercase tracking-widest">Bagian 2</span>
+                <h2 class="text-4xl font-black mt-2 mb-6 text-stone-900">Penghargaan HAKI</h2>
+                
+                <div class="prose prose-stone max-w-none">
+                    <h3 class="text-xl font-bold mb-3">Pengertian HAKI</h3>
+                    <p class="text-stone-600 leading-relaxed mb-6">
+                        Hak Kekayaan Intelektual (HAKI) adalah hak eksklusif yang diberikan oleh hukum kepada seseorang atau sekelompok orang atas karya intelektualnya. Karya ini merupakan hasil kemampuan manusia yang lahir dari daya cipta, rasa, dan karsa yang memiliki nilai ekonomis. HAKI mencakup Hak Cipta, Merek, Paten, Desain Industri, dan Rahasia Dagang.
+                    </p>
+
+                    <h3 class="text-lg font-bold mb-4">Pengertian Menurut Para Ahli</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">WIPO (Organisasi Dunia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"HAKI merujuk pada kreasi pikiran: penemuan; karya sastra dan seni; desain; serta simbol, nama, dan gambar yang digunakan dalam perdagangan."</p>
+                        </div>
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">Sudargo Gautama (Indonesia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"HAKI adalah milik imateriel yang wajib dilindungi karena merupakan hasil jerih payah pikiran manusia yang memerlukan waktu, biaya, dan pengorbanan."</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3">Urgensi: Mengapa Perlu Dimengerti?</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        Tanpa perlindungan HAKI, para kreator dan inovator akan kehilangan motivasi untuk berkarya karena hasil kerja mereka dengan mudah dicuri atau diklaim orang lain. Memahami HAKI berarti menghargai proses kreatif dan mendukung ekosistem ekonomi yang adil.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="impact-box-pos">
+                            <h4 class="font-bold text-green-800 mb-2">Dampak Baik (Menghargai)</h4>
+                            <ul class="text-xs text-green-700 space-y-2">
+                                <li>• Merangsang inovasi dan riset teknologi baru.</li>
+                                <li>• Pencipta mendapatkan hak ekonomi (royalti) yang layak.</li>
+                                <li>• Membangun citra positif bangsa di dunia internasional.</li>
+                            </ul>
+                        </div>
+                        <div class="impact-box-neg">
+                            <h4 class="font-bold text-red-800 mb-2">Dampak Buruk (Mengabaikan)</h4>
+                            <ul class="text-xs text-red-700 space-y-2">
+                                <li>• Matinya industri kreatif lokal akibat pembajakan massal.</li>
+                                <li>• Gugatan hukum yang menghancurkan reputasi bisnis.</li>
+                                <li>• Penurunan investasi asing karena lemahnya hukum kekayaan intelektual.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box bg-stone-900">
+                        <h4 class="text-xl font-bold mb-4 text-teal-400">Solusi & Pemikiran Logis</h4>
+                        <p class="text-sm leading-relaxed mb-6">
+                            Secara logis, di era digital di mana salinan data identik dengan aslinya, kontrol fisik tidak lagi memadai. Solusi yang menjadikan HAKI bermanfaat adalah transisi ke model bisnis <strong>Subscription</strong> atau <strong>Freemium</strong> yang memudahkan akses legal namun tetap menjamin pendapatan bagi pemilik hak.
+                        </p>
+                        <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                            <p class="text-xs"><strong>Contoh Relevan:</strong> Spotify atau Netflix yang berhasil menurunkan tingkat pembajakan musik/film dengan menawarkan kemudahan akses legal dengan harga terjangkau.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-4">Solusi Zaman Ini & Langkah Strategis</h3>
+                    <p class="text-sm text-stone-600 mb-6">Solusi tercanggih saat ini adalah pemanfaatan <strong>NFT (Non-Fungible Token)</strong> di atas jaringan Blockchain untuk mencatat kepemilikan aset digital secara permanen dan tidak dapat dipalsukan.</p>
+                    <div class="strategy-grid">
+                        <div class="strategy-item">
+                            <div class="strategy-num">A</div>
+                            <p class="font-bold text-sm mb-1">First-to-File Principle</p>
+                            <p class="text-xs text-stone-500">Segera daftarkan karya ke Dirjen Kekayaan Intelektual sebelum diklaim pihak lain. Siapa yang mendaftar pertama, dialah yang diakui hukum.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">B</div>
+                            <p class="font-bold text-sm mb-1">Gunakan Lisensi Terbuka</p>
+                            <p class="text-xs text-stone-500">Jika ingin berbagi, gunakan lisensi <em>Creative Commons</em> agar karya Anda tetap terlindungi atribusinya meskipun digunakan orang lain.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">C</div>
+                            <p class="font-bold text-sm mb-1">Watermarking Digital</p>
+                            <p class="text-xs text-stone-500">Sertakan metadata atau tanda air digital pada setiap karya agar jejak kepemilikan tetap ada meski karya disebarluaskan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PERLINDUNGAN BUDAYA NASIONAL -->
+        <section id="section-budaya" class="hidden-section fade-in">
+            <div class="content-card">
+                <span class="text-teal-700 font-bold text-xs uppercase tracking-widest">Bagian 3</span>
+                <h2 class="text-4xl font-black mt-2 mb-6 text-stone-900">Perlindungan Budaya Nasional</h2>
+                
+                <div class="prose prose-stone max-w-none">
+                    <h3 class="text-xl font-bold mb-3">Pengertian & Kedaulatan Digital</h3>
+                    <p class="text-stone-600 leading-relaxed mb-6">
+                        Perlindungan budaya nasional di ruang digital adalah upaya kolektif untuk menjaga, melestarikan, dan mempromosikan identitas budaya bangsa (seperti adat istiadat, bahasa, seni, dan sejarah) dari ancaman disinformasi, <em>cultural appropriation</em> (pengakuan sepihak), serta pengikisan nilai-nilai lokal oleh budaya global yang dominan.
+                    </p>
+
+                    <h3 class="text-lg font-bold mb-4">Pengertian Menurut Para Ahli</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">UNESCO</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Keanekaragaman budaya adalah aset berharga yang harus dilindungi di platform digital untuk mencegah homogenitas budaya yang disebabkan oleh algoritma media sosial."</p>
+                        </div>
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">Koentjaraningrat (Indonesia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Budaya adalah sistem gagasan dan rasa. Di era digital, perlindungan budaya berarti memastikan sistem gagasan lokal tetap relevan dan tidak tersisih oleh nilai luar."</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3">Urgensi: Mengapa Perlu Dimengerti?</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        Internet adalah "perang konten". Jika kita tidak memenuhi ruang digital dengan konten budaya kita sendiri, maka generasi masa depan akan kehilangan akar identitasnya. Penguasaan budaya di ruang digital adalah bentuk pertahanan kedaulatan non-militer.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="impact-box-pos">
+                            <h4 class="font-bold text-green-800 mb-2">Dampak Baik (Menjalankan)</h4>
+                            <ul class="text-xs text-green-700 space-y-2">
+                                <li>• Budaya nasional menjadi <strong>Soft Power</strong> global yang disegani.</li>
+                                <li>• Munculnya ekonomi kreatif berbasis warisan budaya (Gamelan di Spotify, dll).</li>
+                                <li>• Penguatan jati diri bangsa di kalangan Gen-Z dan Alpha.</li>
+                            </ul>
+                        </div>
+                        <div class="impact-box-neg">
+                            <h4 class="font-bold text-red-800 mb-2">Dampak Buruk (Mengabaikan)</h4>
+                            <ul class="text-xs text-red-700 space-y-2">
+                                <li>• Klaim warisan budaya oleh negara lain karena ketiadaan arsip digital.</li>
+                                <li>• Hilangnya kearifan lokal (Local Wisdom) dalam menyelesaikan masalah sosial.</li>
+                                <li>• Budaya nasional dianggap kuno dan ditinggalkan.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box bg-teal-800">
+                        <h4 class="text-xl font-bold mb-4">Solusi & Pemikiran Logis</h4>
+                        <p class="text-sm leading-relaxed mb-6">
+                            Logikanya: <em>"Budaya yang tidak didigitalisasi adalah budaya yang akan terlupakan."</em> Solusinya adalah melakukan **Digitalisasi Budaya secara Masif**. Mengubah artefak fisik menjadi aset digital (AR/VR/3D) agar bisa diakses secara global namun tetap memiliki identitas sumber yang jelas.
+                        </p>
+                        <div class="bg-black/20 p-4 rounded-lg border border-white/10">
+                            <p class="text-xs"><strong>Contoh Relevan:</strong> Penggunaan Google Arts & Culture untuk mendigitalisasi Candi Borobudur sehingga dunia tahu itu milik Indonesia dan tetap terlindungi secara informasi.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-4">Solusi Zaman Ini & Langkah Strategis</h3>
+                    <div class="strategy-grid">
+                        <div class="strategy-item">
+                            <div class="strategy-num">1</div>
+                            <p class="font-bold text-sm mb-1">Arsip Digital Terdesentralisasi</p>
+                            <p class="text-xs text-stone-500">Mencatat warisan budaya di Blockchain sebagai bukti asal-usul yang tidak bisa diubah oleh pihak mana pun.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">2</div>
+                            <p class="font-bold text-sm mb-1">Gamifikasi Budaya</p>
+                            <p class="text-xs text-stone-500">Memasukkan unsur sejarah dan mitologi lokal ke dalam game modern untuk menarik minat generasi muda.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">3</div>
+                            <p class="font-bold text-sm mb-1">Pendaftaran IG (Indikasi Geografis)</p>
+                            <p class="text-xs text-stone-500">Mendaftarkan produk budaya khas daerah secara internasional guna mendapatkan perlindungan hukum penuh.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PENCEGAHAN KONTEN NEGATIF -->
+        <section id="section-konten" class="hidden-section fade-in">
+            <div class="content-card">
+                <span class="text-teal-700 font-bold text-xs uppercase tracking-widest">Bagian 4</span>
+                <h2 class="text-4xl font-black mt-2 mb-6 text-stone-900">Pencegahan Konten Negatif</h2>
+                
+                <div class="prose prose-stone max-w-none">
+                    <h3 class="text-xl font-bold mb-3">Pengertian Patologi Digital</h3>
+                    <p class="text-stone-600 leading-relaxed mb-6">
+                        Pencegahan konten negatif adalah upaya sistematis untuk meminimalisir penyebaran informasi yang melanggar norma hukum, susila, dan agama di internet. Ini mencakup penanganan terhadap hoax (berita bohong), <em>hate speech</em> (ujaran kebencian), pornografi, perjudian online, dan radikalisme.
+                    </p>
+
+                    <h3 class="text-lg font-bold mb-4">Pengertian Menurut Para Ahli</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">Manuel Castells (Dunia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Dalam masyarakat jaringan, emosi negatif menyebar lebih cepat karena algoritma platform media sosial dirancang untuk memaksimalkan 'engagement', yang seringkali dipicu oleh kemarahan."</p>
+                        </div>
+                        <div class="expert-card">
+                            <p class="font-bold text-teal-800 text-sm">Onno W. Purbo (Indonesia)</p>
+                            <p class="text-xs italic mt-2 text-stone-700">"Internet adalah cermin masyarakat. Pencegahan konten negatif tidak cukup dengan memblokir, tetapi dengan membanjiri internet dengan konten positif yang lebih berkualitas."</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3">Urgensi: Mengapa Perlu Dimengerti?</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        Konten negatif dapat menghancurkan mentalitas bangsa dalam sekejap. Tanpa filter yang kuat, masyarakat akan mudah terpolarisasi, tertipu secara finansial, atau bahkan terjerumus dalam tindak kriminal online yang merugikan masa depan.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="impact-box-pos">
+                            <h4 class="font-bold text-green-800 mb-2">Dampak Baik (Cegah)</h4>
+                            <ul class="text-xs text-green-700 space-y-2">
+                                <li>• Menciptakan internet yang ramah anak dan edukatif.</li>
+                                <li>• Stabilitas sosial dan politik terjaga dari isu SARA.</li>
+                                <li>• Masyarakat menjadi lebih kritis dan tidak mudah tertipu.</li>
+                            </ul>
+                        </div>
+                        <div class="impact-box-neg">
+                            <h4 class="font-bold text-red-800 mb-2">Dampak Buruk (Pembiaran)</h4>
+                            <ul class="text-xs text-red-700 space-y-2">
+                                <li>• Terjadinya 'Cyber Bullying' yang memicu depresi hingga bunuh diri.</li>
+                                <li>• Rusaknya moralitas akibat paparan pornografi sejak dini.</li>
+                                <li>• Kehancuran tatanan demokrasi akibat serangan hoax sistematis.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box bg-red-950">
+                        <h4 class="text-xl font-bold mb-4 text-red-400">Solusi & Pemikiran Logis</h4>
+                        <p class="text-sm leading-relaxed mb-6">
+                            Logikanya: <em>"Kita tidak bisa mematikan internet, tapi kita bisa menyalakan logika pengguna."</em> Solusi agar bermanfaat adalah **Literasi Digital sebagai Kurikulum Wajib**. Masyarakat tidak hanya diajari cara memakai gadget, tapi cara memproses informasi secara kritis (Critical Thinking).
+                        </p>
+                        <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                            <p class="text-xs"><strong>Contoh Relevan:</strong> Portal verifikasi fakta seperti Mafindo atau fitur "Context Notes" di Twitter yang memberikan fakta tambahan pada postingan yang menyesatkan.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-4">Solusi Zaman Ini & Langkah Strategis</h3>
+                    <p class="text-sm text-stone-600 mb-6 italic">Solusi tercanggih saat ini adalah penggunaan **AI Content Moderation** yang mampu mendeteksi pola negatif secara instan sebelum menyebar luas.</p>
+                    <div class="strategy-grid">
+                        <div class="strategy-item">
+                            <div class="strategy-num">✓</div>
+                            <p class="font-bold text-sm mb-1">Prinsip Saring sebelum Sharing</p>
+                            <p class="text-xs text-stone-500">Tahan diri selama 5 detik untuk mengecek sumber berita sebelum menekan tombol bagikan.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">✓</div>
+                            <p class="font-bold text-sm mb-1">Lapor Konten Proaktif</p>
+                            <p class="text-xs text-stone-500">Gunakan fitur 'Report' pada platform atau adukan ke portal resmi seperti AduanKonten.id milik Kominfo.</p>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-num">✓</div>
+                            <p class="font-bold text-sm mb-1">Membangun Antibodi Digital</p>
+                            <p class="text-xs text-stone-500">Kembangkan pemikiran kritis: "Siapa yang diuntungkan dari penyebaran informasi negatif ini?"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 py-16 px-6 border-t border-stone-800">
+        <div class="max-w-5xl mx-auto text-center">
+            <p class="text-[10px] uppercase tracking-[0.4em] mb-4 font-black text-teal-600">Terintegrasi & Komprehensif</p>
+            <p class="text-xs leading-relaxed max-w-2xl mx-auto">
+                Platform edukasi ini disusun untuk membekali praktisi Informatika dengan pemahaman hukum dan etika yang kuat. Gunakan pengetahuan ini untuk membangun dunia digital Indonesia yang lebih baik.
+            </p>
+            <p class="mt-8 text-[10px] opacity-30">Teacher Of TKJ : Akhmad Noor Effendi © 2026 AI Informatika </p>
+        </div>
+    </footer>
+
+    <script>
+        function navTo(id) {
+            // Sembunyikan semua section
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden-section'));
+            
+            // Tampilkan section target
+            const target = document.getElementById('section-' + id);
+            if (target) target.classList.remove('hidden-section');
+
+            // Reset semua tombol tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Aktifkan tombol yang diklik
+            const activeBtn = document.getElementById('btn-' + id);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            // Scroll halus ke atas konten
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
