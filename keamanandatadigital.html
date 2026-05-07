@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Keamanan Digital - SMKN 1 TANJUNG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Slate (Backgrounds/Text), Indigo (Primary Actions), Teal (Success/Security), Rose (Warnings). Calm, tech-focused, readable. -->
+    
+    <!-- Application Structure Plan: Dashboard Layout with a persistent left navigation sidebar and a dynamic main content area. This structure was chosen because it allows students to track their progress through the modules non-linearly, providing a "Command Center" feel suitable for Network Engineering (TKJ) students. The dense text is broken down into interactive grid cards and visualized data to reduce cognitive load and increase engagement. -->
+    
+    <!-- Visualization & Content Choices: 
+         1. Password Strength (Bar Chart) -> Goal: Inform/Compare -> Justification: Visually demonstrates why long passwords are needed against brute force (Time to crack). Library: Chart.js.
+         2. 2FA Effectiveness (Doughnut Chart) -> Goal: Inform -> Justification: Highlights the 99.9% statistic powerfully. Library: Chart.js.
+         3. Privacy Dimensions (Radar Chart) -> Goal: Organize/Relationships -> Justification: Shows different areas of digital footprint that need protection. Library: Chart.js.
+         4. Content Presentation -> Goal: Organize -> Use CSS Grid cards for the 8 detailed points per topic to make the heavy text digestible. 
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        
+        .nav-item.active {
+            background-color: #4f46e5;
+            color: white;
+            border-left: 4px solid #818cf8;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 hidden md:flex">
+        <div class="p-6 border-b border-slate-800">
+            <h1 class="text-xl font-bold text-white tracking-wider">INFORMATIKA </h1>
+            <p class="text-xs text-indigo-400 mt-1">SMKN 1 TANJUNG</p>
+            <p class="text-xs text-indigo-400 mt-1">X TKJ 1</p>
+            <p class="text-xs text-indigo-400 mt-1">Teacher : Akhmad Noor Effendi, S.Kom</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar" id="sidebar-nav">
+            <button onclick="navigate('overview')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3" data-target="overview">
+                <span class="text-xl">&#127968;</span> Beranda
+            </button>
+            <div class="px-6 py-2 mt-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Modul Pembelajaran</div>
+            <button onclick="navigate('modul-pwd')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3" data-target="modul-pwd">
+                <span class="text-xl">&#128273;</span> Pengelola Sandi
+            </button>
+            <button onclick="navigate('modul-2fa')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3" data-target="modul-2fa">
+                <span class="text-xl">&#128241;</span> Autentikasi 2FA
+            </button>
+            <button onclick="navigate('modul-privasi')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3" data-target="modul-privasi">
+                <span class="text-xl">&#128373;</span> Proteksi Privasi
+            </button>
+            <div class="px-6 py-2 mt-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tugas</div>
+            <button onclick="navigate('evaluasi')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3" data-target="evaluasi">
+                <span class="text-xl">&#128221;</span> Lab & Evaluasi
+            </button>
+        </nav>
+        <div class="p-4 border-t border-slate-800 text-xs text-center text-slate-500">
+            Kemanan Dan Privasi Data Digital
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="bg-white shadow-sm z-10 p-4 flex justify-between items-center md:hidden">
+            <h1 class="text-lg font-bold text-slate-800">CyberSec EDU</h1>
+            <select id="mobile-nav" onchange="navigate(this.value)" class="bg-slate-100 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5">
+                <option value="overview">Beranda</option>
+                <option value="modul-pwd">Pengelola Sandi</option>
+                <option value="modul-2fa">Autentikasi 2FA</option>
+                <option value="modul-privasi">Proteksi Privasi</option>
+                <option value="evaluasi">Lab & Evaluasi</option>
+            </select>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar" id="main-content">
+            
+            <section id="overview" class="view-section fade-in block">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Keamanan Informasi & Jaringan Digital</h2>
+                    <p class="text-lg text-slate-600 mb-8 border-b pb-6">Selamat datang di modul interaktif. Sebagai calon teknisi jaringan (TKJ), mengamankan diri sendiri adalah langkah krusial sebelum Anda mengamankan infrastruktur publik. Modul ini akan memandu Anda melalui tiga pilar utama pertahanan digital.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer" onclick="navigate('modul-pwd')">
+                            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-2xl mb-4">&#128273;</div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-800">Manajemen Sandi</h3>
+                            <p class="text-slate-600 text-sm mb-4">Pelajari mengapa ingatan manusia tidak cukup untuk keamanan jaringan dan bagaimana alat bantu digital memecahkan masalah ini.</p>
+                            <span class="text-indigo-600 text-sm font-semibold hover:underline">Mulai Modul &rarr;</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer" onclick="navigate('modul-2fa')">
+                            <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center text-2xl mb-4">&#128241;</div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-800">Autentikasi 2FA</h3>
+                            <p class="text-slate-600 text-sm mb-4">Kata sandi saja sudah "mati". Pahami penerapan verifikasi berlapis untuk memblokir teknik Social Engineering.</p>
+                            <span class="text-teal-600 text-sm font-semibold hover:underline">Mulai Modul &rarr;</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer" onclick="navigate('modul-privasi')">
+                            <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-2xl mb-4">&#128373;</div>
+                            <h3 class="font-bold text-xl mb-2 text-slate-800">Proteksi Privasi</h3>
+                            <p class="text-slate-600 text-sm mb-4">Kendalikan jejak digital Anda. Pelajari konfigurasi platform untuk melindungi data personal dari pihak ketiga.</p>
+                            <span class="text-rose-600 text-sm font-semibold hover:underline">Mulai Modul &rarr;</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 bg-slate-900 rounded-xl p-8 text-white text-center shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">Prinsip Administrator Jaringan</h3>
+                        <p class="text-slate-300 max-w-2xl mx-auto italic">"Keamanan bukanlah sebuah produk yang bisa Anda beli, melainkan sebuah proses yang harus terus-menerus Anda terapkan."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modul-pwd" class="view-section fade-in hidden">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-4 border-l-4 border-indigo-600 pl-4">Sistem Manajemen Pengelola Kata Sandi</h2>
+                    <p class="text-lg text-slate-600 mb-8">Modul ini menjelaskan konsep dasar keamanan akun melalui penggunaan brankas digital. Anda akan mempelajari mengapa kata sandi tradisional rentan dan bagaimana Password Manager menjadi standar operasional bagi administrator jaringan untuk mengelola ribuan kredensial perangkat.</p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 text-center">Simulasi: Mengapa Kita Butuh Pengelola Sandi?</h3>
+                        <p class="text-sm text-slate-500 text-center mb-6">Grafik menunjukkan estimasi waktu yang dibutuhkan peretas untuk membobol kata sandi menggunakan teknik Brute Force saat ini.</p>
+                        <div class="chart-container">
+                            <canvas id="chart-password"></canvas>
+                        </div>
+                        <p class="text-xs text-center mt-4 text-slate-400">Pelajaran: Manusia tidak bisa menghafal puluhan kata sandi panjang dan rumit. Mesin (Password Manager) bisa.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100">
+                            <h4 class="font-bold text-indigo-800 mb-2 flex items-center gap-2"><span class="text-xl">&#128214;</span> 1. Pengertian</h4>
+                            <p class="text-sm text-slate-700">Perangkat lunak brankas digital terenkripsi untuk menyimpan, mengelola, dan menghasilkan kata sandi otomatis. Sangat penting bagi administrator jaringan untuk mengelola kredensial router/server tanpa risiko kebocoran.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9881;</span> 2. Fungsi Utama</h4>
+                            <ul class="text-sm text-slate-600 list-disc pl-5 space-y-1">
+                                <li><strong>Password Generator:</strong> Buat sandi entropi tinggi.</li>
+                                <li><strong>Auto-fill:</strong> Cegah keylogging manual.</li>
+                                <li><strong>Secure Vault:</strong> Simpan catatan sensitif & lisensi.</li>
+                                <li><strong>Sync:</strong> Sinkronisasi antar PC dan Smartphone.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#11088;</span> 3. Manfaat</h4>
+                            <p class="text-sm text-slate-600">Mencegah penggunaan ulang sandi (*reusability*), menghemat waktu (tidak perlu reset password), dan memusatkan keamanan hanya dengan satu *Master Password*.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9878;</span> 4. Kelebihan & Kekurangan</h4>
+                            <p class="text-sm text-slate-600"><strong>Kelebihan:</strong> Keamanan AES-256, anti-phishing. <br><strong>Kekurangan:</strong> Konsep *Zero-Knowledge* berarti jika Master Password hilang, data lenyap. Menjadi *Single Point of Failure*.</p>
+                        </div>
+                        <div class="bg-slate-800 text-white p-6 rounded-xl shadow-sm">
+                            <h4 class="font-bold mb-2 flex items-center gap-2 text-indigo-300"><span class="text-xl">&#9200;</span> 5. Urgensi Era Saat Ini</h4>
+                            <p class="text-sm text-slate-300">Jumlah akun meningkat. Tanpa alat ini, pengguna menggunakan sandi lemah (misal: "123456") yang sangat mudah dibobol mesin peretas moderen.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9876;</span> 6. Dampak</h4>
+                            <p class="text-sm text-slate-600"><strong>Baik:</strong> Menurunkan risiko bobol massal. <br><strong>Buruk:</strong> Ketergantungan tinggi pada aplikasi. Jika HP hilang tanpa backup, akses digital terputus.</p>
+                        </div>
+                        <div class="bg-teal-50 p-6 rounded-xl border border-teal-100 md:col-span-2">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-teal-800 mb-2 flex items-center gap-2"><span class="text-xl">&#127919;</span> 7. Langkah Strategis</h4>
+                                    <p class="text-sm text-slate-700">Gunakan software *open-source* seperti Bitwarden. <strong>Alasan:</strong> Kode sumber bisa diaudit komunitas, memastikan tidak ada *backdoor* pencuri data.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-teal-800 mb-2 flex items-center gap-2"><span class="text-xl">&#128161;</span> 8. Contoh Relevan</h4>
+                                    <p class="text-sm text-slate-700">Saat e-commerce besar bocor datanya (*Data Breach*), pengguna Password Manager aman karena sandi e-commerce mereka berbeda dengan sandi email kantor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modul-2fa" class="view-section fade-in hidden">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-4 border-l-4 border-teal-600 pl-4">Autentikasi Dua Faktor (2FA)</h2>
+                    <p class="text-lg text-slate-600 mb-8">Pelajari bagaimana menambahkan lapisan pelindung ekstra pada akses jaringan dan akun digital. Modul ini menyoroti mengapa kata sandi tidak lagi cukup dan bagaimana penerapan autentikasi berlapis dapat memblokir ancaman modern.</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 text-center">Struktur Pertahanan (*Defense in Depth*)</h3>
+                             <p class="text-sm text-slate-500 text-center mb-6">Efektivitas penerapan 2FA dalam memblokir berbagai jenis serangan siber dibandingkan tanpa 2FA.</p>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="chart-2fa"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-teal-800 text-white p-6 rounded-xl shadow-sm flex flex-col justify-center">
+                            <h3 class="text-xl font-bold mb-4 text-teal-300">Metode 2FA</h3>
+                            <div class="space-y-4">
+                                <div class="bg-teal-900 p-3 rounded border border-teal-700">
+                                    <span class="font-bold text-sm block mb-1">TOTP (Aplikasi) &#11088;</span>
+                                    <span class="text-xs text-teal-200">Kode offline dari Google Auth. Paling direkomendasikan.</span>
+                                </div>
+                                <div class="bg-slate-800 p-3 rounded border border-slate-600">
+                                    <span class="font-bold text-sm block mb-1">SMS OTP &#9888;&#65039;</span>
+                                    <span class="text-xs text-slate-300">Rentan terhadap penyadapan (SIM Swapping).</span>
+                                </div>
+                                <div class="bg-slate-800 p-3 rounded border border-slate-600">
+                                    <span class="font-bold text-sm block mb-1">Security Key (Fisik) &#128274;</span>
+                                    <span class="text-xs text-slate-300">Standar tertinggi, menggunakan perangkat USB.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-teal-50 p-6 rounded-xl border border-teal-100">
+                            <h4 class="font-bold text-teal-800 mb-2 flex items-center gap-2"><span class="text-xl">&#128214;</span> 1. Pengertian</h4>
+                            <p class="text-sm text-slate-700">Metode yang mengharuskan pengguna memberikan dua bukti identitas berbeda (Sesuatu yang Anda tahu + Sesuatu yang Anda miliki) sebelum masuk sistem.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9881;</span> 2. Fungsi Utama</h4>
+                            <p class="text-sm text-slate-600">Memverifikasi identitas pengguna sah, memberikan notifikasi instan jika ada upaya login ilegal, dan menjadi tembok penghalang final jika kata sandi telah dicuri.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#11088;</span> 3. Manfaat Utama</h4>
+                            <p class="text-sm text-slate-600">Mencegah akses ilegal secara drastis. Berdasarkan statistik industri, 2FA memblokir hingga 99,9% serangan peretasan otomatis berbasis skrip.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9878;</span> 4. Plus & Minus</h4>
+                            <p class="text-sm text-slate-600"><strong>Plus:</strong> Sangat efektif melawan *phishing*. <br><strong>Minus:</strong> Proses login lebih panjang, risiko akun terkunci permanen jika perangkat authenticator hilang tanpa backup.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9200;</span> 5. Urgensi Era Saat Ini</h4>
+                            <p class="text-sm text-slate-600">Serangan manipulasi psikologis (*Social Engineering*) mudah menipu orang menyerahkan password. 2FA adalah standar minimum keamanan modern.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9876;</span> 6. Dampak</h4>
+                            <p class="text-sm text-slate-600"><strong>Baik:</strong> Akun aman meski password beredar di Dark Web. <br><strong>Buruk:</strong> Frustrasi pengguna saat sinyal SMS buruk atau HP mati.</p>
+                        </div>
+                        <div class="bg-slate-800 text-white p-6 rounded-xl shadow-sm md:col-span-2">
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-teal-300 mb-2 flex items-center gap-2"><span class="text-xl">&#127919;</span> 7. Langkah Strategis</h4>
+                                    <p class="text-sm text-slate-300">Gunakan aplikasi authenticator (Google Auth/Authy) dibanding SMS. <strong>Alasan:</strong> Kode TOTP dihasilkan lokal offline, bebas dari sadap SMS (SIM Swapping).</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-teal-300 mb-2 flex items-center gap-2"><span class="text-xl">&#128161;</span> 8. Contoh Relevan</h4>
+                                    <p class="text-sm text-slate-300">Kasus bajak WhatsApp. Peretas dapat SMS OTP korban. Namun jika fitur "Verifikasi Dua Langkah" (PIN) aktif, peretas tetap gagal masuk.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="modul-privasi" class="view-section fade-in hidden">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-4 border-l-4 border-rose-600 pl-4">Proteksi Privasi Platform Digital</h2>
+                    <p class="text-lg text-slate-600 mb-8">Memahami konsep kedaulatan data. Modul ini berfokus pada teknik mengendalikan informasi apa yang Anda bagikan secara online, mengelola perizinan perangkat, dan menghindari pelacakan (*tracking*) yang tidak diinginkan.</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 text-center">Analisis Dimensi Privasi Data</h3>
+                             <p class="text-sm text-slate-500 text-center mb-6">Area data personal yang paling sering diminta oleh aplikasi dan membutuhkan audit izin secara berkala.</p>
+                            <div class="chart-container">
+                                <canvas id="chart-privacy"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4">Interaktif: Konfigurasi Akses Perangkat</h3>
+                            <p class="text-sm text-slate-500 mb-6">Uji pemahaman Anda: Izin apa yang wajar diberikan pada sebuah "Aplikasi Senter" (*Flashlight App*)?</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 border rounded hover:bg-slate-50">
+                                    <div>
+                                        <span class="font-semibold text-slate-700 block">Kamera & Flash</span>
+                                        <span class="text-xs text-slate-400">Dibutuhkan untuk menyalakan lampu</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" checked disabled>
+                                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border rounded hover:bg-slate-50">
+                                    <div>
+                                        <span class="font-semibold text-slate-700 block">Lokasi (GPS)</span>
+                                        <span class="text-xs text-slate-400">Untuk "menyesuaikan" cahaya dengan cuaca?</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" onchange="togglePrivacy(this, 'Bahaya! Senter tidak butuh lokasi. Ini untuk pelacakan iklan.')">
+                                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border rounded hover:bg-slate-50">
+                                    <div>
+                                        <span class="font-semibold text-slate-700 block">Kontak & Telepon</span>
+                                        <span class="text-xs text-slate-400">Akses buku alamat</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                      <input type="checkbox" value="" class="sr-only peer" onchange="togglePrivacy(this, 'Sangat Berbahaya! Ini pencurian data (Data Harvesting).')">
+                                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="privacy-feedback" class="mt-4 text-sm font-semibold text-rose-600 hidden p-3 bg-rose-50 rounded"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-rose-50 p-6 rounded-xl border border-rose-100">
+                            <h4 class="font-bold text-rose-800 mb-2 flex items-center gap-2"><span class="text-xl">&#128214;</span> 1. Pengertian</h4>
+                            <p class="text-sm text-slate-700">Tindakan/konfigurasi melindungi info pribadi (biometrik, lokasi, histori, kontak) agar tidak disalahgunakan pihak ketiga. Ini tentang kedaulatan data pengguna.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9881;</span> 2. Fungsi Utama</h4>
+                            <ul class="text-sm text-slate-600 list-disc pl-5 space-y-1">
+                                <li><strong>Data Masking:</strong> Sembunyikan identitas asli.</li>
+                                <li><strong>Access Control:</strong> Atur izin kamera/mic aplikasi.</li>
+                                <li><strong>Tracking Prevention:</strong> Blokir pelacakan iklan.</li>
+                            </ul>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#11088;</span> 3. Manfaat</h4>
+                            <p class="text-sm text-slate-600">Menjaga otonomi diri, mencegah manipulasi psikologis via iklan tertarget, dan melindungi dari ancaman fisik (seperti penguntitan/stalking dari data GPS).</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9878;</span> 4. Kelebihan & Kekurangan</h4>
+                            <p class="text-sm text-slate-600"><strong>Kelebihan:</strong> Identitas aman, minim spam email, cegah *Identity Theft*. <br><strong>Kekurangan:</strong> Fitur personalisasi aplikasi (seperti rekomendasi peta) menurun.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm md:col-span-2">
+                            <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2"><span class="text-xl">&#9200;</span> 5. Urgensi: Data = "New Oil"</h4>
+                            <p class="text-sm text-slate-600">Perusahaan teknologi memanen data Anda untuk dijual ke pengiklan atau tujuan politis. Tanpa proteksi, kita hilang kendali atas diri di ruang digital.</p>
+                        </div>
+                        <div class="bg-slate-800 text-white p-6 rounded-xl shadow-sm md:col-span-2">
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-rose-300 mb-2 flex items-center gap-2"><span class="text-xl">&#9876;</span> 6. Dampak</h4>
+                                    <p class="text-xs text-slate-300"><strong>Baik:</strong> Terhindar penipuan berbasis data (misal: Pinjol ilegal). <br><strong>Buruk:</strong> Repot mengatur setting privasi yang terus berubah.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-rose-300 mb-2 flex items-center gap-2"><span class="text-xl">&#127919;</span> 7. Strategi</h4>
+                                    <p class="text-xs text-slate-300">Audit izin HP berkala, pakai browser privat (Brave). <strong>Alasan:</strong> Banyak aplikasi curi data di *background* lewat izin tak relevan.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-rose-300 mb-2 flex items-center gap-2"><span class="text-xl">&#128161;</span> 8. Kasus</h4>
+                                    <p class="text-xs text-slate-300">Pinjol ilegal sebar data kontak peminjam. Membatasi izin akses kontak sejak instalasi mencegah intimidasi ini seratus persen.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="evaluasi" class="view-section fade-in hidden">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-4">Laboratorium & Evaluasi Mandiri</h2>
+                    <p class="text-lg text-slate-600 mb-8">Sebagai tahap akhir dari modul ini, selesaikan tugas-tugas analisis berikut untuk memvalidasi pemahaman teknis Anda terkait materi keamanan jaringan dan privasi.</p>
+
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
+                        <div class="mb-6 pb-6 border-b border-slate-100">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">Tugas 1: Analisis Pengelola Sandi</h3>
+                            <p class="text-slate-600 mb-4">Buatlah tabel perbandingan teknis antara 3 aplikasi Password Manager populer. Fokus pada kelebihan, kekurangan, dan model enkripsi.</p>
+                            <button class="bg-indigo-50 text-indigo-700 px-4 py-2 rounded font-semibold text-sm hover:bg-indigo-100 border border-indigo-200" onclick="toggleTask('task1')">Mulai Mengerjakan</button>
+                            <div id="task1" class="hidden mt-4 p-4 bg-slate-50 border rounded-lg">
+                                <textarea class="w-full h-32 p-3 border rounded border-slate-300 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ketik hasil analisis perbandingan Anda di sini..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 pb-6 border-b border-slate-100">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">Tugas 2: Mitigasi Serangan</h3>
+                            <p class="text-slate-600 mb-4">Simulasikan skenario serangan *Phishing* sederhana. Jelaskan secara teknis (step-by-step) bagaimana implementasi 2FA dapat menggagalkan serangan tersebut meski sandi telah dicuri.</p>
+                            <button class="bg-teal-50 text-teal-700 px-4 py-2 rounded font-semibold text-sm hover:bg-teal-100 border border-teal-200" onclick="toggleTask('task2')">Mulai Mengerjakan</button>
+                            <div id="task2" class="hidden mt-4 p-4 bg-slate-50 border rounded-lg">
+                                <textarea class="w-full h-32 p-3 border rounded border-slate-300 text-sm focus:ring-teal-500 focus:border-teal-500" placeholder="Jelaskan alur kegagalan serangan phishing karena 2FA..."></textarea>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">Tugas 3: Audit Infrastruktur/Platform</h3>
+                            <p class="text-slate-600 mb-4">Periksa pengaturan privasi di akun media sosial utama atau sistem operasi Anda. Sebutkan 3 pengaturan *Default* (bawaan pabrik) yang paling membahayakan keamanan data.</p>
+                            <button class="bg-rose-50 text-rose-700 px-4 py-2 rounded font-semibold text-sm hover:bg-rose-100 border border-rose-200" onclick="toggleTask('task3')">Mulai Mengerjakan</button>
+                            <div id="task3" class="hidden mt-4 p-4 bg-slate-50 border rounded-lg">
+                                <textarea class="w-full h-32 p-3 border rounded border-slate-300 text-sm focus:ring-rose-500 focus:border-rose-500" placeholder="Sebutkan 3 pengaturan berbahaya dan alasan teknisnya..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Core State & Navigation Logic
+        let currentView = 'overview';
+        let chartsInitialized = { pwd: false, twofa: false, priv: false };
+
+        function navigate(targetId) {
+            // Update UI State
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden');
+            
+            // Update Sidebar Active State
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+            if(activeNav) activeNav.classList.add('active');
+
+            // Sync Mobile Dropdown
+            const mobileSelect = document.getElementById('mobile-nav');
+            if(mobileSelect.value !== targetId) mobileSelect.value = targetId;
+
+            // Scroll to top
+            document.getElementById('main-content').scrollTop = 0;
+
+            // Initialize Charts lazily to ensure canvas is visible
+            if (targetId === 'modul-pwd' && !chartsInitialized.pwd) {
+                initPasswordChart();
+                chartsInitialized.pwd = true;
+            } else if (targetId === 'modul-2fa' && !chartsInitialized.twofa) {
+                init2FAChart();
+                chartsInitialized.twofa = true;
+            } else if (targetId === 'modul-privasi' && !chartsInitialized.priv) {
+                initPrivacyChart();
+                chartsInitialized.priv = true;
+            }
+        }
+
+        // Interaction Logic for Privacy Settings
+        function togglePrivacy(checkbox, message) {
+            const feedback = document.getElementById('privacy-feedback');
+            if(checkbox.checked) {
+                feedback.textContent = message;
+                feedback.classList.remove('hidden');
+            } else {
+                feedback.classList.add('hidden');
+            }
+        }
+
+        // Interaction Logic for Evaluation Tasks
+        function toggleTask(taskId) {
+            const el = document.getElementById(taskId);
+            el.classList.toggle('hidden');
+        }
+
+        // Chart.js Implementations
+        Chart.defaults.font.family = 'sans-serif';
+        Chart.defaults.color = '#64748b';
+
+        function initPasswordChart() {
+            const ctx = document.getElementById('chart-password').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['6 Karakter', '8 Karakter', '10 Karakter', '12+ & Simbol'],
+                    datasets: [{
+                        label: 'Waktu Pembobolan (Brute Force)',
+                        data: [0.1, 5, 50, 100], // Illustrative scale
+                        backgroundColor: ['#ef4444', '#f59e0b', '#10b981', '#4f46e5'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = ['Instan', 'Beberapa Jam', 'Bertahun-tahun', 'Berabad-abad'];
+                                    return labels[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false, // Hide numeric scale as it's illustrative
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function init2FAChart() {
+            const ctx = document.getElementById('chart-2fa').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Serangan Diblokir (99.9%)', 'Serangan Lolos (0.1%)'],
+                    datasets: [{
+                        data: [99.9, 0.1],
+                        backgroundColor: ['#0f766e', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function initPrivacyChart() {
+            const ctx = document.getElementById('chart-privacy').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Lokasi (GPS)', 'Kontak', 'Galeri Foto', 'Mikrofon', 'Kamera'],
+                    datasets: [{
+                        label: 'Tingkat Sensitivitas Data',
+                        data: [9, 8, 9, 10, 10],
+                        backgroundColor: 'rgba(225, 29, 72, 0.2)',
+                        borderColor: '#e11d48',
+                        pointBackgroundColor: '#be123c',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
